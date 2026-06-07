@@ -36,26 +36,48 @@ export default function Home() {
     <div
       style={{
         fontFamily: "Arial, sans-serif",
-        margin: 0,
-        padding: 0,
-        background: "#fff",
+        background: "#ffffff",
+        minHeight: "100vh",
       }}
     >
       {/* HEADER */}
 
       <div
         style={{
-          background: "#fff",
-          padding: "18px 40px",
+          background: "#ffffff",
+          padding: "18px 30px",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          borderBottom: "1px solid #eee",
+          borderBottom: "1px solid #e5e7eb",
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
         }}
       >
-        <h2 style={{ margin: 0, color: "#0f172a" }}>
+        <h2
+          style={{
+            margin: 0,
+            color: "#0f172a",
+            fontSize: "22px",
+          }}
+        >
           🏢 Property Insurance Portal
         </h2>
+
+        <div
+          style={{
+            display: "flex",
+            gap: "25px",
+            color: "#334155",
+            fontWeight: "600",
+          }}
+        >
+          <span>Home</span>
+          <span>About Us</span>
+          <span>How It Works</span>
+          <span>Contact Us</span>
+        </div>
 
         <button
           style={{
@@ -79,8 +101,7 @@ export default function Home() {
           background:
             "linear-gradient(135deg,#021024,#032d6a,#0f3f9c)",
           color: "#fff",
-          padding: "60px 20px 180px",
-          position: "relative",
+          padding: "50px 20px 140px",
         }}
       >
         <div
@@ -92,10 +113,10 @@ export default function Home() {
           <div
             style={{
               display: "inline-block",
-              background: "rgba(255,255,255,0.1)",
-              padding: "8px 18px",
+              background: "rgba(255,255,255,0.12)",
+              padding: "10px 18px",
               borderRadius: "30px",
-              marginBottom: "20px",
+              marginBottom: "25px",
             }}
           >
             Secure • Fast • Professional
@@ -104,12 +125,17 @@ export default function Home() {
           <h1
             style={{
               fontSize: "64px",
-              lineHeight: "1.1",
+              lineHeight: "1.05",
               marginBottom: "20px",
             }}
           >
-            Property <br />
-            <span style={{ color: "#60a5fa" }}>
+            Property
+            <br />
+            <span
+              style={{
+                color: "#60a5fa",
+              }}
+            >
               Insurance Portal
             </span>
           </h1>
@@ -118,7 +144,8 @@ export default function Home() {
             style={{
               fontSize: "24px",
               color: "#dbeafe",
-              maxWidth: "800px",
+              maxWidth: "760px",
+              lineHeight: "1.6",
             }}
           >
             Simplified Property Risk Placement,
@@ -128,12 +155,12 @@ export default function Home() {
         </div>
       </div>
 
-      {/* CARDS */}
+      {/* LOGIN CARDS */}
 
       <div
         style={{
           maxWidth: "1200px",
-          margin: "-120px auto 0",
+          margin: "-70px auto 0",
           padding: "0 20px",
           position: "relative",
           zIndex: 10,
@@ -142,24 +169,30 @@ export default function Home() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(350px,1fr))",
-            gap: "30px",
+            gridTemplateColumns:
+              "repeat(auto-fit,minmax(340px,1fr))",
+            gap: "25px",
           }}
         >
-          {/* USER */}
+          {/* USER CARD */}
 
           <div
             style={{
               background:
                 "linear-gradient(135deg,#2563eb,#3b82f6)",
               color: "#fff",
-              padding: "35px",
+              padding: "26px",
               borderRadius: "24px",
               boxShadow:
                 "0 20px 40px rgba(37,99,235,0.35)",
             }}
           >
-            <h2 style={{ fontSize: "36px" }}>
+            <h2
+              style={{
+                fontSize: "30px",
+                marginBottom: "18px",
+              }}
+            >
               👤 User Login
             </h2>
 
@@ -167,36 +200,41 @@ export default function Home() {
             <p>✓ Reply to Queries</p>
             <p>✓ Receive Premium Quotes</p>
             <p>✓ Track Policy Status</p>
-
-            <button
+<button
               style={{
-                marginTop: "20px",
+                marginTop: "15px",
                 background: "#fff",
                 color: "#2563eb",
                 border: "none",
-                padding: "14px 28px",
+                padding: "12px 22px",
                 borderRadius: "12px",
                 fontWeight: "bold",
+                cursor: "pointer",
               }}
             >
               Login as User →
             </button>
           </div>
 
-          {/* ADMIN */}
+          {/* ADMIN CARD */}
 
           <div
             style={{
               background:
                 "linear-gradient(135deg,#059669,#16a34a)",
               color: "#fff",
-              padding: "35px",
+              padding: "26px",
               borderRadius: "24px",
               boxShadow:
                 "0 20px 40px rgba(22,163,74,0.35)",
             }}
           >
-            <h2 style={{ fontSize: "36px" }}>
+            <h2
+              style={{
+                fontSize: "30px",
+                marginBottom: "18px",
+              }}
+            >
               🛡️ Admin Login
             </h2>
 
@@ -207,13 +245,14 @@ export default function Home() {
 
             <button
               style={{
-                marginTop: "20px",
+                marginTop: "15px",
                 background: "#fff",
                 color: "#16a34a",
                 border: "none",
-                padding: "14px 28px",
+                padding: "12px 22px",
                 borderRadius: "12px",
                 fontWeight: "bold",
+                cursor: "pointer",
               }}
             >
               Login as Admin →
@@ -227,9 +266,9 @@ export default function Home() {
       <div
         style={{
           background: "#f8fafc",
-          marginTop: "-60px",
-          paddingTop: "140px",
-          paddingBottom: "80px",
+          marginTop: "-20px",
+          paddingTop: "90px",
+          paddingBottom: "30px",
         }}
       >
         <div
@@ -244,6 +283,7 @@ export default function Home() {
             style={{
               fontSize: "42px",
               color: "#0f172a",
+              marginBottom: "50px",
             }}
           >
             HOW IT WORKS
@@ -251,15 +291,21 @@ export default function Home() {
 
           <div
             style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit,minmax(180px,1fr))",
-              gap: "25px",
-              marginTop: "50px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexWrap: "wrap",
+              gap: "15px",
             }}
           >
-            {steps.map((s) => (
-              <div key={s.no}>
+            {steps.map((s, index) => (
+              <div
+                key={s.no}
+                style={{
+                  flex: "1",
+                  minWidth: "150px",
+                }}
+              >
                 <div
                   style={{
                     width: "55px",
@@ -280,25 +326,36 @@ export default function Home() {
 
                 <div
                   style={{
-                    width: "90px",
-                    height: "90px",
+                    width: "110px",
+                    height: "110px",
                     margin: "20px auto",
-                    borderRadius: "20px",
+                    borderRadius: "24px",
                     background: `${s.color}20`,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontSize: "40px",
+                    fontSize: "50px",
                   }}
                 >
                   {s.icon}
                 </div>
 
                 <h3>{s.title}</h3>
+
+                {index < 4 && (
+                  <div
+                    style={{
+                      fontSize: "32px",
+                      color: "#94a3b8",
+                    }}
+                  >
+                    →
+                  </div>
+                )}
               </div>
             ))}
           </div>
-        </div>
+</div>
       </div>
 
       {/* FOOTER */}
@@ -306,14 +363,30 @@ export default function Home() {
       <div
         style={{
           textAlign: "center",
-          padding: "40px",
-          background: "#fff",
-          color: "#334155",
+          background: "#ffffff",
+          color: "#475569",
+          padding: "20px",
+          borderTop: "1px solid #e5e7eb",
         }}
       >
-        <p>📧 243400@orientalinsurance.co.in</p>
-        <p>Developed by Arun Kr.</p>
+        <p
+          style={{
+            marginBottom: "10px",
+            fontSize: "16px",
+          }}
+        >
+          📧 243400@orientalinsurance.co.in
+        </p>
+
+        <p
+          style={{
+            margin: 0,
+            fontWeight: "600",
+          }}
+        >
+          Developed by Arun Kr.
+        </p>
       </div>
     </div>
   );
-              }
+}
