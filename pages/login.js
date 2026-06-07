@@ -1,5 +1,9 @@
+import React from "react";
+
 export default function Login() {
   return (
-    <h1>Login Page Working</h1>
+    <div>
+      Login Page Working
+    </div>
   );
 }
