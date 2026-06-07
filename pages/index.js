@@ -1,32 +1,59 @@
 export default function Home() {
+  const steps = [
+    {
+      no: "1",
+      icon: "🔐",
+      title: "Submit Request",
+      color: "#2563eb",
+    },
+    {
+      no: "2",
+      icon: "📄",
+      title: "Admin Review",
+      color: "#22c55e",
+    },
+    {
+      no: "3",
+      icon: "❓",
+      title: "Query & Reply",
+      color: "#8b5cf6",
+    },
+    {
+      no: "4",
+      icon: "💰",
+      title: "Premium Quote",
+      color: "#f59e0b",
+    },
+    {
+      no: "5",
+      icon: "🛡️",
+      title: "Policy Issued",
+      color: "#10b981",
+    },
+  ];
+
   return (
     <div
       style={{
-        minHeight: "100vh",
         fontFamily: "Arial, sans-serif",
-        background:
-          "linear-gradient(135deg,#02122b 0%,#06285e 50%,#0d3c8f 100%)",
+        margin: 0,
+        padding: 0,
+        background: "#fff",
       }}
     >
-      {/* NAVBAR */}
+      {/* HEADER */}
 
       <div
         style={{
-          background: "#ffffff",
-          padding: "18px 30px",
+          background: "#fff",
+          padding: "18px 40px",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          boxShadow: "0 2px 15px rgba(0,0,0,0.08)",
+          borderBottom: "1px solid #eee",
         }}
       >
-        <h2
-          style={{
-            margin: 0,
-            color: "#0f172a",
-            fontSize: "22px",
-          }}
-        >
+        <h2 style={{ margin: 0, color: "#0f172a" }}>
           🏢 Property Insurance Portal
         </h2>
 
@@ -49,20 +76,26 @@ export default function Home() {
 
       <div
         style={{
-          maxWidth: "1200px",
-          margin: "auto",
-          padding: "60px 20px",
+          background:
+            "linear-gradient(135deg,#021024,#032d6a,#0f3f9c)",
+          color: "#fff",
+          padding: "60px 20px 180px",
+          position: "relative",
         }}
       >
-        <div style={{ maxWidth: "700px" }}>
+        <div
+          style={{
+            maxWidth: "1200px",
+            margin: "auto",
+          }}
+        >
           <div
             style={{
               display: "inline-block",
-              background: "rgba(255,255,255,0.12)",
-              color: "#fff",
-              padding: "10px 18px",
+              background: "rgba(255,255,255,0.1)",
+              padding: "8px 18px",
               borderRadius: "30px",
-              marginBottom: "25px",
+              marginBottom: "20px",
             }}
           >
             Secure • Fast • Professional
@@ -70,41 +103,47 @@ export default function Home() {
 
           <h1
             style={{
-              color: "#fff",
-              fontSize: "68px",
-              lineHeight: "1.05",
-              margin: "0 0 20px",
+              fontSize: "64px",
+              lineHeight: "1.1",
+              marginBottom: "20px",
             }}
           >
             Property <br />
-            <span style={{ color: "#60A5FA" }}>
+            <span style={{ color: "#60a5fa" }}>
               Insurance Portal
             </span>
           </h1>
 
           <p
             style={{
-              color: "#dbeafe",
               fontSize: "24px",
-              lineHeight: "1.6",
-              marginBottom: "50px",
+              color: "#dbeafe",
+              maxWidth: "800px",
             }}
           >
             Simplified Property Risk Placement,
-            Premium Quotation and Policy
-            Record Platform
+            Premium Quotation and Policy Record
+            Platform
           </p>
         </div>
+      </div>
 
-        {/* LOGIN CARDS */}
+      {/* CARDS */}
 
+      <div
+        style={{
+          maxWidth: "1200px",
+          margin: "-120px auto 0",
+          padding: "0 20px",
+          position: "relative",
+          zIndex: 10,
+        }}
+      >
         <div
           style={{
             display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit,minmax(320px,1fr))",
+            gridTemplateColumns: "repeat(auto-fit,minmax(350px,1fr))",
             gap: "30px",
-            marginTop: "30px",
           }}
         >
           {/* USER */}
@@ -112,20 +151,15 @@ export default function Home() {
           <div
             style={{
               background:
-                "linear-gradient(135deg,#2563eb,#1d4ed8)",
-              padding: "35px",
-              borderRadius: "25px",
+                "linear-gradient(135deg,#2563eb,#3b82f6)",
               color: "#fff",
+              padding: "35px",
+              borderRadius: "24px",
               boxShadow:
-                "0 15px 40px rgba(37,99,235,0.35)",
+                "0 20px 40px rgba(37,99,235,0.35)",
             }}
           >
-            <h2
-              style={{
-                fontSize: "34px",
-                marginBottom: "25px",
-              }}
-            >
+            <h2 style={{ fontSize: "36px" }}>
               👤 User Login
             </h2>
 
@@ -140,10 +174,9 @@ export default function Home() {
                 background: "#fff",
                 color: "#2563eb",
                 border: "none",
-                padding: "14px 25px",
+                padding: "14px 28px",
                 borderRadius: "12px",
                 fontWeight: "bold",
-                cursor: "pointer",
               }}
             >
               Login as User →
@@ -155,20 +188,15 @@ export default function Home() {
           <div
             style={{
               background:
-                "linear-gradient(135deg,#16a34a,#15803d)",
-              padding: "35px",
-              borderRadius: "25px",
+                "linear-gradient(135deg,#059669,#16a34a)",
               color: "#fff",
+              padding: "35px",
+              borderRadius: "24px",
               boxShadow:
-                "0 15px 40px rgba(22,163,74,0.35)",
+                "0 20px 40px rgba(22,163,74,0.35)",
             }}
           >
-            <h2
-              style={{
-                fontSize: "34px",
-                marginBottom: "25px",
-              }}
-            >
+            <h2 style={{ fontSize: "36px" }}>
               🛡️ Admin Login
             </h2>
 
@@ -181,34 +209,41 @@ export default function Home() {
               style={{
                 marginTop: "20px",
                 background: "#fff",
-                color: "#15803d",
+                color: "#16a34a",
                 border: "none",
-                padding: "14px 25px",
+                padding: "14px 28px",
                 borderRadius: "12px",
                 fontWeight: "bold",
-                cursor: "pointer",
               }}
             >
               Login as Admin →
             </button>
           </div>
         </div>
+      </div>
 
-        {/* HOW IT WORKS */}
+      {/* HOW IT WORKS */}
 
+      <div
+        style={{
+          background: "#f8fafc",
+          marginTop: "-60px",
+          paddingTop: "140px",
+          paddingBottom: "80px",
+        }}
+      >
         <div
           style={{
-            background: "#ffffff",
-            borderRadius: "30px",
-            marginTop: "70px",
-            padding: "45px 25px",
+            maxWidth: "1200px",
+            margin: "auto",
             textAlign: "center",
+            padding: "0 20px",
           }}
         >
           <h2
             style={{
+              fontSize: "42px",
               color: "#0f172a",
-              marginBottom: "40px",
             }}
           >
             HOW IT WORKS
@@ -218,58 +253,67 @@ export default function Home() {
             style={{
               display: "grid",
               gridTemplateColumns:
-                "repeat(auto-fit,minmax(160px,1fr))",
-              gap: "20px",
+                "repeat(auto-fit,minmax(180px,1fr))",
+              gap: "25px",
+              marginTop: "50px",
             }}
           >
-            <div>
-              <h3 style={{ color: "#2563eb" }}>1️⃣</h3>
-              <p>Submit Request</p>
-            </div>
+            {steps.map((s) => (
+              <div key={s.no}>
+                <div
+                  style={{
+                    width: "55px",
+                    height: "55px",
+                    borderRadius: "50%",
+                    background: s.color,
+                    color: "#fff",
+                    margin: "auto",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: "bold",
+                    fontSize: "20px",
+                  }}
+                >
+                  {s.no}
+                </div>
 
-            <div>
-              <h3 style={{ color: "#16a34a" }}>2️⃣</h3>
-              <p>Admin Review</p>
-            </div>
+                <div
+                  style={{
+                    width: "90px",
+                    height: "90px",
+                    margin: "20px auto",
+                    borderRadius: "20px",
+                    background: `${s.color}20`,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "40px",
+                  }}
+                >
+                  {s.icon}
+                </div>
 
-            <div>
-              <h3 style={{ color: "#9333ea" }}>3️⃣</h3>
-              <p>Query & Reply</p>
-            </div>
-
-            <div>
-              <h3 style={{ color: "#f59e0b" }}>4️⃣</h3>
-              <p>Premium Quote Sent</p>
-            </div>
-
-            <div>
-              <h3 style={{ color: "#22c55e" }}>5️⃣</h3>
-              <p>Policy Issued</p>
-            </div>
+                <h3>{s.title}</h3>
+              </div>
+            ))}
           </div>
         </div>
+      </div>
 
-        {/* FOOTER */}
+      {/* FOOTER */}
 
-        <div
-          style={{
-            textAlign: "center",
-            color: "#fff",
-            padding: "50px 20px",
-          }}
-        >
-          <p
-            style={{
-              fontSize: "18px",
-              marginBottom: "12px",
-            }}
-          >
-            📧 243400@orientalinsurance.co.in
-          </p>
-
-          <p>Developed by Arun Kr.</p>
-        </div>
+      <div
+        style={{
+          textAlign: "center",
+          padding: "40px",
+          background: "#fff",
+          color: "#334155",
+        }}
+      >
+        <p>📧 243400@orientalinsurance.co.in</p>
+        <p>Developed by Arun Kr.</p>
       </div>
     </div>
   );
-}
+              }
