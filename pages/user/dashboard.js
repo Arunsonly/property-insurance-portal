@@ -1,3 +1,5 @@
+const [riskType, setRiskType] = useState("");
+const [businessActivity, setBusinessActivity] = useState("");
 import { useState } from "react";
 
 export default function NewRequest() {
