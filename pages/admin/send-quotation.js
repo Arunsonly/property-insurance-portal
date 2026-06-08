@@ -57,10 +57,7 @@ export default function SendQuotation() {
           }}
         >
           <option>Select Company</option>
-          <option>ICICI Lombard</option>
-          <option>HDFC ERGO</option>
-          <option>Bajaj Allianz</option>
-          <option>TATA AIG</option>
+          <option>Oriental Insurance Co Ltd</option>
         </select>
 
         <label><b>Premium Amount (₹)</b></label>
