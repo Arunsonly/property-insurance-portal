@@ -1,4 +1,37 @@
-export default function UserDashboard() {
+import { useState } from "react";
+
+export default function NewRequest() {
+  const [riskType, setRiskType] = useState("");
+  const [businessPlaceholder, setBusinessPlaceholder] =
+    useState("");
+
+  const handleRiskType = (value) => {
+    setRiskType(value);
+
+    if (value === "Manufacturing Unit") {
+      setBusinessPlaceholder(
+        "Name of goods manufacturing"
+      );
+    } else if (
+      value === "Godown (Open)" ||
+      value === "Godown (Closed)"
+    ) {
+      setBusinessPlaceholder(
+        "Name of goods storage"
+      );
+    } else if (value === "Retail Shop") {
+      setBusinessPlaceholder(
+        "Name of Goods selling (Kirana, Electric, Puncture Shop etc.)"
+      );
+    } else if (value === "Other") {
+      setBusinessPlaceholder(
+        "Enter the business activities details"
+      );
+    } else {
+      setBusinessPlaceholder("");
+    }
+  };
+
   return (
     <div
       style={{
@@ -8,6 +41,7 @@ export default function UserDashboard() {
       }}
     >
       {/* Header */}
+
       <div
         style={{
           background: "#0b3d91",
@@ -17,96 +51,167 @@ export default function UserDashboard() {
           marginBottom: "20px",
         }}
       >
-        <h2 style={{ margin: 0 }}>Property Insurance Portal</h2>
-        <p style={{ marginTop: "5px" }}>User Panel</p>
+        <h1 style={{ margin: 0 }}>
+          New Request
+        </h1>
 
-        <div style={{ marginTop: "20px" }}>
-          <h2>Welcome, Rajesh Kumar 👋</h2>
-          <p>Here is your dashboard overview</p>
-        </div>
+        <p style={{ marginTop: "10px" }}>
+          Submit Property Insurance Request
+        </p>
       </div>
 
-      {/* Summary Cards */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(2,1fr)",
-          gap: "15px",
-          marginBottom: "20px",
-        }}
-      >
-        <div style={cardStyle}>
-          <h1>12</h1>
-          <p>My Requests</p>
-        </div>
+      {/* Form */}
 
-        <div style={cardStyle}>
-          <h1>2</h1>
-          <p>Query Received</p>
-        </div>
-
-        <div style={cardStyle}>
-          <h1>3</h1>
-          <p>Quotation Received</p>
-        </div>
-
-        <div style={cardStyle}>
-          <h1>1</h1>
-          <p>Approved</p>
-        </div>
-      </div>
-
-      {/* My Submissions */}
       <div
         style={{
           background: "#fff",
           borderRadius: "20px",
           padding: "20px",
-          boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
+          boxShadow:
+            "0 2px 10px rgba(0,0,0,0.08)",
         }}
       >
-        <h2>My Submissions</h2>
+        <h2>Basic Details</h2>
 
-        <div style={rowStyle}>
-          <span>PROP-00125</span>
-          <span>Pending</span>
+        <input
+          type="text"
+          placeholder="Insured Name"
+          style={inputStyle}
+        />
+
+        <textarea
+          placeholder="Communication Address"
+          style={{
+            ...inputStyle,
+            height: "90px",
+          }}
+        />
+
+        <input
+          type="text"
+          placeholder="Mobile Number"
+          style={inputStyle}
+        />
+
+        <h2>Risk Details</h2>
+
+        <input
+          type="text"
+          placeholder="Enter at least district name for EQ rate confirmation"
+          style={inputStyle}
+        />
+
+        <select
+          value={riskType}
+          onChange={(e) =>
+            handleRiskType(e.target.value)
+          }
+          style={inputStyle}
+        >
+          <option value="">
+            Select Risk Type
+          </option>
+
+          <option>
+            Manufacturing Unit
+          </option>
+
+          <option>
+            Godown (Open)
+          </option>
+
+          <option>
+            Godown (Closed)
+          </option>
+
+          <option>
+            Retail Shop
+          </option>
+
+          <option>
+            Other
+          </option>
+        </select>
+
+        <input
+          type="text"
+          placeholder={businessPlaceholder}
+          style={inputStyle}
+        />
+
+        <input
+          type="number"
+          placeholder="Enter Total Sum Insured"
+          style={inputStyle}
+        />
+
+        <select style={inputStyle}>
+          <option>
+            Select Coverage Required
+          </option>
+
+          <option>
+            Fire + STFI + EQ
+          </option>
+
+          <option>
+            Fire + STFI + EQ + Burglary
+          </option>
+
+          <option>
+            Fire + STFI + EQ + Terrorism
+          </option>
+
+          <option>
+            Fire + STFI + EQ + Terrorism +
+            Burglary
+          </option>
+        </select>
+
+        <h2>Documents</h2>
+
+        <div
+          style={{
+            border:
+              "2px dashed #cbd5e1",
+            borderRadius: "15px",
+            padding: "20px",
+            marginBottom: "20px",
+            textAlign: "center",
+          }}
+        >
+          <input type="file" />
+
+          <p>
+            Upload Proposal Form /
+            Photos / Previous Policy
+          </p>
         </div>
 
-        <div style={rowStyle}>
-          <span>PROP-00124</span>
-          <span>Query Received</span>
-        </div>
-
-        <div style={rowStyle}>
-          <span>PROP-00123</span>
-          <span>Query Replied</span>
-        </div>
-
-        <div style={rowStyle}>
-          <span>PROP-00122</span>
-          <span>Quotation Received</span>
-        </div>
-
-        <div style={rowStyle}>
-          <span>PROP-00121</span>
-          <span>Approved</span>
-        </div>
+        <button
+          style={{
+            width: "100%",
+            background: "#22c55e",
+            color: "#fff",
+            border: "none",
+            padding: "16px",
+            borderRadius: "12px",
+            fontSize: "18px",
+            fontWeight: "bold",
+          }}
+        >
+          Submit Request
+        </button>
       </div>
     </div>
   );
 }
 
-const cardStyle = {
-  background: "#fff",
-  borderRadius: "16px",
-  padding: "20px",
-  textAlign: "center",
-  boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
-};
-
-const rowStyle = {
-  display: "flex",
-  justifyContent: "space-between",
-  padding: "12px 0",
-  borderBottom: "1px solid #eee",
+const inputStyle = {
+  width: "100%",
+  padding: "14px",
+  marginBottom: "15px",
+  borderRadius: "12px",
+  border: "1px solid #d1d5db",
+  fontSize: "15px",
 };
