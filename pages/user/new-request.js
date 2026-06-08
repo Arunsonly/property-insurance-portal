@@ -1,4 +1,40 @@
+import { useState } from "react";
+
 export default function NewRequest() {
+  const [riskType, setRiskType] = useState("");
+  const [businessActivity, setBusinessActivity] = useState("");
+
+  const handleRiskType = (value) => {
+    setRiskType(value);
+
+    switch (value) {
+      case "Manufacturing Unit":
+        setBusinessActivity("Name of goods manufacturing");
+        break;
+
+      case "Godown (Open)":
+        setBusinessActivity("Name of goods storage");
+        break;
+
+      case "Godown (Closed)":
+        setBusinessActivity("Name of goods storage");
+        break;
+
+      case "Retail Shop":
+        setBusinessActivity(
+          "Name of goods selling (kirana, electric, puncture shop etc)"
+        );
+        break;
+
+      case "Other":
+        setBusinessActivity("Enter the business activities details");
+        break;
+
+      default:
+        setBusinessActivity("");
+    }
+  };
+
   return (
     <div
       style={{
@@ -7,124 +43,185 @@ export default function NewRequest() {
         padding: "20px",
       }}
     >
-      {/* Header */}
       <div
         style={{
           background: "#0b3d91",
           color: "#fff",
-          padding: "30px",
+          padding: "25px",
           borderRadius: "20px",
           marginBottom: "20px",
         }}
       >
-        <h1 style={{ margin: 0 }}>New Request</h1>
-        <p style={{ marginTop: "10px" }}>
-          Submit a new property insurance request
-        </p>
+        <h1>New Request</h1>
+        <p>Submit Property Insurance Requirement</p>
       </div>
 
-      {/* Form */}
       <div
         style={{
           background: "#fff",
-          borderRadius: "20px",
           padding: "20px",
-          boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
+          borderRadius: "20px",
+          marginBottom: "20px",
         }}
       >
-        <label><b>Insured Name</b></label>
+        <h2>Basic Details</h2>
+
         <input
-          type="text"
-          placeholder="Enter insured name"
+          placeholder="Insured Name"
           style={inputStyle}
         />
 
-        <label><b>Mobile Number</b></label>
-        <input
-          type="text"
-          placeholder="Enter mobile number"
-          style={inputStyle}
+        <textarea
+          placeholder="Communication Address"
+          style={textareaStyle}
         />
 
-        <label><b>Risk Location</b></label>
         <input
-          type="text"
-          placeholder="Enter risk location"
+          placeholder="Mobile Number"
           style={inputStyle}
         />
-
-        <label><b>Risk Type</b></label>
-        <select style={inputStyle}>
-          <option>Select Risk Type</option>
-          <option>Manufacturing Unit</option>
-          <option>Godown</option>
-          <option>Retail Shop</option>
-          <option>Office</option>
-        </select>
-
-        <label><b>Business Activity</b></label>
-        <input
-          type="text"
-          placeholder="Enter business activity"
-          style={inputStyle}
-        />
-
-        <label><b>Sum Insured (₹)</b></label>
-        <input
-          type="number"
-          placeholder="Enter sum insured"
-          style={inputStyle}
-        />
-
-        <label><b>Coverage Required</b></label>
-        <select style={inputStyle}>
-          <option>Select Coverage</option>
-          <option>Fire + STFI + EQ</option>
-          <option>Fire Only</option>
-          <option>Fire + Burglary</option>
-        </select>
-
-        <label><b>Upload Documents</b></label>
-
-        <div
-          style={{
-            border: "2px dashed #ccc",
-            padding: "25px",
-            textAlign: "center",
-            borderRadius: "15px",
-            marginBottom: "20px",
-          }}
-        >
-          <input type="file" />
-          <p>PDF, JPG, PNG</p>
-        </div>
-
-        <button
-          style={{
-            width: "100%",
-            background: "#22c55e",
-            color: "#fff",
-            border: "none",
-            padding: "16px",
-            borderRadius: "12px",
-            fontSize: "18px",
-            fontWeight: "bold",
-            cursor: "pointer",
-          }}
-        >
-          Submit Request
-        </button>
       </div>
+
+      <div
+        style={{
+          background: "#fff",
+          padding: "20px",
+          borderRadius: "20px",
+          marginBottom: "20px",
+        }}
+      >
+        <h2>Risk Details</h2>
+
+        <input
+          placeholder="Enter at least district name for EQ rate confirmation"
+          style={inputStyle}
+        />
+
+        <select
+          value={riskType}
+          onChange={(e) => handleRiskType(e.target.value)}
+          style={inputStyle}
+        >
+          <option value="">Select Risk Type</option>
+
+          <option>Manufacturing Unit</option>
+          <option>Godown (Open)</option>
+          <option>Godown (Closed)</option>
+          <option>Retail Shop</option>
+          <option>Other</option>
+        </select>
+
+        <textarea
+          value={businessActivity}
+          onChange={(e) => setBusinessActivity(e.target.value)}
+          placeholder="Business Activity"
+          style={textareaStyle}
+        />
+
+        <select style={inputStyle}>
+          <option value="">
+            Select Coverage Required
+          </option>
+
+          <option>
+            Fire + STFI + EQ
+          </option>
+
+          <option>
+            Fire + STFI + EQ + Burglary
+          </option>
+
+          <option>
+            Fire + STFI + EQ + Terrorism
+          </option>
+
+          <option>
+            Fire + STFI + EQ + Terrorism + Burglary
+          </option>
+        </select>
+
+        <input
+          placeholder="Enter total sum insured"
+          style={inputStyle}
+        />
+      </div>
+
+      <div
+        style={{
+          background: "#fff",
+          padding: "20px",
+          borderRadius: "20px",
+          marginBottom: "20px",
+        }}
+      >
+        <h2>Upload Documents</h2>
+
+        <label>
+          Proposal Form
+          <input
+            type="file"
+            style={fileStyle}
+          />
+        </label>
+
+        <label>
+          Risk Photos
+          <input
+            type="file"
+            style={fileStyle}
+          />
+        </label>
+
+        <label>
+          Previous Policy (Optional)
+          <input
+            type="file"
+            style={fileStyle}
+          />
+        </label>
+      </div>
+
+      <button
+        style={{
+          width: "100%",
+          background: "#16a34a",
+          color: "#fff",
+          border: "none",
+          padding: "18px",
+          borderRadius: "15px",
+          fontSize: "18px",
+          fontWeight: "bold",
+        }}
+      >
+        Submit Request
+      </button>
     </div>
   );
 }
 
 const inputStyle = {
   width: "100%",
-  padding: "14px",
-  marginTop: "8px",
-  marginBottom: "18px",
+  padding: "15px",
+  marginTop: "12px",
+  marginBottom: "12px",
   borderRadius: "12px",
   border: "1px solid #ddd",
   fontSize: "16px",
+};
+
+const textareaStyle = {
+  width: "100%",
+  minHeight: "100px",
+  padding: "15px",
+  marginTop: "12px",
+  marginBottom: "12px",
+  borderRadius: "12px",
+  border: "1px solid #ddd",
+  fontSize: "16px",
+};
+
+const fileStyle = {
+  width: "100%",
+  marginTop: "10px",
+  marginBottom: "20px",
 };
