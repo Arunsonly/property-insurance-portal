@@ -1,166 +1,168 @@
-import { useState } from "react";
+import Link from "next/link";
 
-export default function NewRequest() {
-  const [riskType, setRiskType] = useState("");
-  const [businessActivity, setBusinessActivity] = useState("");
-
+export default function UserDashboard() {
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>New Request</h2>
+    <div
+      style={{
+        background: "#f4f7fc",
+        minHeight: "100vh",
+        paddingBottom: "80px",
+      }}
+    >
+      {/* Header */}
+      <div
+        style={{
+          background: "linear-gradient(135deg,#0b3d91,#0a2d6f)",
+          color: "#fff",
+          padding: "25px 20px",
+        }}
+      >
+        <h2 style={{ margin: 0 }}>Property Insurance Portal</h2>
+        <p style={{ marginTop: 5 }}>User Panel</p>
 
-      {/* Insured Name */}
-      <div style={{ marginBottom: "20px" }}>
-        <label>Insured Name</label>
-        <input
-          type="text"
-          placeholder="Enter insured name"
-          style={{
-            width: "100%",
-            padding: "14px",
-            borderRadius: "12px",
-            border: "1px solid #ddd",
-          }}
-        />
+        <div style={{ marginTop: 25 }}>
+          <h2 style={{ margin: 0 }}>Welcome, Rajesh Kumar 👋</h2>
+          <p>Here is your dashboard overview</p>
+        </div>
       </div>
 
-      {/* Communication Address */}
-      <div style={{ marginBottom: "20px" }}>
-        <label>Communication Address</label>
-        <textarea
-          placeholder="Enter communication address"
-          style={{
-            width: "100%",
-            padding: "14px",
-            borderRadius: "12px",
-            border: "1px solid #ddd",
-            minHeight: "80px",
-          }}
-        />
+      {/* Stats Cards */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: "15px",
+          padding: "20px",
+        }}
+      >
+        <div style={card}>
+          <div style={{ fontSize: 30 }}>📋</div>
+          <h2>12</h2>
+          <p>My Requests</p>
+        </div>
+
+        <div style={card}>
+          <div style={{ fontSize: 30 }}>❓</div>
+          <h2>2</h2>
+          <p>Query Received</p>
+        </div>
+
+        <div style={card}>
+          <div style={{ fontSize: 30 }}>💰</div>
+          <h2>3</h2>
+          <p>Quotation Received</p>
+        </div>
+
+        <div style={card}>
+          <div style={{ fontSize: 30 }}>✅</div>
+          <h2>1</h2>
+          <p>Approved</p>
+        </div>
       </div>
 
-      {/* Mobile Number */}
-      <div style={{ marginBottom: "20px" }}>
-        <label>Mobile Number</label>
-        <input
-          type="text"
-          placeholder="Enter mobile number"
-          style={{
-            width: "100%",
-            padding: "14px",
-            borderRadius: "12px",
-            border: "1px solid #ddd",
-          }}
-        />
+      {/* Recent Submissions */}
+      <div
+        style={{
+          background: "#fff",
+          margin: "0 20px",
+          borderRadius: "20px",
+          padding: "20px",
+          boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
+        }}
+      >
+        <h3>My Submissions</h3>
+
+        <div style={row}>
+          <span>PROP-00125</span>
+          <span style={pending}>Pending</span>
+        </div>
+
+        <div style={row}>
+          <span>PROP-00124</span>
+          <span style={query}>Query Received</span>
+        </div>
+
+        <div style={row}>
+          <span>PROP-00123</span>
+          <span style={reply}>Query Replied</span>
+        </div>
+
+        <div style={row}>
+          <span>PROP-00122</span>
+          <span style={quotation}>Quotation Received</span>
+        </div>
+
+        <div style={row}>
+          <span>PROP-00121</span>
+          <span style={approved}>Approved</span>
+        </div>
       </div>
 
-      {/* Risk Location */}
-      <div style={{ marginBottom: "20px" }}>
-        <label>Risk Location</label>
-        <input
-          type="text"
-          placeholder="Enter at least district name for EQ rate confirmation"
-          style={{
-            width: "100%",
-            padding: "14px",
-            borderRadius: "12px",
-            border: "1px solid #ddd",
-          }}
-        />
-      </div>
-
-      {/* Risk Type */}
-      <div style={{ marginBottom: "20px" }}>
-        <label>Risk Type</label>
-
-        <select
-          value={riskType}
-          onChange={(e) => {
-            const value = e.target.value;
-            setRiskType(value);
-
-            if (value === "Manufacturing Unit") {
-              setBusinessActivity("Name of goods manufacturing");
-            } else if (
-              value === "Godown (Open)" ||
-              value === "Godown (Closed)"
-            ) {
-              setBusinessActivity("Name of goods storage");
-            } else if (value === "Retail Shop") {
-              setBusinessActivity(
-                "Name of Goods selling (Kirana, Electric, Puncture Shop etc.)"
-              );
-            } else if (value === "Other") {
-              setBusinessActivity(
-                "Enter the business activities details"
-              );
-            } else {
-              setBusinessActivity("");
-            }
-          }}
-          style={{
-            width: "100%",
-            padding: "14px",
-            borderRadius: "12px",
-            border: "1px solid #ddd",
-          }}
-        >
-          <option value="">Select Risk Type</option>
-          <option value="Manufacturing Unit">Manufacturing Unit</option>
-          <option value="Godown (Open)">Godown (Open)</option>
-          <option value="Godown (Closed)">Godown (Closed)</option>
-          <option value="Retail Shop">Retail Shop</option>
-          <option value="Other">Other</option>
-        </select>
-      </div>
-
-      {/* Business Activity */}
-      <div style={{ marginBottom: "20px" }}>
-        <label>Business Activity</label>
-        <input
-          type="text"
-          placeholder={businessActivity}
-          style={{
-            width: "100%",
-            padding: "14px",
-            borderRadius: "12px",
-            border: "1px solid #ddd",
-          }}
-        />
-      </div>
-
-      {/* Sum Insured */}
-      <div style={{ marginBottom: "20px" }}>
-        <label>Sum Insured (₹)</label>
-        <input
-          type="number"
-          placeholder="Enter total sum insured"
-          style={{
-            width: "100%",
-            padding: "14px",
-            borderRadius: "12px",
-            border: "1px solid #ddd",
-          }}
-        />
-      </div>
-
-      {/* Coverage Required */}
-      <div style={{ marginBottom: "20px" }}>
-        <label>Coverage Required</label>
-        <select
-          style={{
-            width: "100%",
-            padding: "14px",
-            borderRadius: "12px",
-            border: "1px solid #ddd",
-          }}
-        >
-          <option>Select Coverage</option>
-          <option>Fire + STFI + EQ</option>
-          <option>Fire + STFI + EQ + Burglary</option>
-          <option>Fire + STFI + EQ + Terrorism</option>
-          <option>Fire + STFI + EQ + Terrorism + Burglary</option>
-        </select>
+      {/* Bottom Navigation */}
+      <div
+        style={{
+          position: "fixed",
+          bottom: 0,
+          width: "100%",
+          background: "#fff",
+          display: "flex",
+          justifyContent: "space-around",
+          padding: "12px 0",
+          borderTop: "1px solid #ddd",
+        }}
+      >
+        <Link href="/user/dashboard">🏠</Link>
+        <Link href="/user/new-request">➕</Link>
+        <Link href="/user/my-submissions">📄</Link>
+        <Link href="/user/profile">👤</Link>
       </div>
     </div>
   );
 }
+
+const card = {
+  background: "#fff",
+  borderRadius: "18px",
+  padding: "20px",
+  textAlign: "center",
+  boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
+};
+
+const row = {
+  display: "flex",
+  justifyContent: "space-between",
+  marginBottom: "12px",
+  padding: "10px",
+  background: "#f8fafc",
+  borderRadius: "10px",
+};
+
+const pending = {
+  background: "#fde68a",
+  padding: "5px 10px",
+  borderRadius: "15px",
+};
+
+const query = {
+  background: "#ddd6fe",
+  padding: "5px 10px",
+  borderRadius: "15px",
+};
+
+const reply = {
+  background: "#bfdbfe",
+  padding: "5px 10px",
+  borderRadius: "15px",
+};
+
+const quotation = {
+  background: "#fdba74",
+  padding: "5px 10px",
+  borderRadius: "15px",
+};
+
+const approved = {
+  background: "#86efac",
+  padding: "5px 10px",
+  borderRadius: "15px",
+};
