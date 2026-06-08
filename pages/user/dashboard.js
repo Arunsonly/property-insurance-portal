@@ -1,5 +1,3 @@
-const [riskType, setRiskType] = useState("");
-const [businessActivity, setBusinessActivity] = useState("");
 import { useState } from "react";
 
 export default function NewRequest() {
@@ -8,13 +6,26 @@ export default function NewRequest() {
 
   return (
     <div style={{ padding: "20px" }}>
-
       <h2>New Request</h2>
+
+      {/* Insured Name */}
+      <div style={{ marginBottom: "20px" }}>
+        <label>Insured Name</label>
+        <input
+          type="text"
+          placeholder="Enter insured name"
+          style={{
+            width: "100%",
+            padding: "14px",
+            borderRadius: "12px",
+            border: "1px solid #ddd",
+          }}
+        />
+      </div>
 
       {/* Communication Address */}
       <div style={{ marginBottom: "20px" }}>
         <label>Communication Address</label>
-
         <textarea
           placeholder="Enter communication address"
           style={{
@@ -27,10 +38,24 @@ export default function NewRequest() {
         />
       </div>
 
+      {/* Mobile Number */}
+      <div style={{ marginBottom: "20px" }}>
+        <label>Mobile Number</label>
+        <input
+          type="text"
+          placeholder="Enter mobile number"
+          style={{
+            width: "100%",
+            padding: "14px",
+            borderRadius: "12px",
+            border: "1px solid #ddd",
+          }}
+        />
+      </div>
+
       {/* Risk Location */}
       <div style={{ marginBottom: "20px" }}>
         <label>Risk Location</label>
-
         <input
           type="text"
           placeholder="Enter at least district name for EQ rate confirmation"
@@ -80,18 +105,17 @@ export default function NewRequest() {
           }}
         >
           <option value="">Select Risk Type</option>
-          <option>Manufacturing Unit</option>
-          <option>Godown (Open)</option>
-          <option>Godown (Closed)</option>
-          <option>Retail Shop</option>
-          <option>Other</option>
+          <option value="Manufacturing Unit">Manufacturing Unit</option>
+          <option value="Godown (Open)">Godown (Open)</option>
+          <option value="Godown (Closed)">Godown (Closed)</option>
+          <option value="Retail Shop">Retail Shop</option>
+          <option value="Other">Other</option>
         </select>
       </div>
 
       {/* Business Activity */}
       <div style={{ marginBottom: "20px" }}>
         <label>Business Activity</label>
-
         <input
           type="text"
           placeholder={businessActivity}
@@ -107,7 +131,6 @@ export default function NewRequest() {
       {/* Sum Insured */}
       <div style={{ marginBottom: "20px" }}>
         <label>Sum Insured (₹)</label>
-
         <input
           type="number"
           placeholder="Enter total sum insured"
@@ -120,10 +143,9 @@ export default function NewRequest() {
         />
       </div>
 
-      {/* Coverage */}
+      {/* Coverage Required */}
       <div style={{ marginBottom: "20px" }}>
         <label>Coverage Required</label>
-
         <select
           style={{
             width: "100%",
@@ -139,7 +161,6 @@ export default function NewRequest() {
           <option>Fire + STFI + EQ + Terrorism + Burglary</option>
         </select>
       </div>
-
     </div>
   );
 }
