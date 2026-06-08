@@ -75,3 +75,66 @@ export default function MyRequests() {
           padding: "15px",
           borderRadius: "14px",
           border: "1px solid #ddd",
+          marginBottom: "20px",
+          fontSize: "16px",
+          background: "#fff",
+        }}
+      />
+
+      {/* Request Cards */}
+      {requests.map((item, index) => (
+        <div
+          key={index}
+          style={{
+            background: "#fff",
+            borderRadius: "24px",
+            padding: "22px",
+            marginBottom: "18px",
+            boxShadow:
+              "0 10px 25px rgba(0,0,0,0.08)",
+          }}
+        >
+          <h2
+            style={{
+              marginTop: 0,
+              color: "#111827",
+            }}
+          >
+            {item.refNo}
+          </h2>
+
+          <p>
+            <strong>Date:</strong> {item.date}
+          </p>
+
+          <div
+            style={{
+              display: "inline-block",
+              background: item.color,
+              color: "#fff",
+              padding: "8px 14px",
+              borderRadius: "999px",
+              fontWeight: "600",
+              marginTop: "10px",
+            }}
+          >
+            {item.status}
+          </div>
+
+          <div style={{ marginTop: "18px" }}>
+            <Link
+              href="/user/request-details"
+              style={{
+                color: "#2563eb",
+                textDecoration: "none",
+                fontWeight: "700",
+              }}
+            >
+              View Details →
+            </Link>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+          }
