@@ -41,30 +41,42 @@ export default function NewRequest() {
         background: "#f4f7fc",
         minHeight: "100vh",
         padding: "20px",
+        maxWidth: "700px",
+        margin: "0 auto",
       }}
     >
+      {/* Header */}
       <div
         style={{
-          background: "#0b3d91",
+          background:
+            "linear-gradient(135deg,#0b3d91,#2563eb)",
           color: "#fff",
-          padding: "25px",
-          borderRadius: "20px",
+          padding: "30px",
+          borderRadius: "24px",
           marginBottom: "20px",
+          boxShadow:
+            "0 15px 30px rgba(37,99,235,.25)",
         }}
       >
-        <h1>New Request</h1>
-        <p>Submit Property Insurance Requirement</p>
+        <h1 style={{ margin: 0 }}>
+          🏢 New Property Request
+        </h1>
+
+        <p
+          style={{
+            marginTop: "10px",
+            opacity: "0.9",
+          }}
+        >
+          Submit Property Insurance Requirement
+        </p>
       </div>
 
-      <div
-        style={{
-          background: "#fff",
-          padding: "20px",
-          borderRadius: "20px",
-          marginBottom: "20px",
-        }}
-      >
-        <h2>Basic Details</h2>
+      {/* Basic Details */}
+      <div style={cardStyle}>
+        <h2 style={{ color: "#0b3d91" }}>
+          👤 Basic Details
+        </h2>
 
         <input
           placeholder="Insured Name"
@@ -82,15 +94,11 @@ export default function NewRequest() {
         />
       </div>
 
-      <div
-        style={{
-          background: "#fff",
-          padding: "20px",
-          borderRadius: "20px",
-          marginBottom: "20px",
-        }}
-      >
-        <h2>Risk Details</h2>
+      {/* Risk Details */}
+      <div style={cardStyle}>
+        <h2 style={{ color: "#0b3d91" }}>
+          🏭 Risk Details
+        </h2>
 
         <input
           placeholder="Enter at least district name for EQ rate confirmation"
@@ -99,27 +107,47 @@ export default function NewRequest() {
 
         <select
           value={riskType}
-          onChange={(e) => handleRiskType(e.target.value)}
+          onChange={(e) =>
+            handleRiskType(e.target.value)
+          }
           style={inputStyle}
         >
-          <option value="">Select Risk Type</option>
+          <option value="">
+            Select Risk Type
+          </option>
 
-          <option>Manufacturing Unit</option>
-          <option>Godown (Open)</option>
-          <option>Godown (Closed)</option>
-          <option>Retail Shop</option>
-          <option>Other</option>
+          <option>
+            Manufacturing Unit
+          </option>
+
+          <option>
+            Godown (Open)
+          </option>
+
+          <option>
+            Godown (Closed)
+          </option>
+
+          <option>
+            Retail Shop
+          </option>
+
+          <option>
+            Other
+          </option>
         </select>
 
         <textarea
           value={businessActivity}
-          onChange={(e) => setBusinessActivity(e.target.value)}
+          onChange={(e) =>
+            setBusinessActivity(e.target.value)
+          }
           placeholder="Business Activity"
           style={textareaStyle}
         />
 
         <select style={inputStyle}>
-          <option value="">
+          <option>
             Select Coverage Required
           </option>
 
@@ -146,82 +174,109 @@ export default function NewRequest() {
         />
       </div>
 
-      <div
-        style={{
-          background: "#fff",
-          padding: "20px",
-          borderRadius: "20px",
-          marginBottom: "20px",
-        }}
-      >
-        <h2>Upload Documents</h2>
+      {/* Upload Documents */}
+      <div style={cardStyle}>
+        <h2 style={{ color: "#0b3d91" }}>
+          📎 Upload Documents
+        </h2>
 
-        <label>
-          Proposal Form
+        <div style={uploadBox}>
+          <strong>
+            Proposal Form
+          </strong>
           <input
             type="file"
             style={fileStyle}
           />
-        </label>
+        </div>
 
-        <label>
-          Risk Photos
+        <div style={uploadBox}>
+          <strong>
+            Risk Photos
+          </strong>
           <input
             type="file"
             style={fileStyle}
           />
-        </label>
+        </div>
 
-        <label>
-          Previous Policy (Optional)
+        <div style={uploadBox}>
+          <strong>
+            Previous Policy (Optional)
+          </strong>
           <input
             type="file"
             style={fileStyle}
           />
-        </label>
+        </div>
       </div>
 
+      {/* Submit */}
       <button
         style={{
           width: "100%",
-          background: "#16a34a",
-          color: "#fff",
-          border: "none",
           padding: "18px",
-          borderRadius: "15px",
+          border: "none",
+          borderRadius: "16px",
+          background:
+            "linear-gradient(135deg,#16a34a,#22c55e)",
+          color: "#fff",
           fontSize: "18px",
-          fontWeight: "bold",
+          fontWeight: "700",
+          boxShadow:
+            "0 10px 20px rgba(34,197,94,0.25)",
+          cursor: "pointer",
         }}
       >
-        Submit Request
+        🚀 Submit Request
       </button>
     </div>
   );
 }
 
+const cardStyle = {
+  background: "#fff",
+  padding: "25px",
+  borderRadius: "24px",
+  marginBottom: "20px",
+  boxShadow:
+    "0 10px 25px rgba(0,0,0,0.08)",
+};
+
 const inputStyle = {
   width: "100%",
+  boxSizing: "border-box",
   padding: "15px",
   marginTop: "12px",
   marginBottom: "12px",
   borderRadius: "12px",
   border: "1px solid #ddd",
   fontSize: "16px",
+  background: "#fafafa",
 };
 
 const textareaStyle = {
   width: "100%",
-  minHeight: "100px",
+  boxSizing: "border-box",
+  minHeight: "120px",
   padding: "15px",
   marginTop: "12px",
   marginBottom: "12px",
   borderRadius: "12px",
   border: "1px solid #ddd",
   fontSize: "16px",
+  background: "#fafafa",
 };
 
 const fileStyle = {
   width: "100%",
   marginTop: "10px",
-  marginBottom: "20px",
+};
+
+const uploadBox = {
+  border: "2px dashed #d1d5db",
+  borderRadius: "16px",
+  padding: "15px",
+  marginBottom: "15px",
+  background: "#fafafa",
 };
