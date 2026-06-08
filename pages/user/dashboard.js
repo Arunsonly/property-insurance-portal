@@ -1,3 +1,40 @@
+import { useState } from "react";
+
+export default function NewRequest() {
+
+  const [riskType, setRiskType] = useState("");
+  const [businessActivity, setBusinessActivity] = useState("");
+
+  return (
+    <>
+      {/* yaha tumhara form code */}
+    </>
+  );
+}
+{/* Communication Address */}
+<div style={{ marginBottom: "20px" }}>
+  <label
+    style={{
+      display: "block",
+      marginBottom: "8px",
+      fontWeight: "600",
+    }}
+  >
+    Communication Address
+  </label>
+
+  <textarea
+    placeholder="Enter communication address"
+    style={{
+      width: "100%",
+      padding: "14px",
+      borderRadius: "12px",
+      border: "1px solid #ddd",
+      minHeight: "80px",
+    }}
+  />
+</div>
+
 {/* Risk Location */}
 <div style={{ marginBottom: "20px" }}>
   <label
@@ -41,20 +78,26 @@
       setRiskType(value);
 
       if (value === "Manufacturing Unit") {
-        setBusinessActivity("Name of goods manufacturing");
+        setBusinessActivity(
+          "Name of goods manufacturing"
+        );
       } else if (
         value === "Godown (Open)" ||
         value === "Godown (Closed)"
       ) {
-        setBusinessActivity("Name of goods storage");
+        setBusinessActivity(
+          "Name of goods storage"
+        );
       } else if (value === "Retail Shop") {
         setBusinessActivity(
           "Name of Goods selling (Kirana, Electric, Puncture Shop etc.)"
         );
-      } else {
+      } else if (value === "Other") {
         setBusinessActivity(
           "Enter the business activities details"
         );
+      } else {
+        setBusinessActivity("");
       }
     }}
     style={{
