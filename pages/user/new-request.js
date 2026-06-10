@@ -4,51 +4,15 @@ import { ref, push } from "firebase/database";
 
 export default function NewRequest() {
   const [insuredName, setInsuredName] = useState("");
-const [address, setAddress] = useState("");
-const [mobile, setMobile] = useState("");
-const [riskLocation, setRiskLocation] = useState("");
-const [coverage, setCoverage] = useState("");
-const [sumInsured, setSumInsured] = useState("");
+  const [address, setAddress] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [riskLocation, setRiskLocation] = useState("");
   const [riskType, setRiskType] = useState("");
   const [businessActivity, setBusinessActivity] = useState("");
+  const [coverage, setCoverage] = useState("");
+  const [sumInsured, setSumInsured] = useState("");
 
   const handleRiskType = (value) => {
-    const handleSubmit = async () => {
-  try {
-    const requestData = {
-      requestNo: "PROP-" + Date.now(),
-      insuredName,
-      address,
-      mobile,
-      riskLocation,
-      riskType,
-      businessActivity,
-      coverage,
-      sumInsured,
-      status: "Pending",
-      createdAt: new Date().toISOString(),
-    };
-
-    await push(
-      ref(database, "requests"),
-      requestData
-    );
-
-    alert("Request Submitted Successfully");
-
-    setInsuredName("");
-    setAddress("");
-    setMobile("");
-    setRiskLocation("");
-    setRiskType("");
-    setBusinessActivity("");
-    setCoverage("");
-    setSumInsured("");
-  } catch (error) {
-    console.error(error);
-    alert("Error submitting request");
-  }
-};
     setRiskType(value);
 
     switch (value) {
@@ -71,11 +35,50 @@ const [sumInsured, setSumInsured] = useState("");
         break;
 
       case "Other":
-        setBusinessActivity("Enter the business activities details");
+        setBusinessActivity(
+          "Enter the business activities details"
+        );
         break;
 
       default:
         setBusinessActivity("");
+    }
+  };
+const handleSubmit = async () => {
+    try {
+      const requestData = {
+        requestNo: "PROP-" + Date.now(),
+        insuredName,
+        address,
+        mobile,
+        riskLocation,
+        riskType,
+        businessActivity,
+        coverage,
+        sumInsured,
+        status: "Pending",
+        createdAt: new Date().toISOString(),
+      };
+
+      await push(
+        ref(database, "requests"),
+        requestData
+      );
+
+      alert("Request Submitted Successfully");
+
+      setInsuredName("");
+      setAddress("");
+      setMobile("");
+      setRiskLocation("");
+      setRiskType("");
+      setBusinessActivity("");
+      setCoverage("");
+      setSumInsured("");
+
+    } catch (error) {
+      console.error(error);
+      alert("Error submitting request");
     }
   };
 
@@ -89,7 +92,6 @@ const [sumInsured, setSumInsured] = useState("");
         margin: "0 auto",
       }}
     >
-      {/* Header */}
       <div
         style={{
           background:
@@ -98,25 +100,17 @@ const [sumInsured, setSumInsured] = useState("");
           padding: "30px",
           borderRadius: "24px",
           marginBottom: "20px",
-          boxShadow:
-            "0 15px 30px rgba(37,99,235,.25)",
         }}
       >
         <h1 style={{ margin: 0 }}>
           🏢 New Property Request
         </h1>
 
-        <p
-          style={{
-            marginTop: "10px",
-            opacity: "0.9",
-          }}
-        >
+        <p style={{ marginTop: "10px" }}>
           Submit Property Insurance Requirement
         </p>
       </div>
-
-      {/* Basic Details */}
+{/* Basic Details */}
       <div style={cardStyle}>
         <h2 style={{ color: "#0b3d91" }}>
           👤 Basic Details
@@ -124,16 +118,28 @@ const [sumInsured, setSumInsured] = useState("");
 
         <input
           placeholder="Insured Name"
+          value={insuredName}
+          onChange={(e) =>
+            setInsuredName(e.target.value)
+          }
           style={inputStyle}
         />
 
         <textarea
           placeholder="Communication Address"
+          value={address}
+          onChange={(e) =>
+            setAddress(e.target.value)
+          }
           style={textareaStyle}
         />
 
         <input
           placeholder="Mobile Number"
+          value={mobile}
+          onChange={(e) =>
+            setMobile(e.target.value)
+          }
           style={inputStyle}
         />
       </div>
@@ -146,6 +152,10 @@ const [sumInsured, setSumInsured] = useState("");
 
         <input
           placeholder="Enter at least district name for EQ rate confirmation"
+          value={riskLocation}
+          onChange={(e) =>
+            setRiskLocation(e.target.value)
+          }
           style={inputStyle}
         />
 
@@ -160,28 +170,13 @@ const [sumInsured, setSumInsured] = useState("");
             Select Risk Type
           </option>
 
-          <option>
-            Manufacturing Unit
-          </option>
-
-          <option>
-            Godown (Open)
-          </option>
-
-          <option>
-            Godown (Closed)
-          </option>
-
-          <option>
-            Retail Shop
-          </option>
-
-          <option>
-            Other
-          </option>
+          <option>Manufacturing Unit</option>
+          <option>Godown (Open)</option>
+          <option>Godown (Closed)</option>
+          <option>Retail Shop</option>
+          <option>Other</option>
         </select>
-
-        <textarea
+<textarea
           value={businessActivity}
           onChange={(e) =>
             setBusinessActivity(e.target.value)
@@ -190,8 +185,14 @@ const [sumInsured, setSumInsured] = useState("");
           style={textareaStyle}
         />
 
-        <select style={inputStyle}>
-          <option>
+        <select
+          value={coverage}
+          onChange={(e) =>
+            setCoverage(e.target.value)
+          }
+          style={inputStyle}
+        >
+          <option value="">
             Select Coverage Required
           </option>
 
@@ -214,6 +215,10 @@ const [sumInsured, setSumInsured] = useState("");
 
         <input
           placeholder="Enter total sum insured"
+          value={sumInsured}
+          onChange={(e) =>
+            setSumInsured(e.target.value)
+          }
           style={inputStyle}
         />
       </div>
@@ -225,38 +230,24 @@ const [sumInsured, setSumInsured] = useState("");
         </h2>
 
         <div style={uploadBox}>
-          <strong>
-            Proposal Form
-          </strong>
-          <input
-            type="file"
-            style={fileStyle}
-          />
+          <strong>Proposal Form</strong>
+          <input type="file" style={fileStyle} />
         </div>
 
         <div style={uploadBox}>
-          <strong>
-            Risk Photos
-          </strong>
-          <input
-            type="file"
-            style={fileStyle}
-          />
+          <strong>Risk Photos</strong>
+          <input type="file" style={fileStyle} />
         </div>
 
         <div style={uploadBox}>
           <strong>
             Previous Policy (Optional)
           </strong>
-          <input
-            type="file"
-            style={fileStyle}
-          />
+          <input type="file" style={fileStyle} />
         </div>
       </div>
-
-      {/* Submit */}
-      <button
+<button
+        onClick={handleSubmit}
         style={{
           width: "100%",
           padding: "18px",
@@ -267,8 +258,6 @@ const [sumInsured, setSumInsured] = useState("");
           color: "#fff",
           fontSize: "18px",
           fontWeight: "700",
-          boxShadow:
-            "0 10px 20px rgba(34,197,94,0.25)",
           cursor: "pointer",
         }}
       >
