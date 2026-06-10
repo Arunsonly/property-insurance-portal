@@ -126,13 +126,13 @@ const handleSubmit = async () => {
         />
 
         <textarea
-          placeholder="Communication Address"
-          value={address}
-          onChange={(e) =>
-            setAddress(e.target.value)
-          }
-          style={textareaStyle}
-        />
+  placeholder={businessActivity}
+  onFocus={() => setBusinessActivity("")}
+  onChange={(e) =>
+    setBusinessActivity(e.target.value)
+  }
+  style={textareaStyle}
+/>
 
         <input
           placeholder="Mobile Number"
