@@ -97,7 +97,7 @@ export default function QueryReceived() {
           </p>
 
           <Link
-            href={`/user/request-details?id=${item.id}`}
+            href={`/user/reply-query?id=${item.id}`}
             style={{
               color: "#2563eb",
               fontWeight: "bold",
