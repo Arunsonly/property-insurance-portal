@@ -6,29 +6,27 @@ import { ref, onValue } from "firebase/database";
 
 export default function RequestDetails() {
   const router = useRouter();
+  const { id } = router.query;
 
   const [requestData, setRequestData] =
     useState(null);
 
   useEffect(() => {
-    const requestsRef = ref(
+    if (!id) return;
+
+    const requestRef = ref(
       database,
-      "requests"
+      `requests/${id}`
     );
 
-    onValue(requestsRef, (snapshot) => {
+    onValue(requestRef, (snapshot) => {
       const data = snapshot.val();
 
       if (data) {
-        const firstKey =
-          Object.keys(data)[0];
-
-        setRequestData(
-          data[firstKey]
-        );
+        setRequestData(data);
       }
     });
-  }, []);
+  }, [id]);
 
   if (!requestData) {
     return (
@@ -59,11 +57,10 @@ export default function RequestDetails() {
           marginBottom: "15px",
         }}
       >
-        <h2>
-          Request Details
-        </h2>
+        <h2>Request Details</h2>
       </div>
-<div
+
+      <div
         style={{
           background: "#fff",
           padding: "18px",
@@ -127,7 +124,8 @@ export default function RequestDetails() {
           {requestData.coverage}
         </p>
       </div>
-<div
+
+      <div
         style={{
           display: "grid",
           gap: "12px",
@@ -182,6 +180,6 @@ export default function RequestDetails() {
           Reject Request
         </button>
       </div>
-</div>
+    </div>
   );
 }
