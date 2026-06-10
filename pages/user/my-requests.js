@@ -1,32 +1,53 @@
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { database } from "../../lib/firebase";
+import { ref, onValue } from "firebase/database";
 
 export default function MyRequests() {
-  const requests = [
-    {
-      refNo: "PROP-00128",
-      date: "20/05/2025",
-      status: "Pending",
-      color: "#f59e0b",
-    },
-    {
-      refNo: "PROP-00127",
-      date: "19/05/2025",
-      status: "Query Raised",
-      color: "#8b5cf6",
-    },
-    {
-      refNo: "PROP-00126",
-      date: "18/05/2025",
-      status: "Quotation Received",
-      color: "#2563eb",
-    },
-    {
-      refNo: "PROP-00125",
-      date: "17/05/2025",
-      status: "Policy Issued",
-      color: "#22c55e",
-    },
-  ];
+  const [requests, setRequests] = useState([]);
+
+  useEffect(() => {
+    const requestsRef = ref(database, "requests");
+
+    onValue(requestsRef, (snapshot) => {
+      const data = snapshot.val();
+
+      if (data) {
+        const loadedRequests = Object.keys(data).map(
+          (key) => ({
+            id: key,
+            ...data[key],
+          })
+        );
+
+        setRequests(loadedRequests.reverse());
+      } else {
+        setRequests([]);
+      }
+    });
+  }, []);
+
+  const getColor = (status) => {
+    switch (status) {
+      case "Pending":
+        return "#f59e0b";
+
+      case "Query Raised":
+        return "#8b5cf6";
+
+      case "Reply Received":
+        return "#2563eb";
+
+      case "Quotation Sent":
+        return "#ea580c";
+
+      case "Policy Issued":
+        return "#22c55e";
+
+      default:
+        return "#6b7280";
+    }
+  };
 
   return (
     <div
@@ -38,7 +59,6 @@ export default function MyRequests() {
         margin: "0 auto",
       }}
     >
-      {/* Header */}
       <div
         style={{
           background:
@@ -65,7 +85,6 @@ export default function MyRequests() {
         </p>
       </div>
 
-      {/* Search */}
       <input
         type="text"
         placeholder="Search by Reference No"
@@ -81,10 +100,22 @@ export default function MyRequests() {
         }}
       />
 
-      {/* Request Cards */}
-      {requests.map((item, index) => (
+      {requests.length === 0 && (
         <div
-          key={index}
+          style={{
+            background: "#fff",
+            padding: "20px",
+            borderRadius: "16px",
+            textAlign: "center",
+          }}
+        >
+          No Requests Found
+        </div>
+      )}
+
+      {requests.map((item) => (
+        <div
+          key={item.id}
           style={{
             background: "#fff",
             borderRadius: "24px",
@@ -100,17 +131,25 @@ export default function MyRequests() {
               color: "#111827",
             }}
           >
-            {item.refNo}
+            {item.requestNo}
           </h2>
 
           <p>
-            <strong>Date:</strong> {item.date}
+            <strong>Insured:</strong>{" "}
+            {item.insuredName}
+          </p>
+
+          <p>
+            <strong>Location:</strong>{" "}
+            {item.riskLocation}
           </p>
 
           <div
             style={{
               display: "inline-block",
-              background: item.color,
+              background: getColor(
+                item.status
+              ),
               color: "#fff",
               padding: "8px 14px",
               borderRadius: "999px",
@@ -123,7 +162,7 @@ export default function MyRequests() {
 
           <div style={{ marginTop: "18px" }}>
             <Link
-              href="/user/request-details"
+              href={`/user/request-details?id=${item.id}`}
               style={{
                 color: "#2563eb",
                 textDecoration: "none",
@@ -137,4 +176,4 @@ export default function MyRequests() {
       ))}
     </div>
   );
-          }
+                }
