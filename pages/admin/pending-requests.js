@@ -1,32 +1,31 @@
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { database } from "../../lib/firebase";
+import { ref, onValue } from "firebase/database";
 
 export default function PendingRequests() {
-  const requests = [
-    {
-      ref: "PROP-00128",
-      name: "ABC Traders",
-      date: "20/05/2025",
-      status: "Pending",
-    },
-    {
-      ref: "PROP-00127",
-      name: "XYZ Industries",
-      date: "20/05/2025",
-      status: "Pending",
-    },
-    {
-      ref: "PROP-00126",
-      name: "Kumar Retail",
-      date: "19/05/2025",
-      status: "Pending",
-    },
-    {
-      ref: "PROP-00125",
-      name: "Shree Plastics",
-      date: "19/05/2025",
-      status: "Pending",
-    },
-  ];
+  const [requests, setRequests] = useState([]);
+
+  useEffect(() => {
+    const requestsRef = ref(database, "requests");
+
+    onValue(requestsRef, (snapshot) => {
+      const data = snapshot.val();
+
+      if (data) {
+        const loadedRequests = Object.keys(data).map(
+          (key) => ({
+            id: key,
+            ...data[key],
+          })
+        );
+
+        setRequests(loadedRequests.reverse());
+      } else {
+        setRequests([]);
+      }
+    });
+  }, []);
 
   return (
     <div
@@ -47,15 +46,15 @@ export default function PendingRequests() {
           marginBottom: "15px",
         }}
       >
-        <h2 style={{ margin: 0 }}>Pending Requests</h2>
+        <h2 style={{ margin: 0 }}>
+          Pending Requests
+        </h2>
+
         <p style={{ marginTop: "5px" }}>
           Review all newly submitted requests
         </p>
       </div>
-
-      {/* Search */}
-
-      <input
+<input
         type="text"
         placeholder="Search by Ref No / Insured Name / Mobile"
         style={{
@@ -68,13 +67,26 @@ export default function PendingRequests() {
         }}
       />
 
-      {/* Request List */}
+      {requests.length === 0 && (
+        <div
+          style={{
+            background: "#fff",
+            padding: "20px",
+            borderRadius: "12px",
+            textAlign: "center",
+          }}
+        >
+          No Pending Requests Found
+        </div>
+      )}
 
-      {requests.map((item, index) => (
+      {requests.map((item) => (
         <Link
-          key={index}
+          key={item.id}
           href="/admin/request-details"
-          style={{ textDecoration: "none" }}
+          style={{
+            textDecoration: "none",
+          }}
         >
           <div
             style={{
@@ -82,7 +94,8 @@ export default function PendingRequests() {
               padding: "15px",
               borderRadius: "12px",
               marginBottom: "12px",
-              boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
+              boxShadow:
+                "0 2px 10px rgba(0,0,0,0.08)",
               color: "#111",
             }}
           >
@@ -93,7 +106,9 @@ export default function PendingRequests() {
                 marginBottom: "10px",
               }}
             >
-              <strong>{item.ref}</strong>
+              <strong>
+                {item.requestNo}
+              </strong>
 
               <span
                 style={{
@@ -107,13 +122,32 @@ export default function PendingRequests() {
                 {item.status}
               </span>
             </div>
-
-            <p>
-              <strong>Insured Name:</strong> {item.name}
+<p>
+              <strong>
+                Insured Name:
+              </strong>{" "}
+              {item.insuredName}
             </p>
 
             <p>
-              <strong>Date:</strong> {item.date}
+              <strong>
+                Mobile:
+              </strong>{" "}
+              {item.mobile}
+            </p>
+
+            <p>
+              <strong>
+                Risk Location:
+              </strong>{" "}
+              {item.riskLocation}
+            </p>
+
+            <p>
+              <strong>
+                Risk Type:
+              </strong>{" "}
+              {item.riskType}
             </p>
 
             <div
@@ -125,9 +159,10 @@ export default function PendingRequests() {
             >
               View Details →
             </div>
+
           </div>
         </Link>
       ))}
-    </div>
+</div>
   );
-                  }
+}
