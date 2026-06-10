@@ -1,27 +1,37 @@
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { database } from "../../lib/firebase";
+import { ref, onValue } from "firebase/database";
+
 export default function QueryStatus() {
-  const data = [
-    {
-      ref: "PROP-00128",
-      name: "ABC Traders",
-      date: "18/05/2025",
-      status: "Reply Received",
-      color: "#28a745",
-    },
-    {
-      ref: "PROP-00127",
-      name: "XYZ Industries",
-      date: "17/05/2025",
-      status: "Waiting",
-      color: "#ff9800",
-    },
-    {
-      ref: "PROP-00126",
-      name: "Kumar Retail",
-      date: "16/05/2025",
-      status: "Waiting",
-      color: "#ff9800",
-    },
-  ];
+  const [requests, setRequests] = useState([]);
+
+  useEffect(() => {
+    const requestsRef = ref(database, "requests");
+
+    onValue(requestsRef, (snapshot) => {
+      const data = snapshot.val();
+
+      if (data) {
+        const loadedRequests = Object.keys(data)
+          .map((key) => ({
+            id: key,
+            ...data[key],
+          }))
+          .filter(
+            (item) =>
+              item.status ===
+              "Query Raised"
+          );
+
+        setRequests(
+          loadedRequests.reverse()
+        );
+      } else {
+        setRequests([]);
+      }
+    });
+  }, []);
 
   return (
     <div
@@ -33,14 +43,20 @@ export default function QueryStatus() {
     >
       <div
         style={{
-          background: "#0b3d91",
+          background: "#6f42c1",
           color: "#fff",
           padding: "18px",
           borderRadius: "12px",
           marginBottom: "15px",
         }}
       >
-        <h2>Query Status</h2>
+        <h2 style={{ margin: 0 }}>
+          Query Status
+        </h2>
+
+        <p style={{ marginTop: "5px" }}>
+          Query Raised Requests
+        </p>
       </div>
 
       <input
@@ -54,33 +70,70 @@ export default function QueryStatus() {
         }}
       />
 
-      {data.map((item, index) => (
+      {requests.length === 0 && (
         <div
-          key={index}
           style={{
             background: "#fff",
+            padding: "20px",
             borderRadius: "12px",
-            padding: "15px",
-            marginBottom: "12px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+            textAlign: "center",
           }}
         >
-          <p><b>{item.ref}</b></p>
-          <p>{item.name}</p>
-          <p>{item.date}</p>
+          No Query Raised Requests
+        </div>
+      )}
 
-          <span
+      {requests.map((item) => (
+        <Link
+          key={item.id}
+          href={`/admin/request-details?id=${item.id}`}
+          style={{
+            textDecoration: "none",
+          }}
+        >
+          <div
             style={{
-              background: item.color,
-              color: "#fff",
-              padding: "5px 10px",
-              borderRadius: "20px",
-              fontSize: "12px",
+              background: "#fff",
+              borderRadius: "12px",
+              padding: "15px",
+              marginBottom: "12px",
+              boxShadow:
+                "0 2px 8px rgba(0,0,0,0.08)",
+              color: "#111",
             }}
           >
-            {item.status}
-          </span>
-        </div>
+            <p>
+              <b>
+                {item.requestNo}
+              </b>
+            </p>
+
+            <p>
+              {item.insuredName}
+            </p>
+
+            <p>
+              Query:
+              {" "}
+              {item.queryMessage}
+            </p>
+
+            <span
+              style={{
+                background:
+                  "#6f42c1",
+                color: "#fff",
+                padding:
+                  "5px 10px",
+                borderRadius:
+                  "20px",
+                fontSize: "12px",
+              }}
+            >
+              Query Raised
+            </span>
+          </div>
+        </Link>
       ))}
     </div>
   );
