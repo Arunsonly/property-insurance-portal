@@ -1,7 +1,75 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { database } from "../../lib/firebase";
+import { ref, get, update } from "firebase/database";
 
 export default function RaiseQuery() {
+  const router = useRouter();
+  const { id } = router.query;
+
   const [query, setQuery] = useState("");
+  const [requestData, setRequestData] =
+    useState(null);
+
+  useEffect(() => {
+    if (!id) return;
+
+    const loadData = async () => {
+      const snapshot = await get(
+        ref(database, `requests/${id}`)
+      );
+
+      if (snapshot.exists()) {
+        setRequestData(
+          snapshot.val()
+        );
+      }
+    };
+
+    loadData();
+  }, [id]);
+
+  const handleSubmit = async () => {
+    if (!query.trim()) {
+      alert("Enter Query");
+      return;
+    }
+
+    try {
+      await update(
+        ref(database, `requests/${id}`),
+        {
+          status: "Query Raised",
+          queryMessage: query,
+          queryDate:
+            new Date().toISOString(),
+        }
+      );
+
+      alert(
+        "Query Raised Successfully"
+      );
+
+      router.push(
+        "/admin/pending-requests"
+      );
+    } catch (error) {
+      console.error(error);
+      alert("Error");
+    }
+  };
+
+  if (!requestData) {
+    return (
+      <div
+        style={{
+          padding: "20px",
+        }}
+      >
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <div
@@ -11,8 +79,6 @@ export default function RaiseQuery() {
         padding: "15px",
       }}
     >
-      {/* Header */}
-
       <div
         style={{
           background: "#0b3d91",
@@ -22,10 +88,10 @@ export default function RaiseQuery() {
           marginBottom: "15px",
         }}
       >
-        <h2 style={{ margin: 0 }}>Raise Query</h2>
+        <h2 style={{ margin: 0 }}>
+          Raise Query
+        </h2>
       </div>
-
-      {/* Request Info */}
 
       <div
         style={{
@@ -35,11 +101,16 @@ export default function RaiseQuery() {
           marginBottom: "15px",
         }}
       >
-        <p><b>Reference No:</b> PROP-00128</p>
-        <p><b>Insured Name:</b> ABC Traders</p>
-      </div>
+        <p>
+          <b>Reference No:</b>{" "}
+          {requestData.requestNo}
+        </p>
 
-      {/* Query Box */}
+        <p>
+          <b>Insured Name:</b>{" "}
+          {requestData.insuredName}
+        </p>
+      </div>
 
       <div
         style={{
@@ -55,7 +126,11 @@ export default function RaiseQuery() {
 
         <textarea
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) =>
+            setQuery(
+              e.target.value
+            )
+          }
           placeholder="Type your query here..."
           rows="8"
           style={{
@@ -63,42 +138,16 @@ export default function RaiseQuery() {
             marginTop: "10px",
             padding: "12px",
             borderRadius: "10px",
-            border: "1px solid #ddd",
+            border:
+              "1px solid #ddd",
             resize: "none",
             fontSize: "15px",
           }}
         />
       </div>
 
-      {/* Upload */}
-
-      <div
-        style={{
-          background: "#fff",
-          padding: "20px",
-          borderRadius: "12px",
-          marginBottom: "20px",
-          textAlign: "center",
-          border: "2px dashed #ccc",
-        }}
-      >
-        <h3>📎 Upload Document</h3>
-
-        <input type="file" />
-
-        <p
-          style={{
-            color: "#666",
-            marginTop: "10px",
-          }}
-        >
-          PDF, JPG, PNG
-        </p>
-      </div>
-
-      {/* Button */}
-
       <button
+        onClick={handleSubmit}
         style={{
           width: "100%",
           padding: "16px",
@@ -115,4 +164,4 @@ export default function RaiseQuery() {
       </button>
     </div>
   );
-        }
+}
