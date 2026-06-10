@@ -13,14 +13,20 @@ export default function PendingRequests() {
       const data = snapshot.val();
 
       if (data) {
-        const loadedRequests = Object.keys(data).map(
-          (key) => ({
+        const loadedRequests = Object.keys(data)
+          .map((key) => ({
             id: key,
             ...data[key],
-          })
-        );
+          }))
+          .filter(
+            (item) =>
+              !item.status ||
+              item.status === "Pending"
+          );
 
-        setRequests(loadedRequests.reverse());
+        setRequests(
+          loadedRequests.reverse()
+        );
       } else {
         setRequests([]);
       }
@@ -49,7 +55,8 @@ export default function PendingRequests() {
         </h2>
 
         <p style={{ marginTop: "5px" }}>
-          Review all newly submitted requests
+          Review all newly submitted
+          requests
         </p>
       </div>
 
@@ -101,7 +108,8 @@ export default function PendingRequests() {
             <div
               style={{
                 display: "flex",
-                justifyContent: "space-between",
+                justifyContent:
+                  "space-between",
                 marginBottom: "10px",
               }}
             >
@@ -118,12 +126,14 @@ export default function PendingRequests() {
                   fontSize: "12px",
                 }}
               >
-                {item.status}
+                Pending
               </span>
             </div>
 
             <p>
-              <strong>Insured Name:</strong>{" "}
+              <strong>
+                Insured Name:
+              </strong>{" "}
               {item.insuredName}
             </p>
 
@@ -133,12 +143,16 @@ export default function PendingRequests() {
             </p>
 
             <p>
-              <strong>Risk Location:</strong>{" "}
+              <strong>
+                Risk Location:
+              </strong>{" "}
               {item.riskLocation}
             </p>
 
             <p>
-              <strong>Risk Type:</strong>{" "}
+              <strong>
+                Risk Type:
+              </strong>{" "}
               {item.riskType}
             </p>
 
@@ -156,4 +170,4 @@ export default function PendingRequests() {
       ))}
     </div>
   );
-}
+            }
