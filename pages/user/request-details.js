@@ -1,4 +1,40 @@
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { database } from "../../lib/firebase";
+import { ref, onValue } from "firebase/database";
+
 export default function RequestDetails() {
+  const router = useRouter();
+  const { id } = router.query;
+
+  const [requestData, setRequestData] =
+    useState(null);
+
+  useEffect(() => {
+    if (!id) return;
+
+    const requestRef = ref(
+      database,
+      `requests/${id}`
+    );
+
+    onValue(requestRef, (snapshot) => {
+      const data = snapshot.val();
+
+      if (data) {
+        setRequestData(data);
+      }
+    });
+  }, [id]);
+
+  if (!requestData) {
+    return (
+      <div style={{ padding: "20px" }}>
+        Loading...
+      </div>
+    );
+  }
+
   return (
     <div
       style={{
@@ -9,7 +45,6 @@ export default function RequestDetails() {
         margin: "0 auto",
       }}
     >
-      {/* Header */}
       <div
         style={{
           background:
@@ -18,7 +53,6 @@ export default function RequestDetails() {
           padding: "30px",
           borderRadius: "24px",
           marginBottom: "20px",
-          boxShadow: "0 15px 30px rgba(37,99,235,.25)",
         }}
       >
         <h1 style={{ margin: 0 }}>
@@ -30,135 +64,121 @@ export default function RequestDetails() {
         </p>
       </div>
 
-      {/* Request Info */}
       <div
         style={{
           background: "#fff",
           padding: "24px",
           borderRadius: "24px",
           marginBottom: "20px",
-          boxShadow: "0 10px 25px rgba(0,0,0,.08)",
+          boxShadow:
+            "0 10px 25px rgba(0,0,0,.08)",
         }}
       >
-        <h2>PROP-00128</h2>
+        <h2>
+          {requestData.requestNo}
+        </h2>
 
         <p>
           <strong>Status:</strong>{" "}
           <span
             style={{
-              background: "#f59e0b",
+              background: "#8b5cf6",
               color: "#fff",
               padding: "6px 12px",
               borderRadius: "999px",
             }}
           >
-            Pending
+            {requestData.status}
           </span>
         </p>
 
         <p>
-          <strong>Insured Name:</strong> ABC Traders
+          <strong>Insured Name:</strong>{" "}
+          {requestData.insuredName}
         </p>
 
         <p>
-          <strong>Risk Location:</strong> Indore
+          <strong>Mobile:</strong>{" "}
+          {requestData.mobile}
         </p>
 
         <p>
-          <strong>Coverage:</strong> Fire + STFI + EQ
+          <strong>Address:</strong>{" "}
+          {requestData.address}
         </p>
 
         <p>
-          <strong>Sum Insured:</strong> ₹50,00,000
+          <strong>Risk Location:</strong>{" "}
+          {requestData.riskLocation}
+        </p>
+
+        <p>
+          <strong>Risk Type:</strong>{" "}
+          {requestData.riskType}
+        </p>
+
+        <p>
+          <strong>Business Activity:</strong>{" "}
+          {requestData.businessActivity}
+        </p>
+
+        <p>
+          <strong>Coverage:</strong>{" "}
+          {requestData.coverage}
+        </p>
+
+        <p>
+          <strong>Sum Insured:</strong>{" "}
+          {requestData.sumInsured}
         </p>
       </div>
 
-      {/* Timeline */}
+      {requestData.queryMessage && (
+        <div
+          style={{
+            background: "#fff",
+            padding: "24px",
+            borderRadius: "24px",
+            marginBottom: "20px",
+            boxShadow:
+              "0 10px 25px rgba(0,0,0,.08)",
+          }}
+        >
+          <h2>Latest Query</h2>
+
+          <div
+            style={{
+              background: "#faf5ff",
+              padding: "15px",
+              borderRadius: "12px",
+              border:
+                "1px solid #d8b4fe",
+            }}
+          >
+            {requestData.queryMessage}
+          </div>
+        </div>
+      )}
+
       <div
         style={{
           background: "#fff",
           padding: "24px",
           borderRadius: "24px",
-          marginBottom: "20px",
-          boxShadow: "0 10px 25px rgba(0,0,0,.08)",
+          boxShadow:
+            "0 10px 25px rgba(0,0,0,.08)",
         }}
       >
         <h2>Request Timeline</h2>
 
         <p>✅ Request Submitted</p>
 
-        <p>✅ Under Review</p>
-
-        <p>⏳ Awaiting Quotation</p>
-
-        <p>⬜ Policy Issuance Pending</p>
-      </div>
-
-      {/* Query Section */}
-      <div
-        style={{
-          background: "#fff",
-          padding: "24px",
-          borderRadius: "24px",
-          marginBottom: "20px",
-          boxShadow: "0 10px 25px rgba(0,0,0,.08)",
-        }}
-      >
-        <h2>Latest Query</h2>
-
-        <div
-          style={{
-            background: "#faf5ff",
-            padding: "15px",
-            borderRadius: "12px",
-            border: "1px solid #d8b4fe",
-          }}
-        >
-          Kindly upload previous policy copy.
-        </div>
-      </div>
-
-      {/* Quotation */}
-      <div
-        style={{
-          background: "#fff",
-          padding: "24px",
-          borderRadius: "24px",
-          marginBottom: "20px",
-          boxShadow: "0 10px 25px rgba(0,0,0,.08)",
-        }}
-      >
-        <h2>Quotation</h2>
-
-        <p>Quotation not received yet.</p>
-      </div>
-
-      {/* Policy */}
-      <div
-        style={{
-          background: "#fff",
-          padding: "24px",
-          borderRadius: "24px",
-          boxShadow: "0 10px 25px rgba(0,0,0,.08)",
-        }}
-      >
-        <h2>Policy Document</h2>
-
-        <button
-          style={{
-            width: "100%",
-            background: "#22c55e",
-            color: "#fff",
-            border: "none",
-            padding: "15px",
-            borderRadius: "12px",
-            fontSize: "16px",
-            fontWeight: "600",
-          }}
-        >
-          Download Policy
-        </button>
+        <p>
+          Current Status:
+          {" "}
+          {requestData.status}
+        </p>
       </div>
     </div>
   );
-}
+            }
