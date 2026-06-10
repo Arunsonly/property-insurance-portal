@@ -35,8 +35,6 @@ export default function PendingRequests() {
         padding: "15px",
       }}
     >
-      {/* Header */}
-
       <div
         style={{
           background: "#0b3d91",
@@ -54,7 +52,8 @@ export default function PendingRequests() {
           Review all newly submitted requests
         </p>
       </div>
-<input
+
+      <input
         type="text"
         placeholder="Search by Ref No / Insured Name / Mobile"
         style={{
@@ -83,7 +82,7 @@ export default function PendingRequests() {
       {requests.map((item) => (
         <Link
           key={item.id}
-          href="/admin/request-details"
+          href={`/admin/request-details?id=${item.id}`}
           style={{
             textDecoration: "none",
           }}
@@ -122,31 +121,24 @@ export default function PendingRequests() {
                 {item.status}
               </span>
             </div>
-<p>
-              <strong>
-                Insured Name:
-              </strong>{" "}
+
+            <p>
+              <strong>Insured Name:</strong>{" "}
               {item.insuredName}
             </p>
 
             <p>
-              <strong>
-                Mobile:
-              </strong>{" "}
+              <strong>Mobile:</strong>{" "}
               {item.mobile}
             </p>
 
             <p>
-              <strong>
-                Risk Location:
-              </strong>{" "}
+              <strong>Risk Location:</strong>{" "}
               {item.riskLocation}
             </p>
 
             <p>
-              <strong>
-                Risk Type:
-              </strong>{" "}
+              <strong>Risk Type:</strong>{" "}
               {item.riskType}
             </p>
 
@@ -159,10 +151,9 @@ export default function PendingRequests() {
             >
               View Details →
             </div>
-
           </div>
         </Link>
       ))}
-</div>
+    </div>
   );
 }
