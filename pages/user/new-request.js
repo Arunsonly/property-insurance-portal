@@ -1,10 +1,54 @@
 import { useState } from "react";
+import { database } from "../../lib/firebase";
+import { ref, push } from "firebase/database";
 
 export default function NewRequest() {
+  const [insuredName, setInsuredName] = useState("");
+const [address, setAddress] = useState("");
+const [mobile, setMobile] = useState("");
+const [riskLocation, setRiskLocation] = useState("");
+const [coverage, setCoverage] = useState("");
+const [sumInsured, setSumInsured] = useState("");
   const [riskType, setRiskType] = useState("");
   const [businessActivity, setBusinessActivity] = useState("");
 
   const handleRiskType = (value) => {
+    const handleSubmit = async () => {
+  try {
+    const requestData = {
+      requestNo: "PROP-" + Date.now(),
+      insuredName,
+      address,
+      mobile,
+      riskLocation,
+      riskType,
+      businessActivity,
+      coverage,
+      sumInsured,
+      status: "Pending",
+      createdAt: new Date().toISOString(),
+    };
+
+    await push(
+      ref(database, "requests"),
+      requestData
+    );
+
+    alert("Request Submitted Successfully");
+
+    setInsuredName("");
+    setAddress("");
+    setMobile("");
+    setRiskLocation("");
+    setRiskType("");
+    setBusinessActivity("");
+    setCoverage("");
+    setSumInsured("");
+  } catch (error) {
+    console.error(error);
+    alert("Error submitting request");
+  }
+};
     setRiskType(value);
 
     switch (value) {
