@@ -1,6 +1,47 @@
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import Link from "next/link";
+import { database } from "../../lib/firebase";
+import { ref, onValue } from "firebase/database";
 
 export default function RequestDetails() {
+  const router = useRouter();
+
+  const [requestData, setRequestData] =
+    useState(null);
+
+  useEffect(() => {
+    const requestsRef = ref(
+      database,
+      "requests"
+    );
+
+    onValue(requestsRef, (snapshot) => {
+      const data = snapshot.val();
+
+      if (data) {
+        const firstKey =
+          Object.keys(data)[0];
+
+        setRequestData(
+          data[firstKey]
+        );
+      }
+    });
+  }, []);
+
+  if (!requestData) {
+    return (
+      <div
+        style={{
+          padding: "20px",
+        }}
+      >
+        Loading...
+      </div>
+    );
+  }
+
   return (
     <div
       style={{
@@ -18,10 +59,11 @@ export default function RequestDetails() {
           marginBottom: "15px",
         }}
       >
-        <h2>Request Details</h2>
+        <h2>
+          Request Details
+        </h2>
       </div>
-
-      <div
+<div
         style={{
           background: "#fff",
           padding: "18px",
@@ -29,10 +71,25 @@ export default function RequestDetails() {
           marginBottom: "15px",
         }}
       >
-        <p><b>Reference No:</b> PROP-00128</p>
-        <p><b>Insured Name:</b> ABC Traders</p>
-        <p><b>Mobile:</b> 9876543210</p>
-        <p><b>Address:</b> Indore, Madhya Pradesh</p>
+        <p>
+          <b>Reference No:</b>{" "}
+          {requestData.requestNo}
+        </p>
+
+        <p>
+          <b>Insured Name:</b>{" "}
+          {requestData.insuredName}
+        </p>
+
+        <p>
+          <b>Mobile:</b>{" "}
+          {requestData.mobile}
+        </p>
+
+        <p>
+          <b>Address:</b>{" "}
+          {requestData.address}
+        </p>
       </div>
 
       <div
@@ -45,14 +102,32 @@ export default function RequestDetails() {
       >
         <h3>Risk Details</h3>
 
-        <p><b>Risk Location:</b> Indore</p>
-        <p><b>Risk Type:</b> Manufacturing Unit</p>
-        <p><b>Business Activity:</b> Plastic Items</p>
-        <p><b>Sum Insured:</b> ₹50,00,000</p>
-        <p><b>Coverage:</b> Fire + STFI + EQ</p>
-      </div>
+        <p>
+          <b>Risk Location:</b>{" "}
+          {requestData.riskLocation}
+        </p>
 
-      <div
+        <p>
+          <b>Risk Type:</b>{" "}
+          {requestData.riskType}
+        </p>
+
+        <p>
+          <b>Business Activity:</b>{" "}
+          {requestData.businessActivity}
+        </p>
+
+        <p>
+          <b>Sum Insured:</b>{" "}
+          {requestData.sumInsured}
+        </p>
+
+        <p>
+          <b>Coverage:</b>{" "}
+          {requestData.coverage}
+        </p>
+      </div>
+<div
         style={{
           display: "grid",
           gap: "12px",
@@ -68,6 +143,7 @@ export default function RequestDetails() {
               background: "#6f42c1",
               color: "#fff",
               fontSize: "16px",
+              cursor: "pointer",
             }}
           >
             Raise Query
@@ -84,6 +160,7 @@ export default function RequestDetails() {
               background: "#28a745",
               color: "#fff",
               fontSize: "16px",
+              cursor: "pointer",
             }}
           >
             Send Quotation
@@ -99,11 +176,12 @@ export default function RequestDetails() {
             background: "#dc3545",
             color: "#fff",
             fontSize: "16px",
+            cursor: "pointer",
           }}
         >
           Reject Request
         </button>
       </div>
-    </div>
+</div>
   );
-              }
+}
