@@ -131,22 +131,24 @@ export default function RequestDetails() {
           gap: "12px",
         }}
       >
-        <Link href="/admin/raise-query">
-          <button
-            style={{
-              width: "100%",
-              padding: "15px",
-              border: "none",
-              borderRadius: "10px",
-              background: "#6f42c1",
-              color: "#fff",
-              fontSize: "16px",
-              cursor: "pointer",
-            }}
-          >
-            Raise Query
-          </button>
-        </Link>
+        <Link
+  href={`/admin/raise-query?id=${id}`}
+>
+  <button
+    style={{
+      width: "100%",
+      padding: "15px",
+      border: "none",
+      borderRadius: "10px",
+      background: "#6f42c1",
+      color: "#fff",
+      fontSize: "16px",
+      cursor: "pointer",
+    }}
+  >
+    Raise Query
+  </button>
+</Link>
 
         <Link href="/admin/send-quotation">
           <button
