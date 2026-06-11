@@ -36,8 +36,6 @@ export default function PendingRequests() {
   return (
     <>
     <AuthProtection role="admin" />
-
-    <div
     <div
       style={{
         minHeight: "100vh",
