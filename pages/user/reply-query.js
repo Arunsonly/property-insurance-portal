@@ -45,7 +45,7 @@ export default function ReplyQuery() {
           replyDate:
             new Date().toISOString(),
           status:
-            "Reply Received",
+            "Reply Submitted",
         }
       );
 
