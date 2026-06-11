@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { database } from "../../lib/firebase";
-import { ref, onValue } from "firebase/database";
+import {
+  ref,
+  onValue,
+  update,
+} from "firebase/database";
 
 export default function RequestDetails() {
   const router = useRouter();
@@ -27,9 +31,36 @@ export default function RequestDetails() {
     });
   }, [id]);
 
+  const updateStatus = async (
+    status
+  ) => {
+    try {
+      await update(
+        ref(
+          database,
+          `requests/${id}`
+        ),
+        {
+          status,
+        }
+      );
+
+      alert(
+        `Status Updated : ${status}`
+      );
+    } catch (error) {
+      console.error(error);
+      alert("Error");
+    }
+  };
+
   if (!requestData) {
     return (
-      <div style={{ padding: "20px" }}>
+      <div
+        style={{
+          padding: "20px",
+        }}
+      >
         Loading...
       </div>
     );
@@ -45,6 +76,8 @@ export default function RequestDetails() {
         margin: "0 auto",
       }}
     >
+      {/* HEADER */}
+
       <div
         style={{
           background:
@@ -60,9 +93,12 @@ export default function RequestDetails() {
         </h1>
 
         <p style={{ marginTop: 10 }}>
-          Track your insurance request
+          Track your insurance
+          request
         </p>
       </div>
+
+      {/* BASIC DETAILS */}
 
       <div
         style={{
@@ -82,10 +118,13 @@ export default function RequestDetails() {
           <strong>Status:</strong>{" "}
           <span
             style={{
-              background: "#8b5cf6",
+              background:
+                "#8b5cf6",
               color: "#fff",
-              padding: "6px 12px",
-              borderRadius: "999px",
+              padding:
+                "6px 12px",
+              borderRadius:
+                "999px",
             }}
           >
             {requestData.status}
@@ -93,45 +132,78 @@ export default function RequestDetails() {
         </p>
 
         <p>
-          <strong>Insured Name:</strong>{" "}
-          {requestData.insuredName}
+          <strong>
+            Insured Name:
+          </strong>{" "}
+          {
+            requestData.insuredName
+          }
         </p>
 
         <p>
-          <strong>Mobile:</strong>{" "}
-          {requestData.mobile}
+          <strong>
+            Mobile:
+          </strong>{" "}
+          {
+            requestData.mobile
+          }
         </p>
 
         <p>
-          <strong>Address:</strong>{" "}
-          {requestData.address}
+          <strong>
+            Address:
+          </strong>{" "}
+          {
+            requestData.address
+          }
         </p>
 
         <p>
-          <strong>Risk Location:</strong>{" "}
-          {requestData.riskLocation}
+          <strong>
+            Risk Location:
+          </strong>{" "}
+          {
+            requestData.riskLocation
+          }
         </p>
 
         <p>
-          <strong>Risk Type:</strong>{" "}
-          {requestData.riskType}
+          <strong>
+            Risk Type:
+          </strong>{" "}
+          {
+            requestData.riskType
+          }
         </p>
 
         <p>
-          <strong>Business Activity:</strong>{" "}
-          {requestData.businessActivity}
+          <strong>
+            Business Activity:
+          </strong>{" "}
+          {
+            requestData.businessActivity
+          }
         </p>
 
         <p>
-          <strong>Coverage:</strong>{" "}
-          {requestData.coverage}
+          <strong>
+            Coverage:
+          </strong>{" "}
+          {
+            requestData.coverage
+          }
         </p>
 
         <p>
-          <strong>Sum Insured:</strong>{" "}
-          {requestData.sumInsured}
+          <strong>
+            Sum Insured:
+          </strong>{" "}
+          {
+            requestData.sumInsured
+          }
         </p>
       </div>
+{/* QUERY SECTION */}
 
       {requestData.queryMessage && (
         <div
@@ -144,7 +216,7 @@ export default function RequestDetails() {
               "0 10px 25px rgba(0,0,0,.08)",
           }}
         >
-          <h2>Latest Query</h2>
+          <h2>❓ Latest Query</h2>
 
           <div
             style={{
@@ -160,6 +232,144 @@ export default function RequestDetails() {
         </div>
       )}
 
+      {/* QUOTATION DETAILS */}
+
+      {requestData.quotationPremium &&
+        requestData.status !==
+          "Policy Issued" && (
+          <div
+            style={{
+              background: "#fff",
+              padding: "24px",
+              borderRadius: "24px",
+              marginBottom: "20px",
+              boxShadow:
+                "0 10px 25px rgba(0,0,0,.08)",
+            }}
+          >
+            <h2>
+              💰 Quotation Details
+            </h2>
+
+            <p>
+              <strong>
+                Premium Amount:
+              </strong>{" "}
+              ₹
+              {
+                requestData.quotationPremium
+              }
+            </p>
+
+            <p>
+              <strong>
+                Remarks:
+              </strong>{" "}
+              {requestData.quotationRemarks ||
+                "-"}
+            </p>
+
+            <p>
+              <strong>
+                Quotation Date:
+              </strong>{" "}
+              {requestData.quotationDate ||
+                "-"}
+            </p>
+
+            {requestData.status ===
+              "Quotation Received" && (
+              <>
+                <button
+                  onClick={() =>
+                    updateStatus(
+                      "Quotation Accepted"
+                    )
+                  }
+                  style={{
+                    width: "100%",
+                    background:
+                      "#22c55e",
+                    color: "#fff",
+                    border: "none",
+                    padding: "16px",
+                    borderRadius:
+                      "14px",
+                    fontSize:
+                      "16px",
+                    fontWeight:
+                      "700",
+                    marginBottom:
+                      "12px",
+                    cursor:
+                      "pointer",
+                  }}
+                >
+                  ✅ Accept
+                  Quotation
+                </button>
+
+                <button
+                  onClick={() =>
+                    updateStatus(
+                      "Quotation Rejected"
+                    )
+                  }
+                  style={{
+                    width: "100%",
+                    background:
+                      "#ef4444",
+                    color: "#fff",
+                    border: "none",
+                    padding: "16px",
+                    borderRadius:
+                      "14px",
+                    fontSize:
+                      "16px",
+                    fontWeight:
+                      "700",
+                    cursor:
+                      "pointer",
+                  }}
+                >
+                  ❌ Reject
+                  Quotation
+                </button>
+              </>
+            )}
+
+            {requestData.status ===
+              "Quotation Rejected" && (
+              <button
+                onClick={() =>
+                  updateStatus(
+                    "Review Requested"
+                  )
+                }
+                style={{
+                  width: "100%",
+                  background:
+                    "#f59e0b",
+                  color: "#fff",
+                  border: "none",
+                  padding: "16px",
+                  borderRadius:
+                    "14px",
+                  fontSize:
+                    "16px",
+                  fontWeight:
+                    "700",
+                  cursor:
+                    "pointer",
+                }}
+              >
+                🔄 Review Again
+              </button>
+            )}
+          </div>
+        )}
+{/* TIMELINE */}
+
       <div
         style={{
           background: "#fff",
@@ -169,16 +379,77 @@ export default function RequestDetails() {
             "0 10px 25px rgba(0,0,0,.08)",
         }}
       >
-        <h2>Request Timeline</h2>
-
-        <p>✅ Request Submitted</p>
+        <h2>
+          📌 Request Timeline
+        </h2>
 
         <p>
-          Current Status:
-          {" "}
-          {requestData.status}
+          ✅ Request Submitted
+        </p>
+
+        {requestData.queryMessage && (
+          <p>
+            ❓ Query Raised
+          </p>
+        )}
+
+        {requestData.customerReply && (
+          <p>
+            📨 Reply Submitted
+          </p>
+        )}
+
+        {requestData.quotationPremium && (
+          <p>
+            💰 Quotation Received
+          </p>
+        )}
+
+        {requestData.status ===
+          "Quotation Accepted" && (
+          <p>
+            ✅ Quotation Accepted
+          </p>
+        )}
+
+        {requestData.status ===
+          "Quotation Rejected" && (
+          <p>
+            ❌ Quotation Rejected
+          </p>
+        )}
+
+        {requestData.status ===
+          "Review Requested" && (
+          <p>
+            🔄 Review Requested
+          </p>
+        )}
+
+        {requestData.status ===
+          "Policy Issued" && (
+          <p>
+            📄 Policy Issued
+          </p>
+        )}
+
+        <hr
+          style={{
+            margin:
+              "15px 0",
+          }}
+        />
+
+        <p>
+          <strong>
+            Current Status:
+          </strong>{" "}
+          {
+            requestData.status
+          }
         </p>
       </div>
+
     </div>
   );
             }
