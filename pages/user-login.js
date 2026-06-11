@@ -142,9 +142,9 @@ export default function UserLogin() {
             fontSize: "13px",
           }}
         >
-          Any Username & Password
+          login with Id & password 
           <br />
-          can login as User
+          provide by Office
         </div>
       </div>
     </div>
