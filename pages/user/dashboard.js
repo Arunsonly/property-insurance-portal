@@ -1,168 +1,433 @@
+import { useState } from "react";
 import Link from "next/link";
 
 export default function UserDashboard() {
+  const [menuOpen, setMenuOpen] =
+    useState(false);
+
+  const stats = [
+    {
+      title: "New Request",
+      count: "+",
+      icon: "➕",
+      color: "#2563eb",
+      link: "/user/new-request",
+    },
+    {
+      title: "My Requests",
+      count: "12",
+      icon: "📋",
+      color: "#f59e0b",
+      link: "/user/my-requests",
+    },
+    {
+      title: "Queries",
+      count: "03",
+      icon: "❓",
+      color: "#8b5cf6",
+      link: "/user/query-received",
+    },
+    {
+      title: "Quotations",
+      count: "05",
+      icon: "💰",
+      color: "#10b981",
+      link: "/user/quotation-received",
+    },
+  ];
+
   return (
     <div
       style={{
-        background: "#f4f7fc",
         minHeight: "100vh",
-        paddingBottom: "80px",
+        background: "#f4f7fc",
+        fontFamily:
+          "Arial,sans-serif",
       }}
     >
-      {/* Header */}
+      {/* HEADER */}
+
       <div
         style={{
-          background: "linear-gradient(135deg,#0b3d91,#0a2d6f)",
+          background:
+            "linear-gradient(135deg,#0b3d91,#2563eb)",
           color: "#fff",
-          padding: "25px 20px",
-        }}
-      >
-        <h2 style={{ margin: 0 }}>Property Insurance Portal</h2>
-        <p style={{ marginTop: 5 }}>User Panel</p>
-
-        <div style={{ marginTop: 25 }}>
-          <h2 style={{ margin: 0 }}>Welcome, Rajesh Kumar 👋</h2>
-          <p>Here is your dashboard overview</p>
-        </div>
-      </div>
-
-      {/* Stats Cards */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "15px",
-          padding: "20px",
-        }}
-      >
-        <div style={card}>
-          <div style={{ fontSize: 30 }}>📋</div>
-          <h2>12</h2>
-          <p>My Requests</p>
-        </div>
-
-        <div style={card}>
-          <div style={{ fontSize: 30 }}>❓</div>
-          <h2>2</h2>
-          <p>Query Received</p>
-        </div>
-
-        <div style={card}>
-          <div style={{ fontSize: 30 }}>💰</div>
-          <h2>3</h2>
-          <p>Quotation Received</p>
-        </div>
-
-        <div style={card}>
-          <div style={{ fontSize: 30 }}>✅</div>
-          <h2>1</h2>
-          <p>Approved</p>
-        </div>
-      </div>
-
-      {/* Recent Submissions */}
-      <div
-        style={{
-          background: "#fff",
-          margin: "0 20px",
-          borderRadius: "20px",
-          padding: "20px",
-          boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
-        }}
-      >
-        <h3>My Submissions</h3>
-
-        <div style={row}>
-          <span>PROP-00125</span>
-          <span style={pending}>Pending</span>
-        </div>
-
-        <div style={row}>
-          <span>PROP-00124</span>
-          <span style={query}>Query Received</span>
-        </div>
-
-        <div style={row}>
-          <span>PROP-00123</span>
-          <span style={reply}>Query Replied</span>
-        </div>
-
-        <div style={row}>
-          <span>PROP-00122</span>
-          <span style={quotation}>Quotation Received</span>
-        </div>
-
-        <div style={row}>
-          <span>PROP-00121</span>
-          <span style={approved}>Approved</span>
-        </div>
-      </div>
-
-      {/* Bottom Navigation */}
-      <div
-        style={{
-          position: "fixed",
-          bottom: 0,
-          width: "100%",
-          background: "#fff",
+          padding: "15px 20px",
           display: "flex",
-          justifyContent: "space-around",
-          padding: "12px 0",
-          borderTop: "1px solid #ddd",
+          justifyContent:
+            "space-between",
+          alignItems: "center",
         }}
       >
-        <Link href="/user/dashboard">🏠</Link>
-        <Link href="/user/new-request">➕</Link>
-        <Link href="/user/my-submissions">📄</Link>
-        <Link href="/user/profile">👤</Link>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "15px",
+          }}
+        >
+          <button
+            onClick={() =>
+              setMenuOpen(true)
+            }
+            style={{
+              background: "none",
+              border: "none",
+              color: "#fff",
+              fontSize: "26px",
+              cursor: "pointer",
+            }}
+          >
+            ☰
+          </button>
+
+          <div>
+            <div
+              style={{
+                fontSize: "20px",
+                fontWeight:
+                  "bold",
+              }}
+            >
+              Property Insurance
+            </div>
+
+            <div
+              style={{
+                fontSize: "12px",
+                opacity: 0.9,
+              }}
+            >
+              Customer Portal
+            </div>
+          </div>
+        </div>
+
+        <div
+          style={{
+            fontSize: "28px",
+          }}
+        >
+          👤
+        </div>
       </div>
+
+      {/* SIDEBAR */}
+
+      {menuOpen && (
+        <>
+          <div
+            onClick={() =>
+              setMenuOpen(false)
+            }
+            style={{
+              position: "fixed",
+              inset: 0,
+              background:
+                "rgba(0,0,0,0.4)",
+              zIndex: 999,
+            }}
+          />
+
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "270px",
+              height: "100%",
+              background: "#0f172a",
+              color: "#fff",
+              padding: "20px",
+              zIndex: 1000,
+            }}
+          >
+            <h3>
+              Customer Menu
+            </h3>
+
+            <div
+              style={{
+                display: "flex",
+                flexDirection:
+                  "column",
+                gap: "15px",
+              }}
+            >
+              <Link
+                href="/user/dashboard"
+                style={menuLink}
+              >
+                🏠 Dashboard
+              </Link>
+
+              <Link
+                href="/user/new-request"
+                style={menuLink}
+              >
+                ➕ New Request
+              </Link>
+
+              <Link
+                href="/user/my-requests"
+                style={menuLink}
+              >
+                📋 My Requests
+              </Link>
+
+              <Link
+                href="/user/query-received"
+                style={menuLink}
+              >
+                ❓ Query Received
+              </Link>
+
+              <Link
+                href="/user/quotation-received"
+                style={menuLink}
+              >
+                💰 Quotations
+              </Link>
+
+              <Link
+                href="/user/policy-register"
+                style={menuLink}
+              >
+                📄 Policies
+              </Link>
+
+              <Link
+                href="/user/profile"
+                style={menuLink}
+              >
+                👤 Profile
+              </Link>
+</div>
+          </div>
+        </>
+      )}
+
+      {/* WELCOME */}
+
+      <div
+        style={{
+          background:
+            "linear-gradient(135deg,#0b3d91,#2563eb)",
+          color: "#fff",
+          padding: "25px 20px 35px",
+        }}
+      >
+        <h2 style={{ margin: 0 }}>
+          Welcome 👋
+        </h2>
+
+        <p
+          style={{
+            marginTop: "10px",
+            opacity: 0.9,
+          }}
+        >
+          Manage your requests,
+          quotations and policies.
+        </p>
+      </div>
+
+      {/* STATS */}
+
+      <div
+        style={{
+          padding: "20px",
+          display: "grid",
+          gridTemplateColumns:
+            "repeat(auto-fit,minmax(160px,1fr))",
+          gap: "15px",
+          marginTop: "-20px",
+        }}
+      >
+        {stats.map((item, index) => (
+          <Link
+            key={index}
+            href={item.link}
+            style={{
+              textDecoration: "none",
+            }}
+          >
+            <div
+              style={{
+                background: "#fff",
+                borderRadius: "18px",
+                padding: "20px",
+                boxShadow:
+                  "0 8px 20px rgba(0,0,0,0.08)",
+                borderTop: `5px solid ${item.color}`,
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "32px",
+                  marginBottom: "10px",
+                }}
+              >
+                {item.icon}
+              </div>
+
+              <div
+                style={{
+                  color: "#64748b",
+                  fontSize: "13px",
+                }}
+              >
+                {item.title}
+              </div>
+
+              <div
+                style={{
+                  fontSize: "28px",
+                  fontWeight: "bold",
+                  color: "#111827",
+                }}
+              >
+                {item.count}
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+
+      {/* QUICK ACCESS */}
+
+      <div
+        style={{
+          margin: "0 20px 20px",
+          background: "#fff",
+          borderRadius: "18px",
+          padding: "20px",
+          boxShadow:
+            "0 8px 20px rgba(0,0,0,0.08)",
+        }}
+      >
+        <h3
+          style={{
+            marginTop: 0,
+          }}
+        >
+          Quick Access
+        </h3>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns:
+              "1fr 1fr",
+            gap: "12px",
+          }}
+        >
+          <Link
+            href="/user/new-request"
+            style={quickLink}
+          >
+            ➕ New Request
+          </Link>
+
+          <Link
+            href="/user/my-requests"
+            style={quickLink}
+          >
+            📋 My Requests
+          </Link>
+
+          <Link
+            href="/user/query-received"
+            style={quickLink}
+          >
+            ❓ Query Received
+          </Link>
+
+          <Link
+            href="/user/quotation-received"
+            style={quickLink}
+          >
+            💰 Quotations
+          </Link>
+        </div>
+      </div>
+{/* RECENT ACTIVITIES */}
+
+      <div
+        style={{
+          margin: "0 20px 20px",
+          background: "#fff",
+          borderRadius: "18px",
+          padding: "20px",
+          boxShadow:
+            "0 8px 20px rgba(0,0,0,0.08)",
+        }}
+      >
+        <h3
+          style={{
+            marginTop: 0,
+          }}
+        >
+          Recent Activities
+        </h3>
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "12px",
+          }}
+        >
+          <div style={activityRow}>
+            <span>PROP-00128</span>
+            <span>Quotation Received</span>
+          </div>
+
+          <div style={activityRow}>
+            <span>PROP-00127</span>
+            <span>Query Received</span>
+          </div>
+
+          <div style={activityRow}>
+            <span>PROP-00126</span>
+            <span>Reply Submitted</span>
+          </div>
+
+          <div style={activityRow}>
+            <span>PROP-00125</span>
+            <span>Policy Issued</span>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }
 
-const card = {
-  background: "#fff",
-  borderRadius: "18px",
-  padding: "20px",
-  textAlign: "center",
-  boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
+const menuLink = {
+  color: "#fff",
+  textDecoration: "none",
+  padding: "12px",
+  borderRadius: "10px",
+  background:
+    "rgba(255,255,255,0.08)",
 };
 
-const row = {
+const quickLink = {
+  textDecoration: "none",
+  background: "#f8fafc",
+  padding: "15px",
+  borderRadius: "12px",
+  textAlign: "center",
+  color: "#0f172a",
+  fontWeight: "600",
+  border: "1px solid #e2e8f0",
+};
+
+const activityRow = {
   display: "flex",
   justifyContent: "space-between",
-  marginBottom: "12px",
-  padding: "10px",
   background: "#f8fafc",
+  padding: "12px",
   borderRadius: "10px",
-};
-
-const pending = {
-  background: "#fde68a",
-  padding: "5px 10px",
-  borderRadius: "15px",
-};
-
-const query = {
-  background: "#ddd6fe",
-  padding: "5px 10px",
-  borderRadius: "15px",
-};
-
-const reply = {
-  background: "#bfdbfe",
-  padding: "5px 10px",
-  borderRadius: "15px",
-};
-
-const quotation = {
-  background: "#fdba74",
-  padding: "5px 10px",
-  borderRadius: "15px",
-};
-
-const approved = {
-  background: "#86efac",
-  padding: "5px 10px",
-  borderRadius: "15px",
 };
