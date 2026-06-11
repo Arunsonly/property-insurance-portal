@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { database } from "../../lib/firebase";
 import { ref, update } from "firebase/database";
-
+import AuthProtection from "../auth-protection";
 export default function IssuePolicy() {
   const router = useRouter();
   const { id } = router.query;
@@ -67,6 +67,8 @@ export default function IssuePolicy() {
     };
 
   return (
+    <>
+    <AuthProtection role="admin" />
     <div
       style={{
         minHeight: "100vh",
@@ -211,5 +213,6 @@ style={{
         </button>
       </div>
     </div>
+</>
   );
 }
