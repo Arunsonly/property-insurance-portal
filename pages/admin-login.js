@@ -145,11 +145,9 @@ export default function AdminLogin() {
             fontSize: "13px",
           }}
         >
-          Username:
-          arun_oicl
+          devloped by Arun Kr
           <br />
-          Password:
-          Oicl_1308
+          7877774730
         </div>
       </div>
     </div>
