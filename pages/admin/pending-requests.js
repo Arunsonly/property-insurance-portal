@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { database } from "../../lib/firebase";
 import { ref, onValue } from "firebase/database";
-
+import AuthProtection from "../auth-protection";
 export default function PendingRequests() {
   const [requests, setRequests] = useState([]);
 
@@ -34,6 +34,10 @@ export default function PendingRequests() {
   }, []);
 
   return (
+    <>
+    <AuthProtection role="admin" />
+
+    <div
     <div
       style={{
         minHeight: "100vh",
@@ -169,5 +173,6 @@ export default function PendingRequests() {
         </Link>
       ))}
     </div>
+</>
   );
             }
