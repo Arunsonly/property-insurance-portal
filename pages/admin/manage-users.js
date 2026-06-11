@@ -4,26 +4,25 @@ export default function ManageUsers() {
       name: "Rajesh Kumar",
       mobile: "9876543210",
       status: "Active",
+      requests: 5,
+      policies: 2,
+      lastLogin: "11-Jun-2026",
     },
     {
       name: "Amit Sharma",
       mobile: "9123456780",
       status: "Active",
-    },
-    {
-      name: "Suresh Patel",
-      mobile: "9988776655",
-      status: "Active",
+      requests: 3,
+      policies: 1,
+      lastLogin: "10-Jun-2026",
     },
     {
       name: "Neha Verma",
       mobile: "8811223344",
       status: "Inactive",
-    },
-    {
-      name: "Vikas Singh",
-      mobile: "7766554433",
-      status: "Active",
+      requests: 1,
+      policies: 0,
+      lastLogin: "05-Jun-2026",
     },
   ];
 
@@ -35,20 +34,21 @@ export default function ManageUsers() {
         padding: "20px",
       }}
     >
-      {/* Header */}
       <div
         style={{
-          background: "#0b3d91",
+          background:
+            "linear-gradient(135deg,#0b3d91,#2563eb)",
           color: "#fff",
           padding: "30px",
           borderRadius: "20px",
           marginBottom: "20px",
         }}
       >
-        <h1 style={{ margin: 0 }}>Manage Users</h1>
+        <h1 style={{ margin: 0 }}>
+          👥 Manage Users
+        </h1>
       </div>
 
-      {/* Add User Button */}
       <button
         style={{
           width: "100%",
@@ -63,13 +63,12 @@ export default function ManageUsers() {
           cursor: "pointer",
         }}
       >
-        + Add User
+        ➕ Add User
       </button>
 
-      {/* Search */}
       <input
         type="text"
-        placeholder="Search by Name / Mobile"
+        placeholder="Search User"
         style={{
           width: "100%",
           padding: "15px",
@@ -77,10 +76,10 @@ export default function ManageUsers() {
           border: "1px solid #ddd",
           marginBottom: "20px",
           fontSize: "16px",
+          boxSizing: "border-box",
         }}
       />
 
-      {/* User Cards */}
       {users.map((user, index) => (
         <div
           key={index}
@@ -89,13 +88,30 @@ export default function ManageUsers() {
             borderRadius: "20px",
             padding: "20px",
             marginBottom: "15px",
-            boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
+            boxShadow:
+              "0 2px 10px rgba(0,0,0,0.08)",
           }}
         >
           <h2>{user.name}</h2>
 
           <p>
-            <strong>Mobile:</strong> {user.mobile}
+            <strong>Mobile:</strong>{" "}
+            {user.mobile}
+          </p>
+
+          <p>
+            <strong>Total Requests:</strong>{" "}
+            {user.requests}
+          </p>
+
+          <p>
+            <strong>Total Policies:</strong>{" "}
+            {user.policies}
+          </p>
+
+          <p>
+            <strong>Last Login:</strong>{" "}
+            {user.lastLogin}
           </p>
 
           <span
@@ -123,7 +139,7 @@ export default function ManageUsers() {
               flexWrap: "wrap",
             }}
           >
-            <button
+<button
               style={{
                 flex: 1,
                 background: "#2563eb",
@@ -134,7 +150,21 @@ export default function ManageUsers() {
                 cursor: "pointer",
               }}
             >
-              Edit
+              👁 View
+            </button>
+
+            <button
+              style={{
+                flex: 1,
+                background: "#7c3aed",
+                color: "#fff",
+                border: "none",
+                padding: "12px",
+                borderRadius: "10px",
+                cursor: "pointer",
+              }}
+            >
+              ✏️ Edit
             </button>
 
             <button
@@ -148,7 +178,21 @@ export default function ManageUsers() {
                 cursor: "pointer",
               }}
             >
-              Temp Password
+              🔑 Reset Password
+            </button>
+
+            <button
+              style={{
+                flex: 1,
+                background: "#22c55e",
+                color: "#fff",
+                border: "none",
+                padding: "12px",
+                borderRadius: "10px",
+                cursor: "pointer",
+              }}
+            >
+              ✅ Activate
             </button>
 
             <button
@@ -162,7 +206,21 @@ export default function ManageUsers() {
                 cursor: "pointer",
               }}
             >
-              Delete
+              ❌ Deactivate
+            </button>
+
+            <button
+              style={{
+                flex: 1,
+                background: "#991b1b",
+                color: "#fff",
+                border: "none",
+                padding: "12px",
+                borderRadius: "10px",
+                cursor: "pointer",
+              }}
+            >
+              🗑 Delete
             </button>
           </div>
         </div>
