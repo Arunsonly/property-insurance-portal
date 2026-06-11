@@ -19,10 +19,10 @@ export default function QueryStatus() {
             ...data[key],
           }))
           .filter(
-            (item) =>
-              item.status ===
-              "Query Raised"
-          );
+  (item) =>
+    item.status === "Query Raised" ||
+    item.status === "Reply Submitted"
+);
 
         setRequests(
           loadedRequests.reverse()
