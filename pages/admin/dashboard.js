@@ -264,7 +264,12 @@ export default function AdminDashboard() {
               >
                 👤 Profile
               </Link>
-
+<Link
+  href="/admin/manage-users"
+  style={menuLink}
+>
+  👥 Manage Users
+</Link>
               <Link
                 href="/login"
                 style={{
