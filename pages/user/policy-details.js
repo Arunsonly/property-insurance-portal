@@ -1,4 +1,44 @@
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { database } from "../../lib/firebase";
+import { ref, onValue } from "firebase/database";
+
 export default function PolicyDetails() {
+  const router = useRouter();
+  const { id } = router.query;
+
+  const [policyData, setPolicyData] =
+    useState(null);
+
+  useEffect(() => {
+    if (!id) return;
+
+    const requestRef = ref(
+      database,
+      `requests/${id}`
+    );
+
+    onValue(requestRef, (snapshot) => {
+      const data = snapshot.val();
+
+      if (data) {
+        setPolicyData(data);
+      }
+    });
+  }, [id]);
+
+  if (!policyData) {
+    return (
+      <div
+        style={{
+          padding: "20px",
+        }}
+      >
+        Loading...
+      </div>
+    );
+  }
+
   return (
     <div
       style={{
@@ -9,27 +49,39 @@ export default function PolicyDetails() {
         margin: "0 auto",
       }}
     >
-      {/* Header */}
+      {/* HEADER */}
+
       <div
         style={{
-          background: "linear-gradient(135deg,#0b3d91,#2563eb)",
+          background:
+            "linear-gradient(135deg,#0b3d91,#2563eb)",
           color: "#fff",
           padding: "30px",
           borderRadius: "24px",
           marginBottom: "20px",
-          boxShadow: "0 15px 30px rgba(37,99,235,.25)",
+          boxShadow:
+            "0 15px 30px rgba(37,99,235,.25)",
         }}
       >
-        <h1 style={{ margin: 0 }}>
+        <h1
+          style={{
+            margin: 0,
+          }}
+        >
           🛡️ Policy Details
         </h1>
 
-        <p style={{ marginTop: "10px" }}>
-          Your insurance policy information
+        <p
+          style={{
+            marginTop: "10px",
+          }}
+        >
+          Your Insurance Policy
         </p>
       </div>
 
-      {/* Status */}
+      {/* STATUS */}
+
       <div
         style={{
           background: "#dcfce7",
@@ -39,106 +91,186 @@ export default function PolicyDetails() {
           fontWeight: "700",
           textAlign: "center",
           marginBottom: "20px",
-          border: "1px solid #86efac",
+          border:
+            "1px solid #86efac",
         }}
       >
         ✅ Policy Active
       </div>
 
-      {/* Policy Info */}
+      {/* POLICY INFO */}
+
       <div
         style={{
           background: "#fff",
           borderRadius: "24px",
           padding: "24px",
           marginBottom: "20px",
-          boxShadow: "0 10px 25px rgba(0,0,0,.08)",
+          boxShadow:
+            "0 10px 25px rgba(0,0,0,.08)",
         }}
       >
-        <h2>Policy Information</h2>
+        <h2>
+          Policy Information
+        </h2>
 
         <p>
-          <strong>Policy Number:</strong>
+          <strong>
+            Policy Number:
+          </strong>
           <br />
-          OIC/FIRE/2025/00128
+          {
+            policyData.policyNo
+          }
         </p>
 
         <p>
-          <strong>Insurance Company:</strong>
+          <strong>
+            Reference No:
+          </strong>
           <br />
-          Oriental Insurance Co. Ltd.
+          {
+            policyData.requestNo
+          }
         </p>
 
         <p>
-          <strong>Insured Name:</strong>
+          <strong>
+            Insured Name:
+          </strong>
           <br />
-          ABC Traders
+          {
+            policyData.insuredName
+          }
         </p>
 
         <p>
-          <strong>Risk Location:</strong>
+          <strong>
+            Risk Location:
+          </strong>
           <br />
-          Indore, Madhya Pradesh
+          {
+            policyData.riskLocation
+          }
         </p>
       </div>
+{/* COVERAGE DETAILS */}
 
-      {/* Coverage */}
       <div
         style={{
           background: "#fff",
           borderRadius: "24px",
           padding: "24px",
           marginBottom: "20px",
-          boxShadow: "0 10px 25px rgba(0,0,0,.08)",
+          boxShadow:
+            "0 10px 25px rgba(0,0,0,.08)",
         }}
       >
-        <h2>Coverage Details</h2>
+        <h2>
+          Coverage Details
+        </h2>
 
         <p>
-          <strong>Coverage:</strong>
+          <strong>
+            Coverage:
+          </strong>
           <br />
-          Fire + STFI + EQ
+          {
+            policyData.coverage
+          }
         </p>
 
         <p>
-          <strong>Sum Insured:</strong>
+          <strong>
+            Sum Insured:
+          </strong>
           <br />
-          ₹50,00,000
+          ₹
+          {
+            policyData.sumInsured
+          }
         </p>
 
         <p>
-          <strong>Premium Paid:</strong>
+          <strong>
+            Premium Paid:
+          </strong>
           <br />
-          ₹54,200
+          ₹
+          {
+            policyData.quotationPremium
+          }
+        </p>
+
+        <p>
+          <strong>
+            Risk Type:
+          </strong>
+          <br />
+          {
+            policyData.riskType
+          }
+        </p>
+
+        <p>
+          <strong>
+            Business Activity:
+          </strong>
+          <br />
+          {
+            policyData.businessActivity
+          }
         </p>
       </div>
 
-      {/* Policy Period */}
+      {/* POLICY PERIOD */}
+
       <div
         style={{
           background: "#fff",
           borderRadius: "24px",
           padding: "24px",
           marginBottom: "20px",
-          boxShadow: "0 10px 25px rgba(0,0,0,.08)",
+          boxShadow:
+            "0 10px 25px rgba(0,0,0,.08)",
         }}
       >
-        <h2>Policy Period</h2>
+        <h2>
+          Policy Period
+        </h2>
 
         <p>
-          <strong>Start Date:</strong>
+          <strong>
+            Start Date:
+          </strong>
           <br />
-          01-Jun-2025
+          {
+            policyData.policyStartDate
+          }
         </p>
 
         <p>
-          <strong>Expiry Date:</strong>
+          <strong>
+            Expiry Date:
+          </strong>
           <br />
-          31-May-2026
+          {
+            policyData.policyExpiryDate
+          }
+        </p>
+
+        <p>
+          <strong>
+            Policy Issued:
+          </strong>
+          <br />
+          {
+            policyData.policyIssuedDate
+          }
         </p>
       </div>
+{/* ACTION BUTTONS */}
 
-      {/* Download Buttons */}
       <button
         style={{
           width: "100%",
@@ -171,6 +303,7 @@ export default function PolicyDetails() {
       >
         🧾 Download Receipt
       </button>
+
     </div>
   );
-}
+            }
