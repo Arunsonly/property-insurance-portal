@@ -308,16 +308,21 @@ fontFamily:
             👥 Manage Users  
           </Link>  
 
-          <Link  
-            href="/login"  
-            style={{  
-              ...menuLink,  
-              color:  
-                "#fca5a5",  
-            }}  
-          >  
-            🚪 Logout  
-          </Link>  
+          <button
+  onClick={() => {
+    localStorage.removeItem("role");
+    window.location.href = "/";
+  }}
+  style={{
+    ...menuLink,
+    color: "#fca5a5",
+    border: "none",
+    cursor: "pointer",
+    textAlign: "left",
+  }}
+>
+  🚪 Logout
+</button>
         </div>  
       </div>  
     </>  
