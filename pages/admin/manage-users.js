@@ -145,10 +145,63 @@ await remove(
 );
 
 };
+const resetPassword = async (
+  userId
+) => {
+  const newPassword =
+    prompt(
+      "Enter New Password"
+    );
 
-const viewUser = (user) => {
-alert(`
-Name: ${user.name}
+  if (!newPassword) return;
+
+  await update(
+    ref(
+      database,
+      `users/${userId}`
+    ),
+    {
+      password:
+        newPassword,
+    }
+  );
+
+  alert(
+    "Password Reset Successfully"
+  );
+};
+
+const editUser = async (
+  user
+) => {
+  const newName =
+    prompt(
+      "Enter Name",
+      user.name
+    );
+
+  if (!newName) return;
+
+  await update(
+    ref(
+      database,
+      `users/${user.id}`
+    ),
+    {
+      name: newName,
+    }
+  );
+
+  alert(
+    "User Updated"
+  );
+};
+
+const viewUser = (
+  user
+) => {
+  alert(
+`Name: ${user.name}
 
 Mobile: ${user.mobile}
 
@@ -164,60 +217,8 @@ Policies: ${user.totalPolicies}
 
 Last Login: ${user.lastLogin}
 
-Created At: ${user.createdAt}
-`);
-};
-const editUser = async (
-user
-) => {
-const newName =
-prompt(
-"Enter Name",
-user.name
-);
-
-if (!newName) return;  
-
-await update(  
-  ref(  
-    database,  
-    `users/${user.id}`  
-  ),  
-  {  
-    name: newName,  
-  }  
-);  
-
-alert(  
-  "User Updated"  
-);
-
-};
-
-const resetPassword =
-async (userId) => {
-const newPassword =
-prompt(
-"Enter New Password"
-);
-
-if (!newPassword)  
-    return;  
-
-  await update(  
-    ref(  
-      database,  
-      `users/${userId}`  
-    ),  
-    {  
-      password:  
-        newPassword,  
-    }  
-  );  
-
-  alert(  
-    "Password Reset Successfully"  
-  );  
+Created At: ${user.createdAt}`
+  );
 };
 
 const filteredUsers =
@@ -232,10 +233,8 @@ search.toLowerCase()
 return (
 <div
 style={{
-background:
-"#f4f7fc",
-minHeight:
-"100vh",
+background: "#f4f7fc",
+minHeight: "100vh",
 padding: "20px",
 }}
 >
@@ -245,17 +244,11 @@ background:
 "linear-gradient(135deg,#0b3d91,#2563eb)",
 color: "#fff",
 padding: "30px",
-borderRadius:
-"20px",
-marginBottom:
-"20px",
+borderRadius: "20px",
+marginBottom: "20px",
 }}
 >
-<h1
-style={{
-margin: 0,
-}}
->
+<h1 style={{ margin: 0 }}>
 👥 Manage Users
 </h1>
 </div>
@@ -275,44 +268,40 @@ margin: 0,
       padding: "14px",  
       borderRadius:  
         "12px",  
+      fontSize: "16px",  
       fontWeight:  
         "bold",  
       marginBottom:  
         "20px",  
+      cursor:  
+        "pointer",  
     }}  
   >  
     ➕ Add User  
-  </button>  
+  </button>
 
-  {showForm && (  
-    <div  
-      style={{  
-        background:  
-          "#fff",  
-        padding:  
-          "20px",  
-        borderRadius:  
-          "20px",  
-        marginBottom:  
-          "20px",  
-      }}  
-    >  
-      <h2>  
-        Add New User  
-      </h2>  
+{showForm && (
+<div
+style={{
+background: "#fff",
+padding: "20px",
+borderRadius: "20px",
+marginBottom: "20px",
+boxShadow:
+"0 2px 10px rgba(0,0,0,.08)",
+}}
+>
+<h2>Add New User</h2>
 
-      <input  
+<input  
         placeholder="Full Name"  
         value={name}  
         onChange={(e) =>  
           setName(  
-            e.target  
-              .value  
+            e.target.value  
           )  
         }  
-        style={  
-          inputStyle  
-        }  
+        style={inputStyle}  
       />  
 
       <input  
@@ -320,13 +309,10 @@ margin: 0,
         value={mobile}  
         onChange={(e) =>  
           setMobile(  
-            e.target  
-              .value  
+            e.target.value  
           )  
         }  
-        style={  
-          inputStyle  
-        }  
+        style={inputStyle}  
       />  
 
       <input  
@@ -334,27 +320,24 @@ margin: 0,
         value={email}  
         onChange={(e) =>  
           setEmail(  
-            e.target  
-              .value  
+            e.target.value  
           )  
         }  
-        style={  
-          inputStyle  
+        style={inputStyle}  
+      />  
+
+      <input  
+        placeholder="Username"  
+        value={username}  
+        onChange={(e) =>  
+          setUsername(  
+            e.target.value  
+          )  
         }  
-      />
+        style={inputStyle}  
+      />  
 
-<input
-placeholder="Username"
-value={username}
-onChange={(e) =>
-setUsername(
-e.target.value
-)
-}
-style={inputStyle}
-/>
-
-<input  
+      <input  
         placeholder="Password"  
         value={password}  
         onChange={(e) =>  
@@ -369,12 +352,17 @@ style={inputStyle}
         onClick={addUser}  
         style={{  
           width: "100%",  
-          background: "#16a34a",  
+          background:  
+            "#16a34a",  
           color: "#fff",  
           border: "none",  
           padding: "14px",  
-          borderRadius: "12px",  
-          fontWeight: "bold",  
+          borderRadius:  
+            "12px",  
+          fontWeight:  
+            "bold",  
+          cursor:  
+            "pointer",  
         }}  
       >  
         Save User  
@@ -391,7 +379,16 @@ style={inputStyle}
         e.target.value  
       )  
     }  
-    style={inputStyle}  
+    style={{  
+      width: "100%",  
+      padding: "15px",  
+      borderRadius: "12px",  
+      border: "1px solid #ddd",  
+      marginBottom: "20px",  
+      fontSize: "16px",  
+      boxSizing:  
+        "border-box",  
+    }}  
   />  
 
   {filteredUsers.map(  
@@ -399,10 +396,14 @@ style={inputStyle}
       <div  
         key={user.id}  
         style={{  
-          background: "#fff",  
-          borderRadius: "20px",  
-          padding: "20px",  
-          marginBottom: "15px",  
+          background:  
+            "#fff",  
+          borderRadius:  
+            "20px",  
+          padding:  
+            "20px",  
+          marginBottom:  
+            "15px",  
           boxShadow:  
             "0 2px 10px rgba(0,0,0,.08)",  
         }}  
@@ -412,130 +413,172 @@ style={inputStyle}
         </h2>  
 
         <p>  
-          Mobile:  
-          {" "}  
+          <strong>  
+            Mobile:  
+          </strong>{" "}  
           {user.mobile}  
         </p>  
 
         <p>  
-          Email:  
-          {" "}  
+          <strong>  
+            Email:  
+          </strong>{" "}  
           {user.email}  
         </p>  
 
         <p>  
-          Username:  
-          {" "}  
+          <strong>  
+            Username:  
+          </strong>{" "}  
           {user.username}  
         </p>  
 
         <p>  
-          Requests:  
-          {" "}  
-          {user.totalRequests}  
+          <strong>  
+            Requests:  
+          </strong>{" "}  
+          {  
+            user.totalRequests  
+          }  
         </p>  
 
         <p>  
-          Policies:  
-          {" "}  
-          {user.totalPolicies}  
+          <strong>  
+            Policies:  
+          </strong>{" "}  
+          {  
+            user.totalPolicies  
+          }  
         </p>  
 
         <p>  
-          Last Login:  
-          {" "}  
-          {user.lastLogin}  
+          <strong>  
+            Last Login:  
+          </strong>{" "}  
+          {  
+            user.lastLogin  
+          }  
         </p>  
 
-        <p>  
-          Status:  
-          {" "}  
+        <span  
+          style={{  
+            background:  
+              user.status ===  
+              "Active"  
+                ? "#22c55e"  
+                : "#ef4444",  
+            color:  
+              "#fff",  
+            padding:  
+              "8px 14px",  
+            borderRadius:  
+              "20px",  
+            display:  
+              "inline-block",  
+            marginBottom:  
+              "15px",  
+          }}  
+        >  
           {user.status}  
-        </p>  
+        </span>  
 
         <div  
           style={{  
-            display: "flex",  
+            display:  
+              "flex",  
             gap: "10px",  
-            flexWrap: "wrap",  
+            flexWrap:  
+              "wrap",  
           }}  
-        >  
-          <button  
-            onClick={() =>  
-              viewUser(user)  
-            }  
-            style={{  
-              flex: 1,  
-              background: "#2563eb",  
-              color: "#fff",  
-              border: "none",  
-              padding: "12px",  
-              borderRadius: "10px",  
-            }}  
-          >  
-            👁 View  
-          </button>  
+        >
 
-          <button  
-            onClick={() =>  
-              editUser(user)  
-            }  
-            style={{  
-              flex: 1,  
-              background: "#7c3aed",  
-              color: "#fff",  
-              border: "none",  
-              padding: "12px",  
-              borderRadius: "10px",  
-            }}  
-          >  
-            ✏️ Edit  
-          </button>  
+          <button
+  onClick={() =>
+    viewUser(user)
+  }
+  style={{
+    flex: 1,
+    background:
+      "#2563eb",
+    color: "#fff",
+    border: "none",
+    padding: "12px",
+    borderRadius:
+      "10px",
+    cursor:
+      "pointer",
+  }}
+>
+  👁 View
+</button>
 
-          <button  
-            onClick={() =>  
-              resetPassword(  
-                user.id  
-              )  
-            }  
-            style={{  
-              flex: 1,  
-              background: "#f59e0b",  
-              color: "#fff",  
-              border: "none",  
-              padding: "12px",  
-              borderRadius: "10px",  
-            }}  
-          >  
-            🔑 Reset Password  
-          </button>  
+<button
+  onClick={() =>
+    editUser(user)
+  }
+  style={{
+    flex: 1,
+    background:
+      "#7c3aed",
+    color: "#fff",
+    border: "none",
+    padding: "12px",
+    borderRadius:
+      "10px",
+    cursor:
+      "pointer",
+  }}
+>
+  ✏️ Edit
+</button>
 
-          <button  
-            onClick={() =>  
-              toggleStatus(  
-                user  
-              )  
-            }  
-            style={{  
-              flex: 1,  
-              background:  
-                user.status ===  
-                "Active"  
-                  ? "#ef4444"  
-                  : "#22c55e",  
-              color: "#fff",  
-              border: "none",  
-              padding: "12px",  
-              borderRadius: "10px",  
-            }}  
-          >  
-            {user.status ===  
-            "Active"  
-              ? "❌ Deactivate"  
-              : "✅ Activate"}  
-          </button>  
+    <button
+  onClick={() =>
+    resetPassword(
+      user.id
+    )
+  }
+  style={{
+    flex: 1,
+    background:
+      "#f59e0b",
+    color: "#fff",
+    border: "none",
+    padding: "12px",
+    borderRadius:
+      "10px",
+    cursor:
+      "pointer",
+  }}
+>
+  🔑 Reset Password
+</button>
+    
+<button
+onClick={() =>
+toggleStatus(user)
+}
+style={{
+flex: 1,
+background:
+user.status ===
+"Active"
+? "#ef4444"
+: "#22c55e",
+color: "#fff",
+border: "none",
+padding: "12px",
+borderRadius: "10px",
+cursor: "pointer",
+}}
+>
+{user.status ===
+"Active"
+? "❌ Deactivate"
+: "✅ Activate"}
+</button>
 
-          <button  
+<button  
             onClick={() =>  
               deleteUser(  
                 user.id  
@@ -543,11 +586,15 @@ style={inputStyle}
             }  
             style={{  
               flex: 1,  
-              background: "#991b1b",  
+              background:  
+                "#991b1b",  
               color: "#fff",  
               border: "none",  
               padding: "12px",  
-              borderRadius: "10px",  
+              borderRadius:  
+                "10px",  
+              cursor:  
+                "pointer",  
             }}  
           >  
             🗑 Delete  
@@ -569,3 +616,5 @@ borderRadius: "10px",
 border: "1px solid #ddd",
 boxSizing: "border-box",
 };
+
+Manage user r ka dena hai,
