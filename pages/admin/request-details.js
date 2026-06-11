@@ -124,7 +124,41 @@ export default function RequestDetails() {
           {requestData.coverage}
         </p>
       </div>
+{requestData.customerReply && (
+  <div
+    style={{
+      background: "#fff",
+      padding: "18px",
+      borderRadius: "15px",
+      marginBottom: "20px",
+    }}
+  >
+    <h3>Customer Reply</h3>
 
+    <div
+      style={{
+        background: "#ecfdf5",
+        border: "1px solid #86efac",
+        padding: "15px",
+        borderRadius: "10px",
+      }}
+    >
+      {requestData.customerReply}
+    </div>
+
+    <p
+      style={{
+        marginTop: "10px",
+        color: "#666",
+        fontSize: "14px",
+      }}
+    >
+      Reply Date:
+      {" "}
+      {requestData.replyDate}
+    </p>
+  </div>
+)}
       <div
         style={{
           display: "grid",
