@@ -119,19 +119,19 @@ export default function QueryStatus() {
             </p>
 
             <span
-              style={{
-                background:
-                  "#6f42c1",
-                color: "#fff",
-                padding:
-                  "5px 10px",
-                borderRadius:
-                  "20px",
-                fontSize: "12px",
-              }}
-            >
-              Query Raised
-            </span>
+  style={{
+    background:
+      item.status === "Reply Submitted"
+        ? "#2563eb"
+        : "#6f42c1",
+    color: "#fff",
+    padding: "5px 10px",
+    borderRadius: "20px",
+    fontSize: "12px",
+  }}
+>
+  {item.status}
+</span>
           </div>
         </Link>
       ))}
