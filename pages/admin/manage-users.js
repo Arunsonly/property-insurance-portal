@@ -173,15 +173,35 @@ const resetPassword = async (
 };
 
 const editUser = async (
+const editUser = async (
   user
 ) => {
-  const newName =
-    prompt(
-      "Enter Name",
-      user.name
-    );
+
+  const newName = prompt(
+    "Enter Name",
+    user.name
+  );
 
   if (!newName) return;
+
+  const newMobile = prompt(
+    "Enter Mobile",
+    user.mobile
+  );
+
+  if (!newMobile) return;
+
+  const newEmail = prompt(
+    "Enter Email",
+    user.email
+  );
+
+  const newUsername = prompt(
+    "Enter Username",
+    user.username
+  );
+
+  if (!newUsername) return;
 
   await update(
     ref(
@@ -190,11 +210,14 @@ const editUser = async (
     ),
     {
       name: newName,
+      mobile: newMobile,
+      email: newEmail,
+      username: newUsername,
     }
   );
 
   alert(
-    "User Updated"
+    "User Updated Successfully"
   );
 };
 
