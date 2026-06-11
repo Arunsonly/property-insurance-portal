@@ -230,10 +230,6 @@ const filteredUsers =
         search.toLowerCase()
       )
   );
-.includes(
-search.toLowerCase()
-)
-);
 
 return (
 <div
