@@ -1,30 +1,156 @@
+import { useEffect, useState } from "react";
+
+import {
+  ref,
+  push,
+  set,
+  onValue,
+  update,
+  remove,
+} from "firebase/database";
+
+import { database } from "../../lib/firebase";
+
 export default function ManageUsers() {
-  const users = [
-    {
-      name: "Rajesh Kumar",
-      mobile: "9876543210",
+  const [users, setUsers] =
+    useState([]);
+
+  const [search, setSearch] =
+    useState("");
+
+  const [showForm, setShowForm] =
+    useState(false);
+
+  const [name, setName] =
+    useState("");
+
+  const [mobile, setMobile] =
+    useState("");
+
+  const [email, setEmail] =
+    useState("");
+
+  const [username, setUsername] =
+    useState("");
+
+  const [password, setPassword] =
+    useState("");
+
+  useEffect(() => {
+    const usersRef = ref(
+      database,
+      "users"
+    );
+
+    onValue(usersRef, (snapshot) => {
+      const data =
+        snapshot.val();
+
+      if (!data) {
+        setUsers([]);
+        return;
+      }
+
+      const arr =
+        Object.keys(data).map(
+          (key) => ({
+            id: key,
+            ...data[key],
+          })
+        );
+
+      setUsers(arr);
+    });
+  }, []);
+
+  const addUser = async () => {
+    if (
+      !name ||
+      !mobile ||
+      !username ||
+      !password
+    ) {
+      alert(
+        "Please fill all required fields"
+      );
+      return;
+    }
+
+    const userRef = push(
+      ref(database, "users")
+    );
+
+    await set(userRef, {
+      name,
+      mobile,
+      email,
+      username,
+      password,
       status: "Active",
-      requests: 5,
-      policies: 2,
-      lastLogin: "11-Jun-2026",
-    },
-    {
-      name: "Amit Sharma",
-      mobile: "9123456780",
-      status: "Active",
-      requests: 3,
-      policies: 1,
-      lastLogin: "10-Jun-2026",
-    },
-    {
-      name: "Neha Verma",
-      mobile: "8811223344",
-      status: "Inactive",
-      requests: 1,
-      policies: 0,
-      lastLogin: "05-Jun-2026",
-    },
-  ];
+      totalRequests: 0,
+      totalPolicies: 0,
+      lastLogin: "Never",
+      createdAt:
+        new Date().toLocaleString(),
+    });
+
+    setName("");
+    setMobile("");
+    setEmail("");
+    setUsername("");
+    setPassword("");
+
+    setShowForm(false);
+
+    alert(
+      "User Added Successfully"
+    );
+  };
+
+  const toggleStatus = async (
+    user
+  ) => {
+    await update(
+      ref(
+        database,
+        `users/${user.id}`
+      ),
+      {
+        status:
+          user.status ===
+          "Active"
+            ? "Inactive"
+            : "Active",
+      }
+    );
+  };
+
+  const deleteUser = async (
+    id
+  ) => {
+    if (
+      !confirm(
+        "Delete User?"
+      )
+    )
+      return;
+
+    await remove(
+      ref(
+        database,
+        `users/${id}`
+      )
+    );
+  };
+
+  const filteredUsers =
+    users.filter((u) =>
+      `${u.name} ${u.mobile} ${u.username}`
+        .toLowerCase()
+        .includes(
+          search.toLowerCase()
+        )
+    );
 
   return (
     <div
@@ -50,25 +176,130 @@ export default function ManageUsers() {
       </div>
 
       <button
+        onClick={() =>
+          setShowForm(
+            !showForm
+          )
+        }
         style={{
           width: "100%",
-          background: "#7c3aed",
+          background:
+            "#7c3aed",
           color: "#fff",
           border: "none",
           padding: "14px",
-          borderRadius: "12px",
+          borderRadius:
+            "12px",
           fontSize: "16px",
-          fontWeight: "bold",
-          marginBottom: "20px",
-          cursor: "pointer",
+          fontWeight:
+            "bold",
+          marginBottom:
+            "20px",
+          cursor:
+            "pointer",
         }}
       >
         ➕ Add User
       </button>
+{showForm && (
+        <div
+          style={{
+            background: "#fff",
+            padding: "20px",
+            borderRadius: "20px",
+            marginBottom: "20px",
+            boxShadow:
+              "0 2px 10px rgba(0,0,0,.08)",
+          }}
+        >
+          <h2>Add New User</h2>
+
+          <input
+            placeholder="Full Name"
+            value={name}
+            onChange={(e) =>
+              setName(
+                e.target.value
+              )
+            }
+            style={inputStyle}
+          />
+
+          <input
+            placeholder="Mobile"
+            value={mobile}
+            onChange={(e) =>
+              setMobile(
+                e.target.value
+              )
+            }
+            style={inputStyle}
+          />
+
+          <input
+            placeholder="Email"
+            value={email}
+            onChange={(e) =>
+              setEmail(
+                e.target.value
+              )
+            }
+            style={inputStyle}
+          />
+
+          <input
+            placeholder="Username"
+            value={username}
+            onChange={(e) =>
+              setUsername(
+                e.target.value
+              )
+            }
+            style={inputStyle}
+          />
+
+          <input
+            placeholder="Password"
+            value={password}
+            onChange={(e) =>
+              setPassword(
+                e.target.value
+              )
+            }
+            style={inputStyle}
+          />
+
+          <button
+            onClick={addUser}
+            style={{
+              width: "100%",
+              background:
+                "#16a34a",
+              color: "#fff",
+              border: "none",
+              padding: "14px",
+              borderRadius:
+                "12px",
+              fontWeight:
+                "bold",
+              cursor:
+                "pointer",
+            }}
+          >
+            Save User
+          </button>
+        </div>
+      )}
 
       <input
         type="text"
         placeholder="Search User"
+        value={search}
+        onChange={(e) =>
+          setSearch(
+            e.target.value
+          )
+        }
         style={{
           width: "100%",
           padding: "15px",
@@ -76,155 +307,169 @@ export default function ManageUsers() {
           border: "1px solid #ddd",
           marginBottom: "20px",
           fontSize: "16px",
-          boxSizing: "border-box",
+          boxSizing:
+            "border-box",
         }}
       />
 
-      {users.map((user, index) => (
-        <div
-          key={index}
-          style={{
-            background: "#fff",
-            borderRadius: "20px",
-            padding: "20px",
-            marginBottom: "15px",
-            boxShadow:
-              "0 2px 10px rgba(0,0,0,0.08)",
-          }}
-        >
-          <h2>{user.name}</h2>
-
-          <p>
-            <strong>Mobile:</strong>{" "}
-            {user.mobile}
-          </p>
-
-          <p>
-            <strong>Total Requests:</strong>{" "}
-            {user.requests}
-          </p>
-
-          <p>
-            <strong>Total Policies:</strong>{" "}
-            {user.policies}
-          </p>
-
-          <p>
-            <strong>Last Login:</strong>{" "}
-            {user.lastLogin}
-          </p>
-
-          <span
+      {filteredUsers.map(
+        (user) => (
+          <div
+            key={user.id}
             style={{
               background:
-                user.status === "Active"
-                  ? "#22c55e"
-                  : "#ef4444",
-              color: "#fff",
-              padding: "8px 14px",
-              borderRadius: "20px",
-              fontSize: "14px",
-              fontWeight: "bold",
-              display: "inline-block",
-              marginBottom: "15px",
+                "#fff",
+              borderRadius:
+                "20px",
+              padding:
+                "20px",
+              marginBottom:
+                "15px",
+              boxShadow:
+                "0 2px 10px rgba(0,0,0,.08)",
             }}
           >
-            {user.status}
-          </span>
+            <h2>
+              {user.name}
+            </h2>
 
-          <div
-            style={{
-              display: "flex",
-              gap: "10px",
-              flexWrap: "wrap",
-            }}
-          >
+            <p>
+              <strong>
+                Mobile:
+              </strong>{" "}
+              {user.mobile}
+            </p>
+
+            <p>
+              <strong>
+                Email:
+              </strong>{" "}
+              {user.email}
+            </p>
+
+            <p>
+              <strong>
+                Username:
+              </strong>{" "}
+              {user.username}
+            </p>
+
+            <p>
+              <strong>
+                Requests:
+              </strong>{" "}
+              {
+                user.totalRequests
+              }
+            </p>
+
+            <p>
+              <strong>
+                Policies:
+              </strong>{" "}
+              {
+                user.totalPolicies
+              }
+            </p>
+
+            <p>
+              <strong>
+                Last Login:
+              </strong>{" "}
+              {
+                user.lastLogin
+              }
+            </p>
+
+            <span
+              style={{
+                background:
+                  user.status ===
+                  "Active"
+                    ? "#22c55e"
+                    : "#ef4444",
+                color:
+                  "#fff",
+                padding:
+                  "8px 14px",
+                borderRadius:
+                  "20px",
+                display:
+                  "inline-block",
+                marginBottom:
+                  "15px",
+              }}
+            >
+              {user.status}
+            </span>
+
+            <div
+              style={{
+                display:
+                  "flex",
+                gap: "10px",
+                flexWrap:
+                  "wrap",
+              }}
+            >
 <button
-              style={{
-                flex: 1,
-                background: "#2563eb",
-                color: "#fff",
-                border: "none",
-                padding: "12px",
-                borderRadius: "10px",
-                cursor: "pointer",
-              }}
-            >
-              👁 View
-            </button>
+                onClick={() =>
+                  toggleStatus(user)
+                }
+                style={{
+                  flex: 1,
+                  background:
+                    user.status ===
+                    "Active"
+                      ? "#ef4444"
+                      : "#22c55e",
+                  color: "#fff",
+                  border: "none",
+                  padding: "12px",
+                  borderRadius: "10px",
+                  cursor: "pointer",
+                }}
+              >
+                {user.status ===
+                "Active"
+                  ? "❌ Deactivate"
+                  : "✅ Activate"}
+              </button>
 
-            <button
-              style={{
-                flex: 1,
-                background: "#7c3aed",
-                color: "#fff",
-                border: "none",
-                padding: "12px",
-                borderRadius: "10px",
-                cursor: "pointer",
-              }}
-            >
-              ✏️ Edit
-            </button>
-
-            <button
-              style={{
-                flex: 1,
-                background: "#f59e0b",
-                color: "#fff",
-                border: "none",
-                padding: "12px",
-                borderRadius: "10px",
-                cursor: "pointer",
-              }}
-            >
-              🔑 Reset Password
-            </button>
-
-            <button
-              style={{
-                flex: 1,
-                background: "#22c55e",
-                color: "#fff",
-                border: "none",
-                padding: "12px",
-                borderRadius: "10px",
-                cursor: "pointer",
-              }}
-            >
-              ✅ Activate
-            </button>
-
-            <button
-              style={{
-                flex: 1,
-                background: "#ef4444",
-                color: "#fff",
-                border: "none",
-                padding: "12px",
-                borderRadius: "10px",
-                cursor: "pointer",
-              }}
-            >
-              ❌ Deactivate
-            </button>
-
-            <button
-              style={{
-                flex: 1,
-                background: "#991b1b",
-                color: "#fff",
-                border: "none",
-                padding: "12px",
-                borderRadius: "10px",
-                cursor: "pointer",
-              }}
-            >
-              🗑 Delete
-            </button>
+              <button
+                onClick={() =>
+                  deleteUser(
+                    user.id
+                  )
+                }
+                style={{
+                  flex: 1,
+                  background:
+                    "#991b1b",
+                  color: "#fff",
+                  border: "none",
+                  padding: "12px",
+                  borderRadius:
+                    "10px",
+                  cursor:
+                    "pointer",
+                }}
+              >
+                🗑 Delete
+              </button>
+            </div>
           </div>
-        </div>
-      ))}
+        )
+      )}
     </div>
   );
 }
+
+const inputStyle = {
+  width: "100%",
+  padding: "12px",
+  marginBottom: "12px",
+  borderRadius: "10px",
+  border: "1px solid #ddd",
+  boxSizing: "border-box",
+};
