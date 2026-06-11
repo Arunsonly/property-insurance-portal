@@ -76,7 +76,7 @@ export default function PolicyRegister() {
       <div
         style={{
           background:
-            "linear-gradient(135deg,#2563eb,#0b3d91)",
+            "linear-gradient(135deg,#0b3d91,#2563eb)",
           color: "#fff",
           padding: "30px",
           borderRadius: "20px",
@@ -88,7 +88,7 @@ export default function PolicyRegister() {
             margin: 0,
           }}
         >
-          📄 Policy Register
+          📄 My Policies
         </h1>
 
         <p
@@ -96,13 +96,13 @@ export default function PolicyRegister() {
             marginTop: "10px",
           }}
         >
-          All Issued Policies
+          View Active Policies
         </p>
       </div>
 
       <input
         type="text"
-        placeholder="Search Policy No / Insured Name / Ref No"
+        placeholder="Search Policy / Ref No"
         value={search}
         onChange={(e) =>
           setSearch(
@@ -120,24 +120,6 @@ export default function PolicyRegister() {
             "border-box",
         }}
       />
-
-      {filteredPolicies.length ===
-        0 && (
-        <div
-          style={{
-            background:
-              "#fff",
-            padding:
-              "20px",
-            borderRadius:
-              "15px",
-            textAlign:
-              "center",
-          }}
-        >
-          No Policies Found
-        </div>
-      )}
 
       {filteredPolicies.map(
         (policy) => (
@@ -182,15 +164,6 @@ export default function PolicyRegister() {
 
             <p>
               <strong>
-                Start Date:
-              </strong>{" "}
-              {
-                policy.policyStartDate
-              }
-            </p>
-
-            <p>
-              <strong>
                 Expiry Date:
               </strong>{" "}
               {
@@ -205,7 +178,7 @@ export default function PolicyRegister() {
               }}
             >
               <Link
-                href={`/admin/request-details?id=${policy.id}`}
+                href={`/user/policy-details?id=${policy.id}`}
                 style={{
                   background:
                     "#2563eb",
@@ -223,7 +196,7 @@ export default function PolicyRegister() {
                     "bold",
                 }}
               >
-                👁 View Details
+                📄 View Policy
               </Link>
             </div>
           </div>
