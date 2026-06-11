@@ -1,24 +1,43 @@
 import { useState } from "react";
 
 export default function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] =
+    useState("");
+
+  const [password, setPassword] =
+    useState("");
 
   const handleLogin = () => {
     if (
       username === "arun_oicl" &&
       password === "Oicl_1308"
     ) {
-      window.location.href = "/admin/dashboard";
+      localStorage.setItem(
+        "role",
+        "admin"
+      );
+
+      window.location.href =
+        "/admin/dashboard";
+
       return;
     }
 
     if (username && password) {
-      window.location.href = "/user/dashboard";
+      localStorage.setItem(
+        "role",
+        "user"
+      );
+
+      window.location.href =
+        "/user/dashboard";
+
       return;
     }
 
-    alert("Please enter valid login details");
+    alert(
+      "Please enter login details"
+    );
   };
 
   return (
@@ -31,7 +50,8 @@ export default function Login() {
         justifyContent: "center",
         alignItems: "center",
         padding: "20px",
-        fontFamily: "Arial,sans-serif",
+        fontFamily:
+          "Arial,sans-serif",
       }}
     >
       <div
@@ -69,14 +89,19 @@ export default function Login() {
           placeholder="Username"
           value={username}
           onChange={(e) =>
-            setUsername(e.target.value)
+            setUsername(
+              e.target.value
+            )
           }
           style={{
             width: "100%",
             padding: "12px",
             marginBottom: "15px",
             borderRadius: "10px",
-            border: "1px solid #cbd5e1",
+            border:
+              "1px solid #cbd5e1",
+            boxSizing:
+              "border-box",
           }}
         />
 
@@ -85,14 +110,19 @@ export default function Login() {
           placeholder="Password"
           value={password}
           onChange={(e) =>
-            setPassword(e.target.value)
+            setPassword(
+              e.target.value
+            )
           }
           style={{
             width: "100%",
             padding: "12px",
             marginBottom: "20px",
             borderRadius: "10px",
-            border: "1px solid #cbd5e1",
+            border:
+              "1px solid #cbd5e1",
+            boxSizing:
+              "border-box",
           }}
         />
 
@@ -100,13 +130,17 @@ export default function Login() {
           onClick={handleLogin}
           style={{
             width: "100%",
-            background: "#2563eb",
+            background:
+              "#2563eb",
             color: "#fff",
             border: "none",
             padding: "14px",
-            borderRadius: "12px",
-            fontWeight: "bold",
-            cursor: "pointer",
+            borderRadius:
+              "12px",
+            fontWeight:
+              "bold",
+            cursor:
+              "pointer",
           }}
         >
           Login
@@ -120,11 +154,13 @@ export default function Login() {
             textAlign: "center",
           }}
         >
-          Admin Username: arun_oicl
+          Admin Username:
+          arun_oicl
           <br />
-          Admin Password: Oicl_1308
+          Admin Password:
+          Oicl_1308
         </div>
       </div>
     </div>
   );
-            }
+}
