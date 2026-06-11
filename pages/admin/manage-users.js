@@ -223,9 +223,13 @@ Created At: ${user.createdAt}`
 };
 
 const filteredUsers =
-users.filter((u) =>
-${u.name} ${u.mobile} ${u.username}
-.toLowerCase()
+  users.filter((u) =>
+    `${u.name} ${u.mobile} ${u.username}`
+      .toLowerCase()
+      .includes(
+        search.toLowerCase()
+      )
+  );
 .includes(
 search.toLowerCase()
 )
