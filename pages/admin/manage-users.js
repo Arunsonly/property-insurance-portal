@@ -621,5 +621,3 @@ borderRadius: "10px",
 border: "1px solid #ddd",
 boxSizing: "border-box",
 };
-
-Manage user r ka dena hai,
