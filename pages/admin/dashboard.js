@@ -19,7 +19,24 @@ policy: 0,
 
 const [activities, setActivities] =
 useState([]);
+const [activities, setActivities] =
+  useState([]);
 
+useEffect(() => {
+
+  const role =
+    localStorage.getItem("role");
+
+  if (role !== "admin") {
+
+    window.location.replace("/");
+
+    return;
+  }
+
+}, []);
+
+useEffect(() => {
 useEffect(() => {
 
 const requestsRef =  
