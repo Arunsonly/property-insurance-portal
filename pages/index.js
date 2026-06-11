@@ -80,7 +80,7 @@ export default function Home() {
             ✓ View Policies
           </p>
 
-          <Link href="/login">
+          <Link href="/user-login">
             <button
               style={{
                 marginTop: "15px",
@@ -132,7 +132,7 @@ export default function Home() {
             ✓ Issue Policies
           </p>
 
-          <Link href="/login">
+          <Link href="/admin-login">
             <button
               style={{
                 marginTop: "15px",
