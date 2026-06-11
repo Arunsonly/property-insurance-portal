@@ -1,16 +1,30 @@
 import { useState } from "react";
+import { useRouter } from "next/router";
+import { database } from "../lib/firebase";
+
+import {
+  ref,
+  get,
+  child,
+  update,
+} from "firebase/database";
 
 export default function UserLogin() {
+  const router = useRouter();
+
   const [username, setUsername] =
     useState("");
 
   const [password, setPassword] =
     useState("");
 
-  const handleLogin = () => {
+  const [loading, setLoading] =
+    useState(false);
+
+  const handleLogin = async () => {
     if (
-      username.trim() === "" ||
-      password.trim() === ""
+      !username.trim() ||
+      !password.trim()
     ) {
       alert(
         "Please enter Username and Password"
@@ -18,13 +32,110 @@ export default function UserLogin() {
       return;
     }
 
-    localStorage.setItem(
-      "role",
-      "user"
-    );
+    try {
+      setLoading(true);
 
-    window.location.href =
-      "/user/dashboard";
+      const dbRef = ref(database);
+
+      const snapshot = await get(
+        child(dbRef, "users")
+      );
+
+      if (!snapshot.exists()) {
+        alert("No Users Found");
+        setLoading(false);
+        return;
+      }
+
+      const users =
+        snapshot.val();
+
+      let matchedUser =
+        null;
+
+      let matchedKey =
+        null;
+
+      Object.keys(users).forEach(
+        (key) => {
+          const user =
+            users[key];
+
+          if (
+            user.username ===
+              username.trim() &&
+            user.password ===
+              password.trim()
+          ) {
+            matchedUser =
+              user;
+
+            matchedKey =
+              key;
+          }
+        }
+      );
+
+      if (!matchedUser) {
+        alert(
+          "Invalid Username or Password"
+        );
+
+        setLoading(false);
+        return;
+      }
+
+      if (
+        matchedUser.status ===
+        "Inactive"
+      ) {
+        alert(
+          "User Account Deactivated"
+        );
+
+        setLoading(false);
+        return;
+      }
+
+      await update(
+        ref(
+          database,
+          `users/${matchedKey}`
+        ),
+        {
+          lastLogin:
+            new Date().toLocaleString(),
+        }
+      );
+
+      localStorage.setItem(
+        "role",
+        "user"
+      );
+
+      localStorage.setItem(
+        "userName",
+        matchedUser.name
+      );
+
+      localStorage.setItem(
+        "userId",
+        matchedKey
+      );
+
+      router.push(
+        "/user/dashboard"
+      );
+return;
+    } catch (error) {
+      console.error(error);
+
+      alert(
+        "Login Failed"
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -115,6 +226,7 @@ export default function UserLogin() {
 
         <button
           onClick={handleLogin}
+          disabled={loading}
           style={{
             width: "100%",
             background:
@@ -131,7 +243,9 @@ export default function UserLogin() {
               "pointer",
           }}
         >
-          Login as User
+          {loading
+            ? "Please Wait..."
+            : "Login as User"}
         </button>
 
         <div
@@ -142,11 +256,10 @@ export default function UserLogin() {
             fontSize: "13px",
           }}
         >
-          login with Id & password 
-          <br />
-          provide by Office
+          Login using credentials
+          provided by office
         </div>
       </div>
     </div>
   );
-            }
+}
