@@ -171,8 +171,7 @@ const resetPassword = async (
     "Password Reset Successfully"
   );
 };
-
-const editUser = async (
+  
 const editUser = async (
   user
 ) => {
