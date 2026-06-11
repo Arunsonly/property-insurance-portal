@@ -19,9 +19,6 @@ policy: 0,
 
 const [activities, setActivities] =
 useState([]);
-const [activities, setActivities] =
-  useState([]);
-
 useEffect(() => {
 
   const role =
@@ -36,7 +33,6 @@ useEffect(() => {
 
 }, []);
 
-useEffect(() => {
 useEffect(() => {
 
 const requestsRef =  
