@@ -113,10 +113,11 @@ const toggleStatus = async (
 user
 ) => {
 await update(
-ref(
-database,
-users/${user.id}
-),
+  ref(
+    database,
+    `users/${user.id}`
+  ),
+  
 {
 status:
 user.status ===
