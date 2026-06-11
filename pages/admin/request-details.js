@@ -184,7 +184,7 @@ export default function RequestDetails() {
   </button>
 </Link>
 
-        <Link href="/admin/send-quotation">
+        <Link href={`/admin/send-quotation?id=${id}`}>
           <button
             style={{
               width: "100%",
