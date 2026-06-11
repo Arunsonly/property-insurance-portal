@@ -1,3 +1,36 @@
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { database } from "../../lib/firebase";
+import { ref, update } from "firebase/database";
+
+export default function SendQuotation() {
+  const router = useRouter();
+  const { id } = router.query;
+
+  const [premium, setPremium] = useState("");
+  const [remarks, setRemarks] = useState("");
+
+  const handleSubmit = async () => {
+    if (!premium) {
+      alert("Enter Premium");
+      return;
+    }
+
+    await update(
+      ref(database, `requests/${id}`),
+      {
+        quotationPremium: premium,
+        quotationRemarks: remarks,
+        quotationDate: new Date().toISOString(),
+        status: "Quotation Received",
+      }
+    );
+
+    alert("Quotation Sent");
+
+    router.push("/admin/pending-requests");
+  };
+
 return (
   <div
     style={{
