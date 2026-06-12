@@ -136,42 +136,31 @@ const filteredPolicies =
           </p>
         </div>
 
-        <div
-          style={{
-            display:"flex",
-            gap:"10px",
-            marginBottom:"20px",
-          }}
-        >
-<input
-            value={month}
-            onChange={(e)=>
-              setMonth(
-                e.target.value
-              )
-            }
-            placeholder="MM"
-            style={{
-              flex:1,
-              padding:"12px",
-            }}
-          />
+        <input
+  type="month"
+  value={`${year}-${month}`}
+  onChange={(e) => {
 
-          <input
-            value={year}
-            onChange={(e)=>
-              setYear(
-                e.target.value
-              )
-            }
-            placeholder="YYYY"
-            style={{
-              flex:1,
-              padding:"12px",
-            }}
-          />
+    const [
+      selectedYear,
+      selectedMonth
+    ] =
+      e.target.value.split("-");
 
-        </div>
+    setYear(selectedYear);
+    setMonth(selectedMonth);
+
+  }}
+  style={{
+    width: "100%",
+    padding: "15px",
+    borderRadius: "12px",
+    border: "1px solid #ddd",
+    fontSize: "16px",
+    boxSizing: "border-box",
+    marginBottom: "20px",
+  }}
+/>
 
         {filteredPolicies.length === 0 && (
 
