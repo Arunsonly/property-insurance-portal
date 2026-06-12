@@ -1,165 +1,594 @@
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { database } from "../../lib/firebase";
-import { ref, onValue } from "firebase/database";
+import { useState } from "react";
 
-export default function MyRequests() {
-  const [requests, setRequests] = useState([]);
+import {
+  ref,
+  push,
+  set
+} from "firebase/database";
 
-  useEffect(() => {
-    const requestsRef = ref(database, "requests");
+import { database }
+from "../../lib/firebase";
 
-    onValue(requestsRef, (snapshot) => {
-      const data = snapshot.val();
+import AuthProtection
+from "../auth-protection";
 
-      if (data) {
-        const loadedRequests = Object.keys(data).map(
-          (key) => ({
-            id: key,
-            ...data[key],
-          })
+export default function NewRequest() {
+
+  const [insuredName,
+    setInsuredName] =
+    useState("");
+
+  const [address,
+    setAddress] =
+    useState("");
+
+  const [mobile,
+    setMobile] =
+    useState("");
+
+  const [riskLocation,
+    setRiskLocation] =
+    useState("");
+
+  const [riskType,
+    setRiskType] =
+    useState("");
+
+  const [propertyType,
+    setPropertyType] =
+    useState([]);
+
+  const [businessActivity,
+    setBusinessActivity] =
+    useState("");
+
+  const [coverage,
+    setCoverage] =
+    useState("");
+
+  const [sumInsured,
+    setSumInsured] =
+    useState("");
+
+  const [loading,
+    setLoading] =
+    useState(false);
+
+  const handleRiskType =
+    (value) => {
+
+    setRiskType(value);
+
+    switch (value) {
+
+      case "Manufacturing Unit":
+
+        setBusinessActivity(
+          "Name of goods manufacturing"
         );
 
-        setRequests(loadedRequests.reverse());
-      } else {
-        setRequests([]);
-      }
-    });
+        break;
 
-  }, []);
+      case "Godown (Open)":
 
-  const getColor = (status) => {
-    switch (status) {
-      case "Pending":
-        return "#f59e0b";
+        setBusinessActivity(
+          "Name of goods storage"
+        );
 
-      case "Query Raised":
-        return "#8b5cf6";
+        break;
 
-      case "Reply Received":
-        return "#2563eb";
+      case "Godown (Closed)":
 
-      case "Quotation Sent":
-        return "#ea580c";
+        setBusinessActivity(
+          "Name of goods storage"
+        );
 
-      case "Policy Issued":
-        return "#22c55e";
+        break;
+
+      case "Retail Shop":
+
+        setBusinessActivity(
+          "Name of goods selling (kirana, electric, puncture shop etc)"
+        );
+
+        break;
+
+      case "Other":
+
+        setBusinessActivity(
+          "Enter business activity details"
+        );
+
+        break;
 
       default:
-        return "#6b7280";
+
+        setBusinessActivity("");
+
     }
   };
 
+  const generateRequestNo =
+    () => {
+
+      const userName =
+        (
+          localStorage.getItem(
+            "userName"
+          ) || "USER"
+        )
+          .replace(/\s/g, "")
+          .substring(0, 8)
+          .toUpperCase();
+
+      const now =
+        new Date();
+
+      const mm =
+        String(
+          now.getMonth() + 1
+        ).padStart(2, "0");
+
+      const yy =
+        String(
+          now.getFullYear()
+        ).slice(-2);
+
+      const serial =
+        Math.floor(
+          100 +
+          Math.random() * 900
+        );
+
+      return `${userName}_${mm}${yy}_${serial}`;
+    };
+const handleSubmit =
+    async () => {
+
+      if (
+        !insuredName ||
+        !mobile ||
+        !riskLocation ||
+        !riskType ||
+        propertyType.length === 0 ||
+        !coverage ||
+        !sumInsured
+      ) {
+
+        alert(
+          "Please fill all mandatory fields"
+        );
+
+        return;
+      }
+
+      try {
+
+        setLoading(true);
+
+        const requestNo =
+          generateRequestNo();
+
+        const requestRef =
+          push(
+            ref(
+              database,
+              "requests"
+            )
+          );
+
+        const requestData = {
+
+          requestNo,
+
+          userId:
+            localStorage.getItem(
+              "userId"
+            ),
+
+          userName:
+            localStorage.getItem(
+              "userName"
+            ),
+
+          insuredName,
+
+          address,
+
+          mobile,
+
+          riskLocation,
+
+          riskType,
+
+          propertyType,
+
+          businessActivity,
+
+          coverage,
+
+          sumInsured,
+
+          status:
+            "Pending",
+
+          createdAt:
+            new Date()
+              .toISOString(),
+
+        };
+
+        await set(
+          requestRef,
+          requestData
+        );
+
+        alert(
+          "Request Submitted Successfully"
+        );
+
+        setInsuredName("");
+        setAddress("");
+        setMobile("");
+        setRiskLocation("");
+        setRiskType("");
+        setPropertyType([]);
+        setBusinessActivity("");
+        setCoverage("");
+        setSumInsured("");
+
+      } catch (error) {
+
+        console.error(
+          error
+        );
+
+        alert(
+          "Error Submitting Request"
+        );
+
+      } finally {
+
+        setLoading(false);
+
+      }
+    };
+
   return (
-    <div
-      style={{
-        background: "#f4f7fc",
-        minHeight: "100vh",
-        padding: "20px",
-        maxWidth: "700px",
-        margin: "0 auto",
-      }}
-    >
+    <>
+      <AuthProtection
+        role="user"
+      />
+
       <div
         style={{
           background:
-            "linear-gradient(135deg,#0b3d91,#2563eb)",
-          color: "#fff",
-          padding: "30px",
-          borderRadius: "24px",
-          marginBottom: "20px",
-          boxShadow:
-            "0 15px 30px rgba(37,99,235,.25)",
+            "#f4f7fc",
+          minHeight:
+            "100vh",
+          padding:
+            "20px",
+          maxWidth:
+            "700px",
+          margin:
+            "0 auto",
         }}
       >
-        <h1 style={{ margin: 0 }}>
-          📋 My Requests
-        </h1>
 
-        <p
-          style={{
-            marginTop: "10px",
-            opacity: "0.9",
-          }}
-        >
-          View all submitted requests
-        </p>
-      </div>
-
-      {requests.length === 0 && (
         <div
           style={{
-            background: "#fff",
-            padding: "20px",
-            borderRadius: "16px",
-            textAlign: "center",
+            background:
+              "linear-gradient(135deg,#0b3d91,#2563eb)",
+            color:
+              "#fff",
+            padding:
+              "30px",
+            borderRadius:
+              "24px",
+            marginBottom:
+              "20px",
           }}
         >
-          No Requests Found
+          <h1
+            style={{
+              margin: 0,
+            }}
+          >
+            🏢 New Property Request
+          </h1>
+
+          <p
+            style={{
+              marginTop:
+                "10px",
+            }}
+          >
+            Submit Property Insurance Requirement
+          </p>
         </div>
-      )}
 
-      {requests.map((item) => (
         <div
-          key={item.id}
-          style={{
-            background: "#fff",
-            borderRadius: "24px",
-            padding: "22px",
-            marginBottom: "18px",
-            boxShadow:
-              "0 10px 25px rgba(0,0,0,0.08)",
-          }}
+          style={cardStyle}
         >
           <h2
             style={{
-              marginTop: 0,
-              color: "#111827",
+              color:
+                "#0b3d91",
             }}
           >
-            {item.requestNo}
+            👤 Basic Details
+          </h2>
+<input
+            placeholder="Insured Name"
+            value={insuredName}
+            onChange={(e) =>
+              setInsuredName(
+                e.target.value
+              )
+            }
+            style={inputStyle}
+          />
+
+          <input
+            placeholder="Address"
+            value={address}
+            onChange={(e) =>
+              setAddress(
+                e.target.value
+              )
+            }
+            style={inputStyle}
+          />
+
+          <input
+            placeholder="Mobile Number"
+            value={mobile}
+            onChange={(e) =>
+              setMobile(
+                e.target.value
+              )
+            }
+            style={inputStyle}
+          />
+        </div>
+
+        <div style={cardStyle}>
+          <h2
+            style={{
+              color: "#0b3d91",
+            }}
+          >
+            🏭 Risk Details
           </h2>
 
-          <p>
-            <strong>Insured:</strong>{" "}
-            {item.insuredName}
-          </p>
+          <input
+            placeholder="Enter District Name"
+            value={riskLocation}
+            onChange={(e) =>
+              setRiskLocation(
+                e.target.value
+              )
+            }
+            style={inputStyle}
+          />
 
-          <p>
-            <strong>Location:</strong>{" "}
-            {item.riskLocation}
-          </p>
+          <select
+            value={riskType}
+            onChange={(e) =>
+              handleRiskType(
+                e.target.value
+              )
+            }
+            style={inputStyle}
+          >
+            <option value="">
+              Select Risk Type
+            </option>
 
-          <div
+            <option>
+              Manufacturing Unit
+            </option>
+
+            <option>
+              Godown (Open)
+            </option>
+
+            <option>
+              Godown (Closed)
+            </option>
+
+            <option>
+              Retail Shop
+            </option>
+
+            <option>
+              Other
+            </option>
+          </select>
+
+          <select
+            multiple
+            value={propertyType}
+            onChange={(e) =>
+              setPropertyType(
+                [
+                  ...e.target.selectedOptions,
+                ].map(
+                  (option) =>
+                    option.value
+                )
+              )
+            }
             style={{
-              display: "inline-block",
-              background: getColor(
-                item.status
-              ),
-              color: "#fff",
-              padding: "8px 14px",
-              borderRadius: "999px",
-              fontWeight: "600",
-              marginTop: "10px",
+              ...inputStyle,
+              height: "140px",
             }}
           >
-            {item.status}
-          </div>
+            <option value="Building">
+              Building
+            </option>
 
-          <div style={{ marginTop: "18px" }}>
-            <Link
-              href={`/user/request-details?id=${item.id}`}
-              style={{
-                color: "#2563eb",
-                textDecoration: "none",
-                fontWeight: "700",
-              }}
-            >
-              View Details →
-            </Link>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
+            <option value="Stock/Assets">
+              Stock / Assets
+            </option>
+
+            <option value="Plant & Machinery">
+              Plant & Machinery
+            </option>
+
+            <option value="Roof Top Solar">
+              Roof Top Solar
+            </option>
+          </select>
+
+          <textarea
+            value={businessActivity}
+            onChange={(e) =>
+              setBusinessActivity(
+                e.target.value
+              )
             }
+            placeholder="Business Activity"
+            style={textareaStyle}
+          />
+
+          <select
+            value={coverage}
+            onChange={(e) =>
+              setCoverage(
+                e.target.value
+              )
+            }
+            style={inputStyle}
+          >
+            <option value="">
+              Select Coverage Required
+            </option>
+
+            <option>
+              Fire + STFI + EQ
+            </option>
+
+            <option>
+              Fire + STFI + EQ + Burglary
+            </option>
+
+            <option>
+              Fire + STFI + EQ + Terrorism
+            </option>
+
+            <option>
+              Fire + STFI + EQ + Terrorism + Burglary
+            </option>
+          </select>
+
+          <input
+            placeholder="Enter Total Sum Insured"
+            value={sumInsured}
+            onChange={(e) =>
+              setSumInsured(
+                e.target.value
+              )
+            }
+            style={inputStyle}
+          />
+        </div>
+<div style={cardStyle}>
+          <h2
+            style={{
+              color: "#0b3d91",
+            }}
+          >
+            📎 Documents Information
+          </h2>
+
+          <p
+            style={{
+              color: "#64748b",
+              lineHeight: "1.6",
+            }}
+          >
+            Proposal Form, Risk Photos
+            aur Previous Policy
+            details admin ko
+            WhatsApp ya Email se
+            share kar sakte hain.
+          </p>
+        </div>
+
+        <button
+          onClick={
+            handleSubmit
+          }
+          disabled={
+            loading
+          }
+          style={{
+            width: "100%",
+            padding: "18px",
+            border: "none",
+            borderRadius:
+              "16px",
+            background:
+              "linear-gradient(135deg,#16a34a,#22c55e)",
+            color: "#fff",
+            fontSize: "18px",
+            fontWeight: "700",
+            cursor: "pointer",
+          }}
+        >
+          {loading
+            ? "Please Wait..."
+            : "🚀 Submit Request"}
+        </button>
+
+      </div>
+    </>
+  );
+}
+
+const cardStyle = {
+  background: "#fff",
+  padding: "25px",
+  borderRadius: "24px",
+  marginBottom: "20px",
+  boxShadow:
+    "0 10px 25px rgba(0,0,0,0.08)",
+};
+
+const inputStyle = {
+  width: "100%",
+  boxSizing:
+    "border-box",
+  padding: "15px",
+  marginTop: "12px",
+  marginBottom: "12px",
+  borderRadius: "12px",
+  border:
+    "1px solid #ddd",
+  fontSize: "16px",
+  background:
+    "#fafafa",
+};
+
+const textareaStyle = {
+  width: "100%",
+  boxSizing:
+    "border-box",
+  minHeight:
+    "120px",
+  padding:
+    "15px",
+  marginTop:
+    "12px",
+  marginBottom:
+    "12px",
+  borderRadius:
+    "12px",
+  border:
+    "1px solid #ddd",
+  fontSize:
+    "16px",
+  background:
+    "#fafafa",
+};
