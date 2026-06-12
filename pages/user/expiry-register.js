@@ -6,21 +6,13 @@ import AuthProtection from "../auth-protection";
 
 export default function ExpiryRegister() {
 
-  const [policies, setPolicies] =
-    useState([]);
+  const [policies, setPolicies] = useState([]);
 
-  const [month, setMonth] =
+  const [selectedMonth, setSelectedMonth] =
     useState(
-      String(
+      `${new Date().getFullYear()}-${String(
         new Date().getMonth() + 1
-      ).padStart(2, "0")
-    );
-
-  const [year, setYear] =
-    useState(
-      String(
-        new Date().getFullYear()
-      )
+      ).padStart(2, "0")}`
     );
 
   useEffect(() => {
@@ -28,92 +20,67 @@ export default function ExpiryRegister() {
     const requestsRef =
       ref(database, "requests");
 
-    onValue(
-      requestsRef,
-      (snapshot) => {
+    onValue(requestsRef, (snapshot) => {
 
-        const data =
-          snapshot.val();
+      const data = snapshot.val();
 
-        if (!data) {
+      if (!data) {
+        setPolicies([]);
+        return;
+      }
 
-          setPolicies([]);
+      const currentUserId =
+        localStorage.getItem("userId");
 
-          return;
-        }
-
-        const currentUserId =
-          localStorage.getItem(
-            "userId"
+      const loadedPolicies =
+        Object.keys(data)
+          .map((key) => ({
+            id: key,
+            ...data[key],
+          }))
+          .filter(
+            (item) =>
+              item.status === "Policy Issued" &&
+              item.userId === currentUserId
           );
 
-        const loadedPolicies =
-          Object.keys(data)
-            .map((key) => ({
-              id: key,
-              ...data[key],
-            }))
-            .filter(
-              (item) =>
-                item.status ===
-                  "Policy Issued" &&
-                item.userId ===
-                  currentUserId
-            );
+      setPolicies(loadedPolicies);
 
-        setPolicies(
-          loadedPolicies
-        );
-      }
-    );
+    });
 
   }, []);
-const filteredPolicies =
+
+  const filteredPolicies =
     policies
       .filter((item) => {
 
-        if (
-          !item.policyExpiryDate
-        )
+        if (!item.policyExpiryDate)
           return false;
 
         const expiry =
-          new Date(
-            item.policyExpiryDate
+          item.policyExpiryDate.substring(
+            0,
+            7
           );
 
-        return (
-          String(
-            expiry.getMonth() + 1
-          ).padStart(2, "0") ===
-            month &&
-          String(
-            expiry.getFullYear()
-          ) === year
-        );
-      })
+        return expiry === selectedMonth;
 
+      })
       .sort(
         (a, b) =>
-          new Date(
-            a.policyExpiryDate
-          ) -
-          new Date(
-            b.policyExpiryDate
-          )
+          new Date(a.policyExpiryDate) -
+          new Date(b.policyExpiryDate)
       );
 
   return (
     <>
-      <AuthProtection
-        role="user"
-      />
+      <AuthProtection role="user" />
 
       <div
         style={{
-          background:"#f4f7fc",
-          minHeight:"100vh",
-          padding:"20px",
+          background: "#f4f7fc",
+          minHeight: "100vh",
+          padding: "20px",
         }}
       >
 
@@ -121,15 +88,13 @@ const filteredPolicies =
           style={{
             background:
               "linear-gradient(135deg,#0b3d91,#2563eb)",
-            color:"#fff",
-            padding:"30px",
-            borderRadius:"20px",
-            marginBottom:"20px",
+            color: "#fff",
+            padding: "30px",
+            borderRadius: "20px",
+            marginBottom: "20px",
           }}
         >
-          <h1>
-            ⏳ Expiry Register
-          </h1>
+          <h1>⏳ Expiry Register</h1>
 
           <p>
             Month Wise Policy Expiry
@@ -137,39 +102,32 @@ const filteredPolicies =
         </div>
 
         <input
-  type="month"
-  value={`${year}-${month}`}
-  onChange={(e) => {
-
-    const [
-      selectedYear,
-      selectedMonth
-    ] =
-      e.target.value.split("-");
-
-    setYear(selectedYear);
-    setMonth(selectedMonth);
-
-  }}
-  style={{
-    width: "100%",
-    padding: "15px",
-    borderRadius: "12px",
-    border: "1px solid #ddd",
-    fontSize: "16px",
-    boxSizing: "border-box",
-    marginBottom: "20px",
-  }}
-/>
+          type="month"
+          value={selectedMonth}
+          onChange={(e) =>
+            setSelectedMonth(
+              e.target.value
+            )
+          }
+          style={{
+            width: "100%",
+            padding: "15px",
+            borderRadius: "12px",
+            border: "1px solid #ddd",
+            fontSize: "16px",
+            boxSizing: "border-box",
+            marginBottom: "20px",
+          }}
+        />
 
         {filteredPolicies.length === 0 && (
 
           <div
             style={{
-              background:"#fff",
-              padding:"20px",
-              borderRadius:"15px",
-              textAlign:"center",
+              background: "#fff",
+              padding: "20px",
+              borderRadius: "15px",
+              textAlign: "center",
             }}
           >
             No Expiry Found
@@ -183,10 +141,10 @@ const filteredPolicies =
             <div
               key={policy.id}
               style={{
-                background:"#fff",
-                padding:"20px",
-                borderRadius:"20px",
-                marginBottom:"15px",
+                background: "#fff",
+                padding: "20px",
+                borderRadius: "20px",
+                marginBottom: "15px",
                 boxShadow:
                   "0 2px 10px rgba(0,0,0,.08)",
               }}
@@ -197,32 +155,29 @@ const filteredPolicies =
               </h3>
 
               <p>
-                <b>Reference:</b>
-                {" "}
+                <b>Reference:</b>{" "}
                 {policy.requestNo}
               </p>
 
               <p>
-                <b>Insured:</b>
-                {" "}
+                <b>Insured:</b>{" "}
                 {policy.insuredName}
               </p>
 
               <p>
-                <b>Expiry:</b>
-                {" "}
+                <b>Expiry:</b>{" "}
                 {policy.policyExpiryDate}
               </p>
 
               <Link
                 href={`/user/policy-details?id=${policy.id}`}
                 style={{
-                  background:"#2563eb",
-                  color:"#fff",
-                  textDecoration:"none",
-                  padding:"10px 15px",
-                  borderRadius:"10px",
-                  display:"inline-block",
+                  background: "#2563eb",
+                  color: "#fff",
+                  textDecoration: "none",
+                  padding: "10px 15px",
+                  borderRadius: "10px",
+                  display: "inline-block",
                 }}
               >
                 View Policy
@@ -236,4 +191,4 @@ const filteredPolicies =
       </div>
     </>
   );
- }
+}
