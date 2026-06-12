@@ -94,15 +94,37 @@ export default function RequestDetails() {
 
       } catch (error) {
 
-        console.error(
-          error
-        );
-
-        alert(
-          "Error"
-        );
+        alert("Error");
 
       }
+
+    };
+
+  const handleCancel =
+    async () => {
+
+      const confirmCancel =
+        window.confirm(
+          "Are you sure you want to cancel this request?"
+        );
+
+      if (!confirmCancel)
+        return;
+
+      await update(
+        ref(
+          database,
+          `requests/${id}`
+        ),
+        {
+          status:
+            "Cancelled By User",
+        }
+      );
+
+      alert(
+        "Request Cancelled Successfully"
+      );
 
     };
 
@@ -110,15 +132,8 @@ export default function RequestDetails() {
 
     return (
       <>
-        <AuthProtection
-          role="user"
-        />
-
-        <div
-          style={{
-            padding:"20px",
-          }}
-        >
+        <AuthProtection role="user" />
+        <div style={{padding:"20px"}}>
           Loading...
         </div>
       </>
@@ -200,6 +215,7 @@ return (
             <strong>Sum Insured:</strong>{" "}
             {requestData.sumInsured}
           </p>
+
         </div>
 
         {requestData.quotationPremium &&
@@ -214,6 +230,7 @@ return (
               marginBottom:"20px",
             }}
           >
+
             <h2>
               💰 Quotation Details
             </h2>
@@ -278,6 +295,30 @@ return (
           </div>
         )}
 
+        {(requestData.status === "Pending" ||
+          requestData.status === "Query Raised" ||
+          requestData.status === "Reply Submitted") && (
+
+          <button
+            onClick={
+              handleCancel
+            }
+            style={{
+              width:"100%",
+              background:"#ef4444",
+              color:"#fff",
+              border:"none",
+              padding:"16px",
+              borderRadius:"14px",
+              fontWeight:"700",
+              marginBottom:"20px",
+            }}
+          >
+            🗑 Cancel Request
+          </button>
+
+        )}
+
         <div
           style={{
             background:"#fff",
@@ -290,11 +331,9 @@ return (
           </h2>
 
           <p>
-            Current Status:
+            Current Status :
             {" "}
-            {
-              requestData.status
-            }
+            {requestData.status}
           </p>
 
           {requestData.status ===
@@ -304,9 +343,16 @@ return (
             </p>
           )}
 
+          {requestData.status ===
+            "Cancelled By User" && (
+            <p>
+              🗑 Cancelled By User
+            </p>
+          )}
+
         </div>
 
       </div>
     </>
   );
-          }
+  }
