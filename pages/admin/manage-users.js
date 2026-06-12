@@ -11,6 +11,9 @@ remove,
 
 import { database } from "../../lib/firebase";
 
+import AuthProtection from "../auth-protection";
+
+
 export default function ManageUsers() {
 const [users, setUsers] =
 useState([]);
@@ -254,6 +257,8 @@ const filteredUsers =
   );
 
 return (
+  <>
+    <AuthProtection role="admin" />
 <div
 style={{
 background: "#f4f7fc",
@@ -627,7 +632,7 @@ cursor: "pointer",
     )  
   )}  
 </div>
-
+</>
 );
 }
 
