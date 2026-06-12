@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { database } from "../../lib/firebase";
 import { ref, get, update } from "firebase/database";
-
+import AuthProtection from "../auth-protection";
 export default function RaiseQuery() {
   const router = useRouter();
   const { id } = router.query;
@@ -72,6 +72,8 @@ export default function RaiseQuery() {
   }
 
   return (
+    <>
+    <AuthProtection role="admin" />
     <div
       style={{
         minHeight: "100vh",
@@ -163,5 +165,6 @@ export default function RaiseQuery() {
         Send Query
       </button>
     </div>
+</>
   );
 }
