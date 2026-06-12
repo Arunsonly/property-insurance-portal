@@ -139,7 +139,8 @@ export default function RequestDetails() {
       </>
     );
   }
-return (
+
+  return (
     <>
       <AuthProtection
         role="user"
@@ -173,8 +174,7 @@ return (
             Track your insurance request
           </p>
         </div>
-
-        <div
+<div
           style={{
             background:"#fff",
             padding:"24px",
@@ -252,7 +252,8 @@ return (
                 "-"
               }
             </p>
-{requestData.status ===
+
+            {requestData.status ===
               "Quotation Received" && (
               <>
                 <button
@@ -261,6 +262,18 @@ return (
                       "Quotation Accepted"
                     )
                   }
+                  style={{
+                    width:"100%",
+                    background:"#22c55e",
+                    color:"#fff",
+                    border:"none",
+                    padding:"16px",
+                    borderRadius:"14px",
+                    fontSize:"16px",
+                    fontWeight:"700",
+                    marginBottom:"12px",
+                    cursor:"pointer",
+                  }}
                 >
                   ✅ Accept Quotation
                 </button>
@@ -271,6 +284,17 @@ return (
                       "Quotation Rejected"
                     )
                   }
+                  style={{
+                    width:"100%",
+                    background:"#ef4444",
+                    color:"#fff",
+                    border:"none",
+                    padding:"16px",
+                    borderRadius:"14px",
+                    fontSize:"16px",
+                    fontWeight:"700",
+                    cursor:"pointer",
+                  }}
                 >
                   ❌ Reject Quotation
                 </button>
@@ -286,6 +310,17 @@ return (
                     "Re-Submitted"
                   )
                 }
+                style={{
+                  width:"100%",
+                  background:"#f59e0b",
+                  color:"#fff",
+                  border:"none",
+                  padding:"16px",
+                  borderRadius:"14px",
+                  fontSize:"16px",
+                  fontWeight:"700",
+                  cursor:"pointer",
+                }}
               >
                 🔄 Review Again
               </button>
@@ -294,8 +329,7 @@ return (
 
           </div>
         )}
-
-        {(requestData.status === "Pending" ||
+{(requestData.status === "Pending" ||
           requestData.status === "Query Raised" ||
           requestData.status === "Reply Submitted") && (
 
@@ -312,6 +346,7 @@ return (
               borderRadius:"14px",
               fontWeight:"700",
               marginBottom:"20px",
+              cursor:"pointer",
             }}
           >
             🗑 Cancel Request
@@ -337,6 +372,20 @@ return (
           </p>
 
           {requestData.status ===
+            "Quotation Accepted" && (
+            <p>
+              ✅ Quotation Accepted
+            </p>
+          )}
+
+          {requestData.status ===
+            "Quotation Rejected" && (
+            <p>
+              ❌ Quotation Rejected
+            </p>
+          )}
+
+          {requestData.status ===
             "Re-Submitted" && (
             <p>
               🔄 Re-Submitted
@@ -350,9 +399,16 @@ return (
             </p>
           )}
 
+          {requestData.status ===
+            "Policy Issued" && (
+            <p>
+              📄 Policy Issued
+            </p>
+          )}
+
         </div>
 
       </div>
     </>
   );
-  }
+      }
