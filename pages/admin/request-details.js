@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { database } from "../../lib/firebase";
 import { ref, onValue } from "firebase/database";
-
+import AuthProtection from "../auth-protection";
 export default function RequestDetails() {
   const router = useRouter();
   const { id } = router.query;
@@ -41,6 +41,8 @@ export default function RequestDetails() {
   }
 
   return (
+    <>
+    <AuthProtection role="admin" />
     <div
       style={{
         minHeight: "100vh",
@@ -217,5 +219,6 @@ export default function RequestDetails() {
         </button>
       </div>
     </div>
+</>
   );
 }
