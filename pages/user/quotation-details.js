@@ -1,153 +1,353 @@
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { database } from "../../lib/firebase";
+import {
+  ref,
+  onValue,
+  update
+} from "firebase/database";
+import AuthProtection from "../auth-protection";
+
 export default function QuotationDetails() {
-  return (
-    <div
-      style={{
-        background: "#f4f7fc",
-        minHeight: "100vh",
-        padding: "20px",
-        maxWidth: "700px",
-        margin: "0 auto",
-      }}
-    >
-      {/* Header */}
-      <div
-        style={{
-          background: "linear-gradient(135deg,#0b3d91,#2563eb)",
-          color: "#fff",
-          padding: "30px",
-          borderRadius: "24px",
-          marginBottom: "20px",
-          boxShadow: "0 15px 30px rgba(37,99,235,.25)",
-        }}
-      >
-        <h1 style={{ margin: 0 }}>
-          💰 Quotation Details
-        </h1>
 
-        <p style={{ marginTop: "10px" }}>
-          Review quotation received from insurer
-        </p>
-      </div>
+  const router =
+    useRouter();
 
-      {/* Reference */}
-      <div
-        style={{
-          background: "#fff",
-          borderRadius: "24px",
-          padding: "24px",
-          marginBottom: "20px",
-          boxShadow: "0 10px 25px rgba(0,0,0,.08)",
-        }}
-      >
-        <h2>PROP-00128</h2>
+  const { id } =
+    router.query;
 
-        <p>
-          <strong>Insured Name:</strong> ABC Traders
-        </p>
+  const [quotationData,
+    setQuotationData] =
+    useState(null);
 
-        <p>
-          <strong>Risk Location:</strong> Indore
-        </p>
+  useEffect(() => {
 
-        <p>
-          <strong>Sum Insured:</strong> ₹50,00,000
-        </p>
-      </div>
+    if (!id)
+      return;
 
-      {/* Quotation Card */}
-      <div
-        style={{
-          background: "#fff",
-          borderRadius: "24px",
-          padding: "24px",
-          marginBottom: "20px",
-          boxShadow: "0 10px 25px rgba(0,0,0,.08)",
-        }}
-      >
-        <h2>Quotation Offered</h2>
+    const quotationRef =
+      ref(
+        database,
+        `requests/${id}`
+      );
 
-        <p>
-          <strong>Insurance Company:</strong>
-          <br />
-          Oriental Insurance Co. Ltd.
-        </p>
+    onValue(
+      quotationRef,
+      (snapshot) => {
 
-        <p>
-          <strong>Coverage:</strong>
-          <br />
-          Fire + STFI + EQ
-        </p>
+        const data =
+          snapshot.val();
 
-        <p>
-          <strong>Premium Amount:</strong>
-          <br />
-          ₹54,200
-        </p>
+        if (!data)
+          return;
 
-        <p>
-          <strong>Validity:</strong>
-          <br />
-          15 Days
-        </p>
-      </div>
+        const currentUserId =
+          localStorage.getItem(
+            "userId"
+          );
 
-      {/* Remarks */}
-      <div
-        style={{
-          background: "#fff",
-          borderRadius: "24px",
-          padding: "24px",
-          marginBottom: "20px",
-          boxShadow: "0 10px 25px rgba(0,0,0,.08)",
-        }}
-      >
-        <h2>Remarks</h2>
+        if (
+          data.userId &&
+          data.userId !==
+            currentUserId
+        ) {
+
+          alert(
+            "Unauthorized Access"
+          );
+
+          router.push(
+            "/user/dashboard"
+          );
+
+          return;
+        }
+
+        setQuotationData(
+          data
+        );
+      }
+    );
+
+  }, [id]);
+
+  const handleAccept =
+    async () => {
+
+      await update(
+        ref(
+          database,
+          `requests/${id}`
+        ),
+        {
+          quotationStatus:
+            "Accepted",
+        }
+      );
+
+      alert(
+        "Quotation Accepted"
+      );
+    };
+
+  const handleReject =
+    async () => {
+
+      await update(
+        ref(
+          database,
+          `requests/${id}`
+        ),
+        {
+          quotationStatus:
+            "Rejected",
+        }
+      );
+
+      alert(
+        "Quotation Rejected"
+      );
+    };
+
+  if (!quotationData) {
+
+    return (
+      <>
+        <AuthProtection
+          role="user"
+        />
 
         <div
           style={{
-            background: "#f8fafc",
-            padding: "15px",
-            borderRadius: "12px",
-            border: "1px solid #e5e7eb",
+            padding: "20px",
           }}
         >
-          Premium inclusive of all applicable taxes.
+          Loading...
         </div>
+      </>
+    );
+  }
+return (
+    <>
+      <AuthProtection
+        role="user"
+      />
+
+      <div
+        style={{
+          background: "#f4f7fc",
+          minHeight: "100vh",
+          padding: "20px",
+          maxWidth: "700px",
+          margin: "0 auto",
+        }}
+      >
+
+        <div
+          style={{
+            background:
+              "linear-gradient(135deg,#0b3d91,#2563eb)",
+            color: "#fff",
+            padding: "30px",
+            borderRadius: "24px",
+            marginBottom: "20px",
+            boxShadow:
+              "0 15px 30px rgba(37,99,235,.25)",
+          }}
+        >
+          <h1>
+            💰 Quotation Details
+          </h1>
+
+          <p>
+            Review quotation received
+          </p>
+        </div>
+
+        <div
+          style={{
+            background: "#fff",
+            borderRadius: "24px",
+            padding: "24px",
+            marginBottom: "20px",
+            boxShadow:
+              "0 10px 25px rgba(0,0,0,.08)",
+          }}
+        >
+          <h2>
+            {quotationData.requestNo}
+          </h2>
+
+          <p>
+            <strong>
+              Insured Name:
+            </strong>
+            <br />
+            {
+              quotationData.insuredName
+            }
+          </p>
+
+          <p>
+            <strong>
+              Risk Location:
+            </strong>
+            <br />
+            {
+              quotationData.riskLocation
+            }
+          </p>
+
+          <p>
+            <strong>
+              Sum Insured:
+            </strong>
+            <br />
+            ₹
+            {
+              quotationData.sumInsured
+            }
+          </p>
+        </div>
+
+        <div
+          style={{
+            background: "#fff",
+            borderRadius: "24px",
+            padding: "24px",
+            marginBottom: "20px",
+            boxShadow:
+              "0 10px 25px rgba(0,0,0,.08)",
+          }}
+        >
+          <h2>
+            Quotation Offered
+          </h2>
+
+          <p>
+            <strong>
+              Insurance Company:
+            </strong>
+            <br />
+            {
+              quotationData.insuranceCompany ||
+              "-"
+            }
+          </p>
+
+          <p>
+            <strong>
+              Coverage:
+            </strong>
+            <br />
+            {
+              quotationData.coverage
+            }
+          </p>
+
+          <p>
+            <strong>
+              Premium Amount:
+            </strong>
+            <br />
+            ₹
+            {
+              quotationData.quotationPremium ||
+              "-"
+            }
+          </p>
+
+          <p>
+            <strong>
+              Validity:
+            </strong>
+            <br />
+            {
+              quotationData.quotationValidity ||
+              "-"
+            }
+          </p>
+        </div>
+<div
+          style={{
+            background: "#fff",
+            borderRadius: "24px",
+            padding: "24px",
+            marginBottom: "20px",
+            boxShadow:
+              "0 10px 25px rgba(0,0,0,.08)",
+          }}
+        >
+          <h2>
+            Remarks
+          </h2>
+
+          <div
+            style={{
+              background: "#f8fafc",
+              padding: "15px",
+              borderRadius: "12px",
+              border:
+                "1px solid #e5e7eb",
+            }}
+          >
+            {
+              quotationData.quotationRemarks ||
+              "No Remarks"
+            }
+          </div>
+
+          <p
+            style={{
+              marginTop: "15px",
+              fontWeight: "700",
+            }}
+          >
+            Status :
+            {" "}
+            {
+              quotationData.quotationStatus ||
+              "Pending Decision"
+            }
+          </p>
+        </div>
+
+        <button
+          onClick={handleAccept}
+          style={{
+            width: "100%",
+            background: "#22c55e",
+            color: "#fff",
+            border: "none",
+            padding: "16px",
+            borderRadius: "14px",
+            fontSize: "17px",
+            fontWeight: "700",
+            marginBottom: "15px",
+            cursor: "pointer",
+          }}
+        >
+          ✅ Accept Quotation
+        </button>
+
+        <button
+          onClick={handleReject}
+          style={{
+            width: "100%",
+            background: "#ef4444",
+            color: "#fff",
+            border: "none",
+            padding: "16px",
+            borderRadius: "14px",
+            fontSize: "17px",
+            fontWeight: "700",
+            cursor: "pointer",
+          }}
+        >
+          ❌ Reject Quotation
+        </button>
+
       </div>
-
-      {/* Buttons */}
-      <button
-        style={{
-          width: "100%",
-          background: "#22c55e",
-          color: "#fff",
-          border: "none",
-          padding: "16px",
-          borderRadius: "14px",
-          fontSize: "17px",
-          fontWeight: "700",
-          marginBottom: "15px",
-          cursor: "pointer",
-        }}
-      >
-        ✅ Accept Quotation
-      </button>
-
-      <button
-        style={{
-          width: "100%",
-          background: "#ef4444",
-          color: "#fff",
-          border: "none",
-          padding: "16px",
-          borderRadius: "14px",
-          fontSize: "17px",
-          fontWeight: "700",
-          cursor: "pointer",
-        }}
-      >
-        ❌ Reject Quotation
-      </button>
-    </div>
+    </>
   );
-}
+            }
