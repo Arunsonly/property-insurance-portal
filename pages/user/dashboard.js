@@ -202,6 +202,28 @@ export default function UserDashboard() {
               >
                 👤 Profile
               </Link>
+
+                  <button
+  onClick={() => {
+
+    localStorage.removeItem("role");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userName");
+
+    window.location.href = "/";
+
+  }}
+  style={{
+    ...menuLink,
+    color: "#fca5a5",
+    border: "none",
+    cursor: "pointer",
+    textAlign: "left",
+  }}
+>
+  🚪 Logout
+</button>
+    
 </div>
           </div>
         </>
