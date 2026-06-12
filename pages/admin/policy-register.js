@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { database } from "../../lib/firebase";
 import { ref, onValue } from "firebase/database";
-
+import AuthProtection from "../auth-protection";
 export default function PolicyRegister() {
   const [policies, setPolicies] =
     useState([]);
@@ -66,6 +66,8 @@ export default function PolicyRegister() {
     );
 
   return (
+    <>
+    <AuthProtection role="admin" />
     <div
       style={{
         background: "#f4f7fc",
@@ -230,5 +232,6 @@ export default function PolicyRegister() {
         )
       )}
 </div>
+</>
   );
                   }
