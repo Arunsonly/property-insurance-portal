@@ -61,11 +61,13 @@ export default function QuotationDetails() {
           );
 
           return;
+
         }
 
         setQuotationData(
           data
         );
+
       }
     );
 
@@ -80,14 +82,15 @@ export default function QuotationDetails() {
           `requests/${id}`
         ),
         {
-          quotationStatus:
-            "Accepted",
+          status:
+            "Quotation Accepted",
         }
       );
 
       alert(
         "Quotation Accepted"
       );
+
     };
 
   const handleReject =
@@ -99,14 +102,15 @@ export default function QuotationDetails() {
           `requests/${id}`
         ),
         {
-          quotationStatus:
-            "Rejected",
+          status:
+            "Quotation Rejected",
         }
       );
 
       alert(
         "Quotation Rejected"
       );
+
     };
 
   if (!quotationData) {
@@ -119,7 +123,7 @@ export default function QuotationDetails() {
 
         <div
           style={{
-            padding: "20px",
+            padding:"20px",
           }}
         >
           Loading...
@@ -135,11 +139,11 @@ return (
 
       <div
         style={{
-          background: "#f4f7fc",
-          minHeight: "100vh",
-          padding: "20px",
-          maxWidth: "700px",
-          margin: "0 auto",
+          background:"#f4f7fc",
+          minHeight:"100vh",
+          padding:"20px",
+          maxWidth:"700px",
+          margin:"0 auto",
         }}
       >
 
@@ -147,12 +151,10 @@ return (
           style={{
             background:
               "linear-gradient(135deg,#0b3d91,#2563eb)",
-            color: "#fff",
-            padding: "30px",
-            borderRadius: "24px",
-            marginBottom: "20px",
-            boxShadow:
-              "0 15px 30px rgba(37,99,235,.25)",
+            color:"#fff",
+            padding:"30px",
+            borderRadius:"24px",
+            marginBottom:"20px",
           }}
         >
           <h1>
@@ -166,12 +168,10 @@ return (
 
         <div
           style={{
-            background: "#fff",
-            borderRadius: "24px",
-            padding: "24px",
-            marginBottom: "20px",
-            boxShadow:
-              "0 10px 25px rgba(0,0,0,.08)",
+            background:"#fff",
+            borderRadius:"24px",
+            padding:"24px",
+            marginBottom:"20px",
           }}
         >
           <h2>
@@ -179,45 +179,30 @@ return (
           </h2>
 
           <p>
-            <strong>
-              Insured Name:
-            </strong>
+            <strong>Insured Name:</strong>
             <br />
-            {
-              quotationData.insuredName
-            }
+            {quotationData.insuredName}
           </p>
 
           <p>
-            <strong>
-              Risk Location:
-            </strong>
+            <strong>Risk Location:</strong>
             <br />
-            {
-              quotationData.riskLocation
-            }
+            {quotationData.riskLocation}
           </p>
 
           <p>
-            <strong>
-              Sum Insured:
-            </strong>
+            <strong>Sum Insured:</strong>
             <br />
-            ₹
-            {
-              quotationData.sumInsured
-            }
+            ₹{quotationData.sumInsured}
           </p>
         </div>
 
         <div
           style={{
-            background: "#fff",
-            borderRadius: "24px",
-            padding: "24px",
-            marginBottom: "20px",
-            boxShadow:
-              "0 10px 25px rgba(0,0,0,.08)",
+            background:"#fff",
+            borderRadius:"24px",
+            padding:"24px",
+            marginBottom:"20px",
           }}
         >
           <h2>
@@ -225,9 +210,7 @@ return (
           </h2>
 
           <p>
-            <strong>
-              Insurance Company:
-            </strong>
+            <strong>Insurance Company:</strong>
             <br />
             {
               quotationData.insuranceCompany ||
@@ -236,19 +219,13 @@ return (
           </p>
 
           <p>
-            <strong>
-              Coverage:
-            </strong>
+            <strong>Coverage:</strong>
             <br />
-            {
-              quotationData.coverage
-            }
+            {quotationData.coverage}
           </p>
 
           <p>
-            <strong>
-              Premium Amount:
-            </strong>
+            <strong>Premium Amount:</strong>
             <br />
             ₹
             {
@@ -258,9 +235,7 @@ return (
           </p>
 
           <p>
-            <strong>
-              Validity:
-            </strong>
+            <strong>Validity:</strong>
             <br />
             {
               quotationData.quotationValidity ||
@@ -270,12 +245,10 @@ return (
         </div>
 <div
           style={{
-            background: "#fff",
-            borderRadius: "24px",
-            padding: "24px",
-            marginBottom: "20px",
-            boxShadow:
-              "0 10px 25px rgba(0,0,0,.08)",
+            background:"#fff",
+            borderRadius:"24px",
+            padding:"24px",
+            marginBottom:"20px",
           }}
         >
           <h2>
@@ -284,11 +257,9 @@ return (
 
           <div
             style={{
-              background: "#f8fafc",
-              padding: "15px",
-              borderRadius: "12px",
-              border:
-                "1px solid #e5e7eb",
+              background:"#f8fafc",
+              padding:"15px",
+              borderRadius:"12px",
             }}
           >
             {
@@ -299,55 +270,60 @@ return (
 
           <p
             style={{
-              marginTop: "15px",
-              fontWeight: "700",
+              marginTop:"15px",
+              fontWeight:"700",
             }}
           >
             Status :
             {" "}
             {
-              quotationData.quotationStatus ||
-              "Pending Decision"
+              quotationData.status ||
+              "Quotation Received"
             }
           </p>
         </div>
 
-        <button
-          onClick={handleAccept}
-          style={{
-            width: "100%",
-            background: "#22c55e",
-            color: "#fff",
-            border: "none",
-            padding: "16px",
-            borderRadius: "14px",
-            fontSize: "17px",
-            fontWeight: "700",
-            marginBottom: "15px",
-            cursor: "pointer",
-          }}
-        >
-          ✅ Accept Quotation
-        </button>
+        {quotationData.status ===
+          "Quotation Received" && (
 
-        <button
-          onClick={handleReject}
-          style={{
-            width: "100%",
-            background: "#ef4444",
-            color: "#fff",
-            border: "none",
-            padding: "16px",
-            borderRadius: "14px",
-            fontSize: "17px",
-            fontWeight: "700",
-            cursor: "pointer",
-          }}
-        >
-          ❌ Reject Quotation
-        </button>
+          <>
+            <button
+              onClick={handleAccept}
+              style={{
+                width:"100%",
+                background:"#22c55e",
+                color:"#fff",
+                border:"none",
+                padding:"16px",
+                borderRadius:"14px",
+                fontSize:"17px",
+                fontWeight:"700",
+                marginBottom:"15px",
+              }}
+            >
+              ✅ Accept Quotation
+            </button>
+
+            <button
+              onClick={handleReject}
+              style={{
+                width:"100%",
+                background:"#ef4444",
+                color:"#fff",
+                border:"none",
+                padding:"16px",
+                borderRadius:"14px",
+                fontSize:"17px",
+                fontWeight:"700",
+              }}
+            >
+              ❌ Reject Quotation
+            </button>
+          </>
+
+        )}
 
       </div>
     </>
   );
-            }
+          }
