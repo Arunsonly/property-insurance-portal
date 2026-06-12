@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import AuthProtection from "../auth-protection";
 
 import { database } from "../../lib/firebase";
-import { ref, get } from "firebase/database";
+import { ref, get, update } from "firebase/database";
 
 export default function UserProfile() {
 
@@ -35,6 +35,38 @@ export default function UserProfile() {
 
   }, []);
 
+  const changePassword =
+    async () => {
+
+      const newPassword =
+        prompt(
+          "Enter New Password"
+        );
+
+      if (!newPassword) return;
+
+      const userId =
+        localStorage.getItem(
+          "userId"
+        );
+
+      await update(
+        ref(
+          database,
+          `users/${userId}`
+        ),
+        {
+          password:
+            newPassword,
+        }
+      );
+
+      alert(
+        "Password Changed Successfully"
+      );
+
+    };
+
   if (!user) {
 
     return (
@@ -53,16 +85,6 @@ export default function UserProfile() {
     );
 
   }
-
-  const logout = () => {
-
-    localStorage.removeItem("role");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("userName");
-
-    window.location.href = "/";
-
-  };
 
   return (
     <>
@@ -128,21 +150,28 @@ export default function UserProfile() {
           </p>
 
           <button
-            onClick={logout}
+            onClick={
+              changePassword
+            }
             style={{
               width: "100%",
-              background: "#dc2626",
+              background:
+                "#f59e0b",
               color: "#fff",
               border: "none",
               padding: "14px",
-              borderRadius: "12px",
-              marginTop: "20px",
-              fontWeight: "bold",
-              cursor: "pointer",
+              borderRadius:
+                "12px",
+              marginTop: "15px",
+              fontWeight:
+                "bold",
+              cursor:
+                "pointer",
             }}
           >
-            🚪 Logout
+            🔑 Change Password
           </button>
+
         </div>
       </div>
     </>
