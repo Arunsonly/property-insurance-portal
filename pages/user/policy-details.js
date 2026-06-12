@@ -373,7 +373,7 @@ export default function PolicyDetails() {
             } else {
 
               alert(
-                "Policy PDF Not Uploaded Yet"
+                "feature is not updated Yet"
               );
 
             }
@@ -420,7 +420,7 @@ export default function PolicyDetails() {
             } else {
 
               alert(
-                "Receipt Not Uploaded Yet"
+                "feature not updated Yet"
               );
 
             }
