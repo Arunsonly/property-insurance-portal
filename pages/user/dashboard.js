@@ -1,9 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import AuthProtection from "../auth-protection";
 
 export default function UserDashboard() {
+
   const [menuOpen, setMenuOpen] =
     useState(false);
+
+  const [userName, setUserName] =
+    useState("");
+
+  useEffect(() => {
+
+    const name =
+      localStorage.getItem(
+        "userName"
+      );
+
+    if (name) {
+      setUserName(name);
+    }
+
+  }, []);
 
   const stats = [
     {
@@ -15,21 +33,21 @@ export default function UserDashboard() {
     },
     {
       title: "My Requests",
-      count: "12",
+      count: "-",
       icon: "📋",
       color: "#f59e0b",
       link: "/user/my-requests",
     },
     {
       title: "Queries",
-      count: "03",
+      count: "-",
       icon: "❓",
       color: "#8b5cf6",
       link: "/user/query-received",
     },
     {
       title: "Quotations",
-      count: "05",
+      count: "-",
       icon: "💰",
       color: "#10b981",
       link: "/user/quotation-received",
@@ -37,392 +55,387 @@ export default function UserDashboard() {
   ];
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "#f4f7fc",
-        fontFamily:
-          "Arial,sans-serif",
-      }}
-    >
-      {/* HEADER */}
+    <>
+      <AuthProtection role="user" />
 
       <div
         style={{
-          background:
-            "linear-gradient(135deg,#0b3d91,#2563eb)",
-          color: "#fff",
-          padding: "15px 20px",
-          display: "flex",
-          justifyContent:
-            "space-between",
-          alignItems: "center",
+          minHeight: "100vh",
+          background: "#f4f7fc",
+          fontFamily:
+            "Arial,sans-serif",
         }}
       >
+
         <div
           style={{
+            background:
+              "linear-gradient(135deg,#0b3d91,#2563eb)",
+            color: "#fff",
+            padding: "15px 20px",
             display: "flex",
+            justifyContent:
+              "space-between",
             alignItems: "center",
-            gap: "15px",
           }}
         >
-          <button
-            onClick={() =>
-              setMenuOpen(true)
-            }
+          <div
             style={{
-              background: "none",
-              border: "none",
-              color: "#fff",
-              fontSize: "26px",
-              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: "15px",
             }}
           >
-            ☰
-          </button>
-
-          <div>
-            <div
+            <button
+              onClick={() =>
+                setMenuOpen(true)
+              }
               style={{
-                fontSize: "20px",
-                fontWeight:
-                  "bold",
+                background: "none",
+                border: "none",
+                color: "#fff",
+                fontSize: "26px",
+                cursor: "pointer",
               }}
             >
-              Property Insurance
-            </div>
+              ☰
+            </button>
 
-            <div
-              style={{
-                fontSize: "12px",
-                opacity: 0.9,
-              }}
-            >
-              Customer Portal
+            <div>
+              <div
+                style={{
+                  fontSize: "20px",
+                  fontWeight:
+                    "bold",
+                }}
+              >
+                Property Insurance
+              </div>
+
+              <div
+                style={{
+                  fontSize: "12px",
+                  opacity: 0.9,
+                }}
+              >
+                Customer Portal
+              </div>
             </div>
           </div>
-        </div>
-
-        <div
-          style={{
-            fontSize: "28px",
-          }}
-        >
-          👤
-        </div>
-      </div>
-
-      {/* SIDEBAR */}
-
-      {menuOpen && (
-        <>
-          <div
-            onClick={() =>
-              setMenuOpen(false)
-            }
-            style={{
-              position: "fixed",
-              inset: 0,
-              background:
-                "rgba(0,0,0,0.4)",
-              zIndex: 999,
-            }}
-          />
 
           <div
             style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "270px",
-              height: "100%",
-              background: "#0f172a",
-              color: "#fff",
-              padding: "20px",
-              zIndex: 1000,
+              fontSize: "28px",
             }}
           >
-            <h3>
-              Customer Menu
-            </h3>
-
-            <div
-              style={{
-                display: "flex",
-                flexDirection:
-                  "column",
-                gap: "15px",
-              }}
-            >
-              <Link
-                href="/user/dashboard"
-                style={menuLink}
-              >
-                🏠 Dashboard
-              </Link>
-
-              <Link
-                href="/user/new-request"
-                style={menuLink}
-              >
-                ➕ New Request
-              </Link>
-
-              <Link
-                href="/user/my-requests"
-                style={menuLink}
-              >
-                📋 My Requests
-              </Link>
-
-              <Link
-                href="/user/query-received"
-                style={menuLink}
-              >
-                ❓ Query Received
-              </Link>
-
-              <Link
-                href="/user/quotation-received"
-                style={menuLink}
-              >
-                💰 Quotations
-              </Link>
-
-              <Link
-                href="/user/policy-register"
-                style={menuLink}
-              >
-                📄 Policies
-              </Link>
-
-              <Link
-                href="/user/profile"
-                style={menuLink}
-              >
-                👤 Profile
-              </Link>
-
-                  <button
-  onClick={() => {
-
-    localStorage.removeItem("role");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("userName");
-
-    window.location.href = "/";
-
-  }}
-  style={{
-    ...menuLink,
-    color: "#fca5a5",
-    border: "none",
-    cursor: "pointer",
-    textAlign: "left",
-  }}
->
-  🚪 Logout
-</button>
-    
-</div>
+            👤
           </div>
-        </>
-      )}
+        </div>
+{menuOpen && (
+          <>
+            <div
+              onClick={() =>
+                setMenuOpen(false)
+              }
+              style={{
+                position: "fixed",
+                inset: 0,
+                background:
+                  "rgba(0,0,0,0.4)",
+                zIndex: 999,
+              }}
+            />
 
-      {/* WELCOME */}
-
-      <div
-        style={{
-          background:
-            "linear-gradient(135deg,#0b3d91,#2563eb)",
-          color: "#fff",
-          padding: "25px 20px 35px",
-        }}
-      >
-        <h2 style={{ margin: 0 }}>
-          Welcome 👋
-        </h2>
-
-        <p
-          style={{
-            marginTop: "10px",
-            opacity: 0.9,
-          }}
-        >
-          Manage your requests,
-          quotations and policies.
-        </p>
-      </div>
-
-      {/* STATS */}
-
-      <div
-        style={{
-          padding: "20px",
-          display: "grid",
-          gridTemplateColumns:
-            "repeat(auto-fit,minmax(160px,1fr))",
-          gap: "15px",
-          marginTop: "-20px",
-        }}
-      >
-        {stats.map((item, index) => (
-          <Link
-            key={index}
-            href={item.link}
-            style={{
-              textDecoration: "none",
-            }}
-          >
             <div
               style={{
-                background: "#fff",
-                borderRadius: "18px",
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "270px",
+                height: "100%",
+                background: "#0f172a",
+                color: "#fff",
                 padding: "20px",
-                boxShadow:
-                  "0 8px 20px rgba(0,0,0,0.08)",
-                borderTop: `5px solid ${item.color}`,
+                zIndex: 1000,
               }}
             >
-              <div
-                style={{
-                  fontSize: "32px",
-                  marginBottom: "10px",
-                }}
-              >
-                {item.icon}
-              </div>
+              <h3>
+                Customer Menu
+              </h3>
 
               <div
                 style={{
-                  color: "#64748b",
-                  fontSize: "13px",
+                  display: "flex",
+                  flexDirection:
+                    "column",
+                  gap: "15px",
                 }}
               >
-                {item.title}
-              </div>
+                <Link
+                  href="/user/dashboard"
+                  style={menuLink}
+                >
+                  🏠 Dashboard
+                </Link>
 
-              <div
-                style={{
-                  fontSize: "28px",
-                  fontWeight: "bold",
-                  color: "#111827",
-                }}
-              >
-                {item.count}
+                <Link
+                  href="/user/new-request"
+                  style={menuLink}
+                >
+                  ➕ New Request
+                </Link>
+
+                <Link
+                  href="/user/my-requests"
+                  style={menuLink}
+                >
+                  📋 My Requests
+                </Link>
+
+                <Link
+                  href="/user/query-received"
+                  style={menuLink}
+                >
+                  ❓ Query Received
+                </Link>
+
+                <Link
+                  href="/user/quotation-received"
+                  style={menuLink}
+                >
+                  💰 Quotations
+                </Link>
+
+                <Link
+                  href="/user/policy-register"
+                  style={menuLink}
+                >
+                  📄 Policies
+                </Link>
+
+                <Link
+                  href="/user/profile"
+                  style={menuLink}
+                >
+                  👤 Profile
+                </Link>
+
+                <button
+                  onClick={() => {
+
+                    localStorage.removeItem(
+                      "role"
+                    );
+
+                    localStorage.removeItem(
+                      "userId"
+                    );
+
+                    localStorage.removeItem(
+                      "userName"
+                    );
+
+                    window.location.href =
+                      "/";
+
+                  }}
+                  style={{
+                    ...menuLink,
+                    color: "#fca5a5",
+                    border: "none",
+                    cursor: "pointer",
+                    textAlign: "left",
+                  }}
+                >
+                  🚪 Logout
+                </button>
+
               </div>
             </div>
-          </Link>
-        ))}
-      </div>
-
-      {/* QUICK ACCESS */}
-
-      <div
-        style={{
-          margin: "0 20px 20px",
-          background: "#fff",
-          borderRadius: "18px",
-          padding: "20px",
-          boxShadow:
-            "0 8px 20px rgba(0,0,0,0.08)",
-        }}
-      >
-        <h3
-          style={{
-            marginTop: 0,
-          }}
-        >
-          Quick Access
-        </h3>
+          </>
+        )}
 
         <div
           style={{
+            background:
+              "linear-gradient(135deg,#0b3d91,#2563eb)",
+            color: "#fff",
+            padding: "25px 20px 35px",
+          }}
+        >
+          <h2
+            style={{
+              margin: 0,
+            }}
+          >
+            Welcome {userName} 👋
+          </h2>
+
+          <p
+            style={{
+              marginTop: "10px",
+              opacity: 0.9,
+            }}
+          >
+            Manage your requests,
+            quotations and policies.
+          </p>
+        </div>
+
+        <div
+          style={{
+            padding: "20px",
             display: "grid",
             gridTemplateColumns:
-              "1fr 1fr",
-            gap: "12px",
+              "repeat(auto-fit,minmax(160px,1fr))",
+            gap: "15px",
+            marginTop: "-20px",
           }}
         >
-          <Link
-            href="/user/new-request"
-            style={quickLink}
-          >
-            ➕ New Request
-          </Link>
+          {stats.map(
+            (item, index) => (
+              <Link
+                key={index}
+                href={item.link}
+                style={{
+                  textDecoration:
+                    "none",
+                }}
+              >
+                <div
+                  style={{
+                    background: "#fff",
+                    borderRadius: "18px",
+                    padding: "20px",
+                    boxShadow:
+                      "0 8px 20px rgba(0,0,0,0.08)",
+                    borderTop:
+                      `5px solid ${item.color}`,
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: "32px",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    {item.icon}
+                  </div>
 
-          <Link
-            href="/user/my-requests"
-            style={quickLink}
-          >
-            📋 My Requests
-          </Link>
+                  <div
+                    style={{
+                      color: "#64748b",
+                      fontSize: "13px",
+                    }}
+                  >
+                    {item.title}
+                  </div>
 
-          <Link
-            href="/user/query-received"
-            style={quickLink}
-          >
-            ❓ Query Received
-          </Link>
-
-          <Link
-            href="/user/quotation-received"
-            style={quickLink}
-          >
-            💰 Quotations
-          </Link>
+                  <div
+                    style={{
+                      fontSize: "28px",
+                      fontWeight:
+                        "bold",
+                      color: "#111827",
+                    }}
+                  >
+                    {item.count}
+                  </div>
+                </div>
+              </Link>
+            )
+          )}
         </div>
-      </div>
-{/* RECENT ACTIVITIES */}
-
-      <div
-        style={{
-          margin: "0 20px 20px",
-          background: "#fff",
-          borderRadius: "18px",
-          padding: "20px",
-          boxShadow:
-            "0 8px 20px rgba(0,0,0,0.08)",
-        }}
-      >
-        <h3
+<div
           style={{
-            marginTop: 0,
+            margin: "0 20px 20px",
+            background: "#fff",
+            borderRadius: "18px",
+            padding: "20px",
+            boxShadow:
+              "0 8px 20px rgba(0,0,0,0.08)",
           }}
         >
-          Recent Activities
-        </h3>
+          <h3
+            style={{
+              marginTop: 0,
+            }}
+          >
+            Quick Access
+          </h3>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns:
+                "1fr 1fr",
+              gap: "12px",
+            }}
+          >
+            <Link
+              href="/user/new-request"
+              style={quickLink}
+            >
+              ➕ New Request
+            </Link>
+
+            <Link
+              href="/user/my-requests"
+              style={quickLink}
+            >
+              📋 My Requests
+            </Link>
+
+            <Link
+              href="/user/query-received"
+              style={quickLink}
+            >
+              ❓ Query Received
+            </Link>
+
+            <Link
+              href="/user/quotation-received"
+              style={quickLink}
+            >
+              💰 Quotations
+            </Link>
+          </div>
+        </div>
 
         <div
           style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "12px",
+            margin: "0 20px 20px",
+            background: "#fff",
+            borderRadius: "18px",
+            padding: "20px",
+            boxShadow:
+              "0 8px 20px rgba(0,0,0,0.08)",
           }}
         >
-          <div style={activityRow}>
-            <span>PROP-00128</span>
-            <span>Quotation Received</span>
-          </div>
+          <h3
+            style={{
+              marginTop: 0,
+            }}
+          >
+            Recent Activities
+          </h3>
 
-          <div style={activityRow}>
-            <span>PROP-00127</span>
-            <span>Query Received</span>
-          </div>
-
-          <div style={activityRow}>
-            <span>PROP-00126</span>
-            <span>Reply Submitted</span>
-          </div>
-
-          <div style={activityRow}>
-            <span>PROP-00125</span>
-            <span>Policy Issued</span>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "12px",
+            }}
+          >
+            <div style={activityRow}>
+              <span>-</span>
+              <span>No Activity</span>
+            </div>
           </div>
         </div>
-      </div>
 
-    </div>
+      </div>
+    </>
   );
 }
 
@@ -448,7 +461,8 @@ const quickLink = {
 
 const activityRow = {
   display: "flex",
-  justifyContent: "space-between",
+  justifyContent:
+    "space-between",
   background: "#f8fafc",
   padding: "12px",
   borderRadius: "10px",
