@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { database } from "../../lib/firebase";
 import { ref, onValue } from "firebase/database";
+import AuthProtection from "../auth-protection";
 
 export default function PolicyRegister() {
+
   const [policies, setPolicies] =
     useState([]);
 
@@ -11,38 +13,49 @@ export default function PolicyRegister() {
     useState("");
 
   useEffect(() => {
-    const requestsRef = ref(
-      database,
-      "requests"
-    );
+
+    const requestsRef =
+      ref(database, "requests");
 
     onValue(
       requestsRef,
       (snapshot) => {
+
         const data =
           snapshot.val();
 
-        if (data) {
-          const loadedPolicies =
-            Object.keys(data)
-              .map((key) => ({
-                id: key,
-                ...data[key],
-              }))
-              .filter(
-                (item) =>
-                  item.status ===
-                  "Policy Issued"
-              );
+        if (!data) {
 
-          setPolicies(
-            loadedPolicies.reverse()
-          );
-        } else {
           setPolicies([]);
+
+          return;
         }
+
+        const currentUserId =
+          localStorage.getItem(
+            "userId"
+          );
+
+        const loadedPolicies =
+          Object.keys(data)
+            .map((key) => ({
+              id: key,
+              ...data[key],
+            }))
+            .filter(
+              (item) =>
+                item.status ===
+                  "Policy Issued" &&
+                item.userId ===
+                  currentUserId
+            );
+
+        setPolicies(
+          loadedPolicies.reverse()
+        );
       }
     );
+
   }, []);
 
   const filteredPolicies =
@@ -66,142 +79,147 @@ export default function PolicyRegister() {
     );
 
   return (
-    <div
-      style={{
-        background: "#f4f7fc",
-        minHeight: "100vh",
-        padding: "20px",
-      }}
-    >
+    <>
+      <AuthProtection role="user" />
+
       <div
         style={{
-          background:
-            "linear-gradient(135deg,#0b3d91,#2563eb)",
-          color: "#fff",
-          padding: "30px",
-          borderRadius: "20px",
-          marginBottom: "20px",
+          background:"#f4f7fc",
+          minHeight:"100vh",
+          padding:"20px",
         }}
       >
-        <h1
-          style={{
-            margin: 0,
-          }}
-        >
-          📄 My Policies
-        </h1>
-
-        <p
-          style={{
-            marginTop: "10px",
-          }}
-        >
-          View Active Policies
-        </p>
-      </div>
-
-      <input
-        type="text"
-        placeholder="Search Policy / Ref No"
-        value={search}
-        onChange={(e) =>
-          setSearch(
-            e.target.value
-          )
-        }
-        style={{
-          width: "100%",
-          padding: "15px",
-          borderRadius: "12px",
-          border: "1px solid #ddd",
-          marginBottom: "20px",
-          fontSize: "16px",
-          boxSizing:
-            "border-box",
-        }}
-      />
-
-      {filteredPolicies.map(
-        (policy) => (
 <div
-            key={policy.id}
+          style={{
+            background:
+              "linear-gradient(135deg,#0b3d91,#2563eb)",
+            color:"#fff",
+            padding:"30px",
+            borderRadius:"20px",
+            marginBottom:"20px",
+          }}
+        >
+          <h1 style={{margin:0}}>
+            📄 My Policies
+          </h1>
+
+          <p
             style={{
-              background: "#fff",
-              borderRadius: "20px",
-              padding: "20px",
-              marginBottom: "15px",
-              boxShadow:
-                "0 2px 10px rgba(0,0,0,0.08)",
+              marginTop:"10px",
             }}
           >
-            <h2>
-              {policy.policyNo}
-            </h2>
+            View Active Policies
+          </p>
+        </div>
 
-            <p>
-              <strong>
-                Reference No:
-              </strong>{" "}
-              {policy.requestNo}
-            </p>
+        <input
+          type="text"
+          placeholder="Search Policy / Ref No"
+          value={search}
+          onChange={(e)=>
+            setSearch(
+              e.target.value
+            )
+          }
+          style={{
+            width:"100%",
+            padding:"15px",
+            borderRadius:"12px",
+            border:"1px solid #ddd",
+            marginBottom:"20px",
+            fontSize:"16px",
+            boxSizing:"border-box",
+          }}
+        />
 
-            <p>
-              <strong>
-                Insured Name:
-              </strong>{" "}
-              {policy.insuredName}
-            </p>
+        {filteredPolicies.length === 0 && (
 
-            <p>
-              <strong>
-                Premium:
-              </strong>{" "}
-              ₹
-              {
-                policy.quotationPremium
-              }
-            </p>
+          <div
+            style={{
+              background:"#fff",
+              padding:"20px",
+              borderRadius:"16px",
+              textAlign:"center",
+            }}
+          >
+            No Active Policy Found
+          </div>
 
-            <p>
-              <strong>
-                Expiry Date:
-              </strong>{" "}
-              {
-                policy.policyExpiryDate
-              }
-            </p>
+        )}
+{filteredPolicies.map(
+          (policy) => (
 
             <div
+              key={policy.id}
               style={{
-                marginTop:
-                  "15px",
+                background:"#fff",
+                borderRadius:"20px",
+                padding:"20px",
+                marginBottom:"15px",
+                boxShadow:
+                  "0 2px 10px rgba(0,0,0,0.08)",
               }}
             >
-              <Link
-                href={`/user/policy-details?id=${policy.id}`}
+
+              <h2>
+                {policy.policyNo}
+              </h2>
+
+              <p>
+                <strong>
+                  Reference No:
+                </strong>{" "}
+                {policy.requestNo}
+              </p>
+
+              <p>
+                <strong>
+                  Insured Name:
+                </strong>{" "}
+                {policy.insuredName}
+              </p>
+
+              <p>
+                <strong>
+                  Premium:
+                </strong>{" "}
+                ₹{policy.quotationPremium}
+              </p>
+
+              <p>
+                <strong>
+                  Expiry Date:
+                </strong>{" "}
+                {policy.policyExpiryDate}
+              </p>
+
+              <div
                 style={{
-                  background:
-                    "#2563eb",
-                  color:
-                    "#fff",
-                  textDecoration:
-                    "none",
-                  padding:
-                    "12px 18px",
-                  borderRadius:
-                    "10px",
-                  display:
-                    "inline-block",
-                  fontWeight:
-                    "bold",
+                  marginTop:"15px",
                 }}
               >
-                📄 View Policy
-              </Link>
+                <Link
+                  href={`/user/policy-details?id=${policy.id}`}
+                  style={{
+                    background:"#2563eb",
+                    color:"#fff",
+                    textDecoration:"none",
+                    padding:"12px 18px",
+                    borderRadius:"10px",
+                    display:"inline-block",
+                    fontWeight:"bold",
+                  }}
+                >
+                  📄 View Policy
+                </Link>
+              </div>
+
             </div>
-          </div>
-        )
-      )}
-</div>
+
+          )
+        )}
+
+      </div>
+    </>
   );
-          }
+}
