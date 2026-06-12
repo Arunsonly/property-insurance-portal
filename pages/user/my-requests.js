@@ -1,583 +1,182 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { database } from "../../lib/firebase";
+import { ref, onValue } from "firebase/database";
 
-import {
-  ref,
-  push,
-  set
-} from "firebase/database";
+export default function MyRequests() {
+  const [requests, setRequests] = useState([]);
 
-import {
-  ref as storageRef,
-  uploadBytes,
-  getDownloadURL
-} from "firebase/storage";
+  useEffect(() => {
+    const requestsRef = ref(database, "requests");
 
-import {
-  database,
-  storage
-} from "../../lib/firebase";
+    onValue(requestsRef, (snapshot) => {
+      const data = snapshot.val();
 
-import AuthProtection from "../auth-protection";
-
-export default function NewRequest() {
-
-  const [insuredName,
-    setInsuredName] =
-    useState("");
-
-  const [address,
-    setAddress] =
-    useState("");
-
-  const [mobile,
-    setMobile] =
-    useState("");
-
-  const [riskLocation,
-    setRiskLocation] =
-    useState("");
-
-  const [riskType,
-    setRiskType] =
-    useState("");
-
-  const [propertyType,
-    setPropertyType] =
-    useState([]);
-
-  const [businessActivity,
-    setBusinessActivity] =
-    useState("");
-
-  const [coverage,
-    setCoverage] =
-    useState("");
-
-  const [sumInsured,
-    setSumInsured] =
-    useState("");
-
-  const [proposalFile,
-    setProposalFile] =
-    useState(null);
-
-  const [riskPhotoFile,
-    setRiskPhotoFile] =
-    useState(null);
-
-  const [previousPolicyFile,
-    setPreviousPolicyFile] =
-    useState(null);
-
-  const [loading,
-    setLoading] =
-    useState(false);
-
-  const handleRiskType = (
-    value
-  ) => {
-
-    setRiskType(value);
-
-    switch (value) {
-
-      case "Manufacturing Unit":
-
-        setBusinessActivity(
-          "Name of goods manufacturing"
+      if (data) {
+        const loadedRequests = Object.keys(data).map(
+          (key) => ({
+            id: key,
+            ...data[key],
+          })
         );
 
-        break;
+        setRequests(loadedRequests.reverse());
+      } else {
+        setRequests([]);
+      }
+    });
+  }, []);
 
-      case "Godown (Open)":
+  const getColor = (status) => {
+    switch (status) {
+      case "Pending":
+        return "#f59e0b";
 
-        setBusinessActivity(
-          "Name of goods storage"
-        );
+      case "Query Raised":
+        return "#8b5cf6";
 
-        break;
+      case "Reply Received":
+        return "#2563eb";
 
-      case "Godown (Closed)":
+      case "Quotation Sent":
+        return "#ea580c";
 
-        setBusinessActivity(
-          "Name of goods storage"
-        );
-
-        break;
-
-      case "Retail Shop":
-
-        setBusinessActivity(
-          "Name of goods selling (kirana, electric, puncture shop etc)"
-        );
-
-        break;
-
-      case "Other":
-
-        setBusinessActivity(
-          "Enter business activity details"
-        );
-
-        break;
+      case "Policy Issued":
+        return "#22c55e";
 
       default:
-
-        setBusinessActivity("");
-
+        return "#6b7280";
     }
   };
 
-  const generateRequestNo =
-    () => {
-
-      const userName =
-        (
-          localStorage.getItem(
-            "userName"
-          ) || "USER"
-        )
-          .replace(/\s/g, "")
-          .substring(0, 8)
-          .toUpperCase();
-
-      const now =
-        new Date();
-
-      const mm =
-        String(
-          now.getMonth() + 1
-        ).padStart(2, "0");
-
-      const yy =
-        String(
-          now.getFullYear()
-        ).slice(-2);
-
-      const serial =
-        Math.floor(
-          100 +
-          Math.random() *
-            900
-        );
-
-      return `${userName}_${mm}${yy}_${serial}`;
-    };
-const uploadFile = async (
-    file,
-    folder
-  ) => {
-
-    if (!file)
-      return "";
-
-    const fileRef =
-      storageRef(
-        storage,
-        `${folder}/${Date.now()}_${
-          file.name
-        }`
-      );
-
-    await uploadBytes(
-      fileRef,
-      file
-    );
-
-    return await getDownloadURL(
-      fileRef
-    );
-  };
-
-  const handleSubmit =
-    async () => {
-
-      if (
-        !insuredName ||
-        !mobile ||
-        !riskLocation ||
-        !riskType ||
-        propertyType.length === 0 ||
-        !coverage ||
-        !sumInsured
-      ) {
-
-        alert(
-          "Please fill all mandatory fields"
-        );
-
-        return;
-      }
-
-      try {
-
-        setLoading(true);
-
-        const proposalUrl =
-          await uploadFile(
-            proposalFile,
-            "proposalForms"
-          );
-
-        const riskPhotoUrl =
-          await uploadFile(
-            riskPhotoFile,
-            "riskPhotos"
-          );
-
-        const previousPolicyUrl =
-          await uploadFile(
-            previousPolicyFile,
-            "previousPolicies"
-          );
-
-        const requestNo =
-          generateRequestNo();
-
-        const requestRef =
-          push(
-            ref(
-              database,
-              "requests"
-            )
-          );
-
-        const requestData =
-          {
-
-            requestNo,
-
-            userId:
-              localStorage.getItem(
-                "userId"
-              ),
-
-            userName:
-              localStorage.getItem(
-                "userName"
-              ),
-
-            insuredName,
-
-            address,
-
-            mobile,
-
-            riskLocation,
-
-            riskType,
-
-            propertyType,
-
-            businessActivity,
-
-            coverage,
-
-            sumInsured,
-
-            proposalUrl,
-
-            riskPhotoUrl,
-
-            previousPolicyUrl,
-
-            status:
-              "Pending",
-
-            createdAt:
-              new Date()
-                .toISOString(),
-
-          };
-
-        await set(
-          requestRef,
-          requestData
-        );
-
-        alert(
-          "Request Submitted Successfully"
-        );
-
-        setInsuredName("");
-        setAddress("");
-        setMobile("");
-        setRiskLocation("");
-        setRiskType("");
-        setPropertyType([]);
-        setBusinessActivity("");
-        setCoverage("");
-        setSumInsured("");
-
-        setProposalFile(
-          null
-        );
-
-        setRiskPhotoFile(
-          null
-        );
-
-        setPreviousPolicyFile(
-          null
-        );
-
-      } catch (error) {
-
-        console.error(
-          error
-        );
-
-        alert(
-          "Error Submitting Request"
-        );
-
-      } finally {
-
-        setLoading(false);
-
-      }
-    };
-
   return (
-    <>
-      <AuthProtection
-        role="user"
-      />
-<div
+    <div
+      style={{
+        background: "#f4f7fc",
+        minHeight: "100vh",
+        padding: "20px",
+        maxWidth: "700px",
+        margin: "0 auto",
+      }}
+    >
+      <div
         style={{
           background:
-            "#f4f7fc",
-          minHeight:
-            "100vh",
-          padding:
-            "20px",
-          maxWidth:
-            "700px",
-          margin:
-            "0 auto",
+            "linear-gradient(135deg,#0b3d91,#2563eb)",
+          color: "#fff",
+          padding: "30px",
+          borderRadius: "24px",
+          marginBottom: "20px",
+          boxShadow:
+            "0 15px 30px rgba(37,99,235,.25)",
         }}
       >
+        <h1 style={{ margin: 0 }}>
+          📋 My Requests
+        </h1>
 
-        <div
+        <p
           style={{
-            background:
-              "linear-gradient(135deg,#0b3d91,#2563eb)",
-            color:
-              "#fff",
-            padding:
-              "30px",
-            borderRadius:
-              "24px",
-            marginBottom:
-              "20px",
+            marginTop: "10px",
+            opacity: "0.9",
           }}
         >
-          <h1
-            style={{
-              margin: 0,
-            }}
-          >
-            🏢 New Property Request
-          </h1>
+          View all submitted requests
+        </p>
+      </div>
 
-          <p
+      <input
+        type="text"
+        placeholder="Search by Reference No"
+        style={{
+          width: "100%",
+          boxSizing: "border-box",
+          padding: "15px",
+          borderRadius: "14px",
+          border: "1px solid #ddd",
+          marginBottom: "20px",
+          fontSize: "16px",
+          background: "#fff",
+        }}
+      />
+
+      {requests.length === 0 && (
+        <div
+          style={{
+            background: "#fff",
+            padding: "20px",
+            borderRadius: "16px",
+            textAlign: "center",
+          }}
+        >
+          No Requests Found
+        </div>
+      )}
+
+      {requests.map((item) => (
+        <div
+          key={item.id}
+          style={{
+            background: "#fff",
+            borderRadius: "24px",
+            padding: "22px",
+            marginBottom: "18px",
+            boxShadow:
+              "0 10px 25px rgba(0,0,0,0.08)",
+          }}
+        >
+          <h2
             style={{
-              marginTop:
-                "10px",
+              marginTop: 0,
+              color: "#111827",
             }}
           >
-            Submit Property Insurance Requirement
+            {item.requestNo}
+          </h2>
+
+          <p>
+            <strong>Insured:</strong>{" "}
+            {item.insuredName}
           </p>
+
+          <p>
+            <strong>Location:</strong>{" "}
+            {item.riskLocation}
+          </p>
+
+          <div
+            style={{
+              display: "inline-block",
+              background: getColor(
+                item.status
+              ),
+              color: "#fff",
+              padding: "8px 14px",
+              borderRadius: "999px",
+              fontWeight: "600",
+              marginTop: "10px",
+            }}
+          >
+            {item.status}
+          </div>
+
+          <div style={{ marginTop: "18px" }}>
+            <Link
+              href={`/user/request-details?id=${item.id}`}
+              style={{
+                color: "#2563eb",
+                textDecoration: "none",
+                fontWeight: "700",
+              }}
+            >
+              View Details →
+            </Link>
+          </div>
         </div>
-
-        <div
-          style={
-            cardStyle
-          }
-        >
-          <h2
-            style={{
-              color:
-                "#0b3d91",
-            }}
-          >
-            👤 Basic Details
-          </h2>
-
-          <input
-            placeholder="Insured Name"
-            value={
-              insuredName
-            }
-            onChange={(
-              e
-            ) =>
-              setInsuredName(
-                e.target
-                  .value
-              )
-            }
-            style={
-              inputStyle
-            }
-          />
-
-          <input
-            placeholder="Address"
-            value={
-              address
-            }
-            onChange={(
-              e
-            ) =>
-              setAddress(
-                e.target
-                  .value
-              )
-            }
-            style={
-              inputStyle
-            }
-          />
-
-          <input
-            placeholder="Mobile Number"
-            value={
-              mobile
-            }
-            onChange={(
-              e
-            ) =>
-              setMobile(
-                e.target
-                  .value
-              )
-            }
-            style={
-              inputStyle
-            }
-          />
-        </div>
-
-        <div
-          style={
-            cardStyle
-          }
-        >
-          <h2
-            style={{
-              color:
-                "#0b3d91",
-            }}
-          >
-            🏭 Risk Details
-          </h2>
-
-          <input
-            placeholder="Enter District Name"
-            value={
-              riskLocation
-            }
-            onChange={(
-              e
-            ) =>
-              setRiskLocation(
-                e.target
-                  .value
-              )
-            }
-            style={
-              inputStyle
-            }
-          />
-
-          <select
-            value={
-              riskType
-            }
-            onChange={(
-              e
-            ) =>
-              handleRiskType(
-                e.target
-                  .value
-              )
-            }
-            style={
-              inputStyle
-            }
-          >
-            <option value="">
-              Select Risk Type
-            </option>
-
-            <option>
-              Manufacturing Unit
-            </option>
-
-            <option>
-              Godown (Open)
-            </option>
-
-            <option>
-              Godown (Closed)
-            </option>
-
-            <option>
-              Retail Shop
-            </option>
-
-            <option>
-              Other
-            </option>
-          </select>
-
-          <select
-            multiple
-            value={
-              propertyType
-            }
-            onChange={(
-              e
-            ) =>
-              setPropertyType(
-                [
-                  ...e.target
-                    .selectedOptions,
-                ].map(
-                  (
-                    option
-                  ) =>
-                    option.value
-                )
-              )
-            }
-            style={{
-              ...inputStyle,
-              height:
-                "140px",
-            }}
-          >
-            <option value="Building">
-              Building
-            </option>
-
-            <option value="Stock/Assets">
-              Stock / Assets
-            </option>
-
-            <option value="Plant & Machinery">
-              Plant & Machinery
-            </option>
-
-            <option value="Roof Top Solar">
-              Roof Top Solar
-            </option>
-          </select>
-
-          <textarea
-            value={
-              businessActivity
+      ))}
+    </div>
+  );
+}usinessActivity
             }
             onChange={(
               e
