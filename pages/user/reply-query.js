@@ -1,97 +1,74 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { database } from "../../lib/firebase";
-import {
-  ref,
-  get,
-  update
-} from "firebase/database";
+import { ref, get, update } from "firebase/database";
 import AuthProtection from "../auth-protection";
 
 export default function ReplyQuery() {
 
-  const router =
-    useRouter();
+  const router = useRouter();
+  const { id } = router.query;
 
-  const { id } =
-    router.query;
-
-  const [requestData,
-    setRequestData] =
+  const [requestData, setRequestData] =
     useState(null);
 
-  const [reply,
-    setReply] =
+  const [reply, setReply] =
     useState("");
 
   useEffect(() => {
 
-    if (!id)
-      return;
+    if (!id) return;
 
-    const loadData =
-      async () => {
+    const loadData = async () => {
 
-        const snapshot =
-          await get(
-            ref(
-              database,
-              `requests/${id}`
-            )
+      const snapshot = await get(
+        ref(
+          database,
+          `requests/${id}`
+        )
+      );
+
+      if (snapshot.exists()) {
+
+        const data =
+          snapshot.val();
+
+        const currentUserId =
+          localStorage.getItem(
+            "userId"
           );
 
         if (
-          snapshot.exists()
+          data.userId &&
+          data.userId !==
+            currentUserId
         ) {
 
-          const data =
-            snapshot.val();
-
-          const currentUserId =
-            localStorage.getItem(
-              "userId"
-            );
-
-          if (
-            data.userId &&
-            data.userId !==
-              currentUserId
-          ) {
-
-            alert(
-              "Unauthorized Access"
-            );
-
-            router.push(
-              "/user/dashboard"
-            );
-
-            return;
-
-          }
-
-          setRequestData(
-            data
+          alert(
+            "Unauthorized Access"
           );
 
+          router.push(
+            "/user/dashboard"
+          );
+
+          return;
         }
 
-      };
+        setRequestData(data);
+      }
+    };
 
     loadData();
 
   }, [id]);
-const handleSubmit =
+
+  const handleSubmit =
     async () => {
 
-      if (
-        !reply.trim()
-      ) {
+      if (!reply.trim()) {
 
-        alert(
-          "Enter Reply"
-        );
-
+        alert("Enter Reply");
         return;
 
       }
@@ -104,13 +81,10 @@ const handleSubmit =
             `requests/${id}`
           ),
           {
-            customerReply:
-              reply,
-
+            customerReply: reply,
             replyDate:
               new Date()
                 .toISOString(),
-
             status:
               "Reply Submitted",
           }
@@ -126,25 +100,17 @@ const handleSubmit =
 
       } catch (error) {
 
-        console.error(
-          error
-        );
-
-        alert(
-          "Error"
-        );
+        console.error(error);
+        alert("Error");
 
       }
-
     };
 
   if (!requestData) {
 
     return (
       <>
-        <AuthProtection
-          role="user"
-        />
+        <AuthProtection role="user" />
 
         <div
           style={{
@@ -156,11 +122,10 @@ const handleSubmit =
       </>
     );
   }
-return (
+
+  return (
     <>
-      <AuthProtection
-        role="user"
-      />
+      <AuthProtection role="user" />
 
       <div
         style={{
@@ -184,16 +149,93 @@ return (
             Reply Query
           </h1>
         </div>
+<div
+          style={{
+            background:"#fff",
+            padding:"20px",
+            borderRadius:"15px",
+            marginBottom:"20px",
+          }}
+        >
+          <p>
+            <b>Reference No:</b>{" "}
+            {requestData.requestNo}
+          </p>
 
-        {/* Same UI as your old code */}
+          <p>
+            <b>Insured Name:</b>{" "}
+            {requestData.insuredName}
+          </p>
 
-        {/* Reference No */}
-        {/* Insured Name */}
-        {/* Query Message */}
-        {/* Reply Textarea */}
-        {/* Submit Button */}
+          <p>
+            <b>Admin Query:</b>
+          </p>
+
+          <div
+            style={{
+              background:"#faf5ff",
+              padding:"15px",
+              borderRadius:"10px",
+              border:
+                "1px solid #d8b4fe",
+            }}
+          >
+            {requestData.queryMessage}
+          </div>
+        </div>
+
+        <div
+          style={{
+            background:"#fff",
+            padding:"20px",
+            borderRadius:"15px",
+            marginBottom:"20px",
+          }}
+        >
+          <h3>
+            Your Reply
+          </h3>
+
+          <textarea
+            value={reply}
+            onChange={(e) =>
+              setReply(
+                e.target.value
+              )
+            }
+            rows="8"
+            placeholder="Type your reply..."
+            style={{
+              width:"100%",
+              padding:"12px",
+              borderRadius:"10px",
+              border:
+                "1px solid #ddd",
+              resize:"none",
+              boxSizing:
+                "border-box",
+            }}
+          />
+        </div>
+
+        <button
+          onClick={handleSubmit}
+          style={{
+            width:"100%",
+            padding:"16px",
+            border:"none",
+            borderRadius:"12px",
+            background:"#22c55e",
+            color:"#fff",
+            fontSize:"17px",
+            fontWeight:"bold",
+            cursor:"pointer",
+          }}
+        >
+          Submit Reply
+        </button>
 
       </div>
     </>
   );
-}
+            }
