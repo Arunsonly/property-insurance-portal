@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import AuthProtection from "../auth-protection";
 export default function AdminProfile() {
 
   const [admin, setAdmin] = useState({
@@ -56,6 +56,8 @@ export default function AdminProfile() {
   };
 
   return (
+    <>
+    <AuthProtection role="admin" />
     <div
       style={{
         background: "#f4f7fc",
@@ -145,5 +147,6 @@ export default function AdminProfile() {
         </button>
       </div>
     </div>
+</>
   );
         }
