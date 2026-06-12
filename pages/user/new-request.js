@@ -6,18 +6,11 @@ import {
   set
 } from "firebase/database";
 
-import {
-  ref as storageRef,
-  uploadBytes,
-  getDownloadURL
-} from "firebase/storage";
+import { database }
+from "../../lib/firebase";
 
-import {
-  database,
-  storage
-} from "../../lib/firebase";
-
-import AuthProtection from "../auth-protection";
+import AuthProtection
+from "../auth-protection";
 
 export default function NewRequest() {
 
@@ -57,25 +50,12 @@ export default function NewRequest() {
     setSumInsured] =
     useState("");
 
-  const [proposalFile,
-    setProposalFile] =
-    useState(null);
-
-  const [riskPhotoFile,
-    setRiskPhotoFile] =
-    useState(null);
-
-  const [previousPolicyFile,
-    setPreviousPolicyFile] =
-    useState(null);
-
   const [loading,
     setLoading] =
     useState(false);
 
-  const handleRiskType = (
-    value
-  ) => {
+  const handleRiskType =
+    (value) => {
 
     setRiskType(value);
 
@@ -158,38 +138,12 @@ export default function NewRequest() {
         Math.floor(
           100 +
           Math.random() *
-            900
+          900
         );
 
       return `${userName}_${mm}${yy}_${serial}`;
     };
-const uploadFile = async (
-    file,
-    folder
-  ) => {
-
-    if (!file)
-      return "";
-
-    const fileRef =
-      storageRef(
-        storage,
-        `${folder}/${Date.now()}_${
-          file.name
-        }`
-      );
-
-    await uploadBytes(
-      fileRef,
-      file
-    );
-
-    return await getDownloadURL(
-      fileRef
-    );
-  };
-
-  const handleSubmit =
+const handleSubmit =
     async () => {
 
       if (
@@ -213,24 +167,6 @@ const uploadFile = async (
 
         setLoading(true);
 
-        const proposalUrl =
-          await uploadFile(
-            proposalFile,
-            "proposalForms"
-          );
-
-        const riskPhotoUrl =
-          await uploadFile(
-            riskPhotoFile,
-            "riskPhotos"
-          );
-
-        const previousPolicyUrl =
-          await uploadFile(
-            previousPolicyFile,
-            "previousPolicies"
-          );
-
         const requestNo =
           generateRequestNo();
 
@@ -242,53 +178,46 @@ const uploadFile = async (
             )
           );
 
-        const requestData =
-          {
+        const requestData = {
 
-            requestNo,
+          requestNo,
 
-            userId:
-              localStorage.getItem(
-                "userId"
-              ),
+          userId:
+            localStorage.getItem(
+              "userId"
+            ),
 
-            userName:
-              localStorage.getItem(
-                "userName"
-              ),
+          userName:
+            localStorage.getItem(
+              "userName"
+            ),
 
-            insuredName,
+          insuredName,
 
-            address,
+          address,
 
-            mobile,
+          mobile,
 
-            riskLocation,
+          riskLocation,
 
-            riskType,
+          riskType,
 
-            propertyType,
+          propertyType,
 
-            businessActivity,
+          businessActivity,
 
-            coverage,
+          coverage,
 
-            sumInsured,
+          sumInsured,
 
-            proposalUrl,
+          status:
+            "Pending",
 
-            riskPhotoUrl,
+          createdAt:
+            new Date()
+              .toISOString(),
 
-            previousPolicyUrl,
-
-            status:
-              "Pending",
-
-            createdAt:
-              new Date()
-                .toISOString(),
-
-          };
+        };
 
         await set(
           requestRef,
@@ -308,18 +237,6 @@ const uploadFile = async (
         setBusinessActivity("");
         setCoverage("");
         setSumInsured("");
-
-        setProposalFile(
-          null
-        );
-
-        setRiskPhotoFile(
-          null
-        );
-
-        setPreviousPolicyFile(
-          null
-        );
 
       } catch (error) {
 
@@ -343,7 +260,8 @@ const uploadFile = async (
       <AuthProtection
         role="user"
       />
-<div
+
+      <div
         style={{
           background:
             "#f4f7fc",
@@ -391,9 +309,7 @@ const uploadFile = async (
         </div>
 
         <div
-          style={
-            cardStyle
-          }
+          style={cardStyle}
         >
           <h2
             style={{
@@ -403,71 +319,44 @@ const uploadFile = async (
           >
             👤 Basic Details
           </h2>
-
-          <input
+<input
             placeholder="Insured Name"
-            value={
-              insuredName
-            }
-            onChange={(
-              e
-            ) =>
+            value={insuredName}
+            onChange={(e) =>
               setInsuredName(
-                e.target
-                  .value
+                e.target.value
               )
             }
-            style={
-              inputStyle
-            }
+            style={inputStyle}
           />
 
           <input
             placeholder="Address"
-            value={
-              address
-            }
-            onChange={(
-              e
-            ) =>
+            value={address}
+            onChange={(e) =>
               setAddress(
-                e.target
-                  .value
+                e.target.value
               )
             }
-            style={
-              inputStyle
-            }
+            style={inputStyle}
           />
 
           <input
             placeholder="Mobile Number"
-            value={
-              mobile
-            }
-            onChange={(
-              e
-            ) =>
+            value={mobile}
+            onChange={(e) =>
               setMobile(
-                e.target
-                  .value
+                e.target.value
               )
             }
-            style={
-              inputStyle
-            }
+            style={inputStyle}
           />
         </div>
 
-        <div
-          style={
-            cardStyle
-          }
-        >
+        <div style={cardStyle}>
           <h2
             style={{
-              color:
-                "#0b3d91",
+              color: "#0b3d91",
             }}
           >
             🏭 Risk Details
@@ -475,37 +364,23 @@ const uploadFile = async (
 
           <input
             placeholder="Enter District Name"
-            value={
-              riskLocation
-            }
-            onChange={(
-              e
-            ) =>
+            value={riskLocation}
+            onChange={(e) =>
               setRiskLocation(
-                e.target
-                  .value
+                e.target.value
               )
             }
-            style={
-              inputStyle
-            }
+            style={inputStyle}
           />
 
           <select
-            value={
-              riskType
-            }
-            onChange={(
-              e
-            ) =>
+            value={riskType}
+            onChange={(e) =>
               handleRiskType(
-                e.target
-                  .value
+                e.target.value
               )
             }
-            style={
-              inputStyle
-            }
+            style={inputStyle}
           >
             <option value="">
               Select Risk Type
@@ -534,28 +409,20 @@ const uploadFile = async (
 
           <select
             multiple
-            value={
-              propertyType
-            }
-            onChange={(
-              e
-            ) =>
+            value={propertyType}
+            onChange={(e) =>
               setPropertyType(
                 [
-                  ...e.target
-                    .selectedOptions,
+                  ...e.target.selectedOptions,
                 ].map(
-                  (
-                    option
-                  ) =>
+                  (option) =>
                     option.value
                 )
               )
             }
             style={{
               ...inputStyle,
-              height:
-                "140px",
+              height: "140px",
             }}
           >
             <option value="Building">
@@ -576,38 +443,24 @@ const uploadFile = async (
           </select>
 
           <textarea
-            value={
-              businessActivity
-            }
-            onChange={(
-              e
-            ) =>
+            value={businessActivity}
+            onChange={(e) =>
               setBusinessActivity(
-                e.target
-                  .value
+                e.target.value
               )
             }
             placeholder="Business Activity"
-            style={
-              textareaStyle
-            }
+            style={textareaStyle}
           />
 
           <select
-            value={
-              coverage
-            }
-            onChange={(
-              e
-            ) =>
+            value={coverage}
+            onChange={(e) =>
               setCoverage(
-                e.target
-                  .value
+                e.target.value
               )
             }
-            style={
-              inputStyle
-            }
+            style={inputStyle}
           >
             <option value="">
               Select Coverage Required
@@ -632,103 +485,36 @@ const uploadFile = async (
 
           <input
             placeholder="Enter Total Sum Insured"
-            value={
-              sumInsured
-            }
-            onChange={(
-              e
-            ) =>
+            value={sumInsured}
+            onChange={(e) =>
               setSumInsured(
-                e.target
-                  .value
+                e.target.value
               )
             }
-            style={
-              inputStyle
-            }
+            style={inputStyle}
           />
         </div>
-<div
-          style={cardStyle}
-        >
+<div style={cardStyle}>
           <h2
             style={{
-              color:
-                "#0b3d91",
+              color: "#0b3d91",
             }}
           >
-            📎 Upload Documents
+            📎 Documents Information
           </h2>
 
-          <div
-            style={uploadBox}
+          <p
+            style={{
+              color: "#64748b",
+              lineHeight: "1.6",
+            }}
           >
-            <strong>
-              Proposal Form
-            </strong>
-
-            <input
-              type="file"
-              onChange={(
-                e
-              ) =>
-                setProposalFile(
-                  e.target
-                    .files[0]
-                )
-              }
-              style={
-                fileStyle
-              }
-            />
-          </div>
-
-          <div
-            style={uploadBox}
-          >
-            <strong>
-              Risk Photos
-            </strong>
-
-            <input
-              type="file"
-              onChange={(
-                e
-              ) =>
-                setRiskPhotoFile(
-                  e.target
-                    .files[0]
-                )
-              }
-              style={
-                fileStyle
-              }
-            />
-          </div>
-
-          <div
-            style={uploadBox}
-          >
-            <strong>
-              Previous Policy
-              (Optional)
-            </strong>
-
-            <input
-              type="file"
-              onChange={(
-                e
-              ) =>
-                setPreviousPolicyFile(
-                  e.target
-                    .files[0]
-                )
-              }
-              style={
-                fileStyle
-              }
-            />
-          </div>
+            Proposal Form, Risk Photos
+            aur Previous Policy
+            details admin ko
+            WhatsApp / Email se
+            share kar sakte hain.
+          </p>
         </div>
 
         <button
@@ -739,28 +525,21 @@ const uploadFile = async (
             loading
           }
           style={{
-            width:
-              "100%",
-            padding:
-              "18px",
-            border:
-              "none",
+            width: "100%",
+            padding: "18px",
+            border: "none",
             borderRadius:
               "16px",
             background:
               "linear-gradient(135deg,#16a34a,#22c55e)",
-            color:
-              "#fff",
-            fontSize:
-              "18px",
-            fontWeight:
-              "700",
-            cursor:
-              "pointer",
+            color: "#fff",
+            fontSize: "18px",
+            fontWeight: "700",
+            cursor: "pointer",
           }}
         >
           {loading
-            ? "Uploading..."
+            ? "Please Wait..."
             : "🚀 Submit Request"}
         </button>
 
@@ -770,104 +549,41 @@ const uploadFile = async (
 }
 
 const cardStyle = {
-  background:
-    "#fff",
-
-  padding:
-    "25px",
-
-  borderRadius:
-    "24px",
-
-  marginBottom:
-    "20px",
-
+  background: "#fff",
+  padding: "25px",
+  borderRadius: "24px",
+  marginBottom: "20px",
   boxShadow:
     "0 10px 25px rgba(0,0,0,0.08)",
 };
 
 const inputStyle = {
-  width:
-    "100%",
-
+  width: "100%",
   boxSizing:
     "border-box",
-
-  padding:
-    "15px",
-
-  marginTop:
-    "12px",
-
-  marginBottom:
-    "12px",
-
-  borderRadius:
-    "12px",
-
+  padding: "15px",
+  marginTop: "12px",
+  marginBottom: "12px",
+  borderRadius: "12px",
   border:
     "1px solid #ddd",
-
-  fontSize:
-    "16px",
-
+  fontSize: "16px",
   background:
     "#fafafa",
 };
 
 const textareaStyle = {
-  width:
-    "100%",
-
+  width: "100%",
   boxSizing:
     "border-box",
-
-  minHeight:
-    "120px",
-
-  padding:
-    "15px",
-
-  marginTop:
-    "12px",
-
-  marginBottom:
-    "12px",
-
-  borderRadius:
-    "12px",
-
+  minHeight: "120px",
+  padding: "15px",
+  marginTop: "12px",
+  marginBottom: "12px",
+  borderRadius: "12px",
   border:
     "1px solid #ddd",
-
-  fontSize:
-    "16px",
-
-  background:
-    "#fafafa",
-};
-
-const fileStyle = {
-  width:
-    "100%",
-
-  marginTop:
-    "10px",
-};
-
-const uploadBox = {
-  border:
-    "2px dashed #d1d5db",
-
-  borderRadius:
-    "16px",
-
-  padding:
-    "15px",
-
-  marginBottom:
-    "15px",
-
+  fontSize: "16px",
   background:
     "#fafafa",
 };
