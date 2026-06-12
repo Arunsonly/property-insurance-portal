@@ -1,59 +1,66 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AuthProtection from "../auth-protection";
+
+import { database } from "../../lib/firebase";
+import { ref, get } from "firebase/database";
 
 export default function UserProfile() {
 
-  const [user, setUser] = useState({
-    name: "Customer",
-    username: "customer",
-    email: "",
-    mobile: "",
-  });
+  const [user, setUser] =
+    useState(null);
 
-  const editProfile = () => {
+  useEffect(() => {
 
-    const name = prompt(
-      "Enter Name",
-      user.name
-    );
+    const userId =
+      localStorage.getItem("userId");
 
-    if (!name) return;
+    if (!userId) return;
 
-    const email = prompt(
-      "Enter Email",
-      user.email
-    );
+    get(
+      ref(
+        database,
+        `users/${userId}`
+      )
+    ).then((snapshot) => {
 
-    const mobile = prompt(
-      "Enter Mobile",
-      user.mobile
-    );
+      if (snapshot.exists()) {
 
-    setUser({
-      ...user,
-      name,
-      email,
-      mobile,
+        setUser(
+          snapshot.val()
+        );
+
+      }
+
     });
 
-    alert(
-      "Profile Updated Successfully"
+  }, []);
+
+  if (!user) {
+
+    return (
+      <>
+        <AuthProtection role="user" />
+
+        <div
+          style={{
+            padding: "30px",
+            textAlign: "center",
+          }}
+        >
+          Loading...
+        </div>
+      </>
     );
 
-  };
+  }
 
-  const changePassword = () => {
+  const logout = () => {
 
-    const newPassword =
-      prompt(
-        "Enter New Password"
-      );
+    localStorage.removeItem("role");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userName");
 
-    if (!newPassword) return;
-
-    alert(
-      "Password Changed Successfully"
-    );
+    window.location.href = "/";
 
   };
 
@@ -102,7 +109,7 @@ export default function UserProfile() {
 
           <p>
             <strong>Email:</strong>{" "}
-            {user.email}
+            {user.email || "-"}
           </p>
 
           <p>
@@ -110,40 +117,32 @@ export default function UserProfile() {
             {user.mobile}
           </p>
 
+          <p>
+            <strong>Status:</strong>{" "}
+            {user.status}
+          </p>
+
+          <p>
+            <strong>Last Login:</strong>{" "}
+            {user.lastLogin || "-"}
+          </p>
+
           <button
-            onClick={editProfile}
+            onClick={logout}
             style={{
               width: "100%",
-              background: "#2563eb",
+              background: "#dc2626",
               color: "#fff",
               border: "none",
               padding: "14px",
               borderRadius: "12px",
-              marginTop: "15px",
-              marginBottom: "10px",
+              marginTop: "20px",
               fontWeight: "bold",
               cursor: "pointer",
             }}
           >
-            ✏️ Edit Profile
+            🚪 Logout
           </button>
-
-          <button
-            onClick={changePassword}
-            style={{
-              width: "100%",
-              background: "#f59e0b",
-              color: "#fff",
-              border: "none",
-              padding: "14px",
-              borderRadius: "12px",
-              fontWeight: "bold",
-              cursor: "pointer",
-            }}
-          >
-            🔑 Change Password
-          </button>
-
         </div>
       </div>
     </>
