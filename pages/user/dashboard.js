@@ -381,6 +381,13 @@ export default function UserDashboard() {
                   📄 Policies
                 </Link>
 
+                    <Link
+  href="/user/expiry-register"
+  style={menuLink}
+>
+  ⏳ Expiry Register
+</Link>
+
                 <Link
                   href="/user/profile"
                   style={menuLink}
@@ -567,6 +574,14 @@ export default function UserDashboard() {
             >
               💰 Quotations
             </Link>
+
+                <Link
+                 href="/user/expiry-register"
+               style={quickLink}
+             >
+           ⏳ Expiry Register
+           </Link>
+                 
           </div>
         </div>
 
