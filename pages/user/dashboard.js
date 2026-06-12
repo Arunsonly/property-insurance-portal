@@ -1,14 +1,47 @@
 import { useState, useEffect } from "react";
+
 import Link from "next/link";
-import AuthProtection from "../auth-protection";
+
+import AuthProtection
+from "../auth-protection";
+
+import { database }
+from "../../lib/firebase";
+
+import {
+  ref,
+  onValue
+} from "firebase/database";
 
 export default function UserDashboard() {
 
-  const [menuOpen, setMenuOpen] =
+  const [menuOpen,
+    setMenuOpen] =
     useState(false);
 
-  const [userName, setUserName] =
+  const [userName,
+    setUserName] =
     useState("");
+
+  const [myRequests,
+    setMyRequests] =
+    useState(0);
+
+  const [queries,
+    setQueries] =
+    useState(0);
+
+  const [quotations,
+    setQuotations] =
+    useState(0);
+
+  const [policies,
+    setPolicies] =
+    useState(0);
+
+  const [recentActivities,
+    setRecentActivities] =
+    useState([]);
 
   useEffect(() => {
 
@@ -17,57 +50,187 @@ export default function UserDashboard() {
         "userName"
       );
 
+    const userId =
+      localStorage.getItem(
+        "userId"
+      );
+
     if (name) {
       setUserName(name);
     }
 
+    const requestsRef =
+      ref(
+        database,
+        "requests"
+      );
+
+    onValue(
+      requestsRef,
+      (snapshot) => {
+
+        const data =
+          snapshot.val();
+
+        if (!data) {
+
+          setMyRequests(0);
+          setQueries(0);
+          setQuotations(0);
+          setPolicies(0);
+          setRecentActivities([]);
+
+          return;
+        }
+
+        const allRequests =
+          Object.keys(data).map(
+            (key) => ({
+              id: key,
+              ...data[key],
+            })
+          );
+
+        const userRequests =
+          allRequests.filter(
+            (item) =>
+              item.userId ===
+              userId
+          );
+
+        setMyRequests(
+          userRequests.length
+        );
+
+        setQueries(
+          userRequests.filter(
+            (x) =>
+              x.status ===
+              "Query Raised"
+          ).length
+        );
+
+        setQuotations(
+          userRequests.filter(
+            (x) =>
+              x.status ===
+              "Quotation Sent"
+          ).length
+        );
+
+        setPolicies(
+          userRequests.filter(
+            (x) =>
+              x.status ===
+              "Policy Issued"
+          ).length
+        );
+
+        setRecentActivities(
+          userRequests
+            .sort(
+              (a, b) =>
+                new Date(
+                  b.createdAt
+                ) -
+                new Date(
+                  a.createdAt
+                )
+            )
+            .slice(0, 5)
+        );
+
+      }
+    );
+
   }, []);
 
   const stats = [
+
     {
-      title: "New Request",
+      title:
+        "New Request",
+
       count: "+",
+
       icon: "➕",
-      color: "#2563eb",
-      link: "/user/new-request",
+
+      color:
+        "#2563eb",
+
+      link:
+        "/user/new-request",
     },
+
     {
-      title: "My Requests",
-      count: "-",
+      title:
+        "My Requests",
+
+      count:
+        myRequests,
+
       icon: "📋",
-      color: "#f59e0b",
-      link: "/user/my-requests",
+
+      color:
+        "#f59e0b",
+
+      link:
+        "/user/my-requests",
     },
+
     {
-      title: "Queries",
-      count: "-",
+      title:
+        "Queries",
+
+      count:
+        queries,
+
       icon: "❓",
-      color: "#8b5cf6",
-      link: "/user/query-received",
+
+      color:
+        "#8b5cf6",
+
+      link:
+        "/user/query-received",
     },
+
     {
-      title: "Quotations",
-      count: "-",
+      title:
+        "Quotations",
+
+      count:
+        quotations,
+
       icon: "💰",
-      color: "#10b981",
-      link: "/user/quotation-received",
+
+      color:
+        "#10b981",
+
+      link:
+        "/user/quotation-received",
     },
+
   ];
 
   return (
     <>
-      <AuthProtection role="user" />
+      <AuthProtection
+        role="user"
+      />
 
       <div
         style={{
-          minHeight: "100vh",
-          background: "#f4f7fc",
+          minHeight:
+            "100vh",
+
+          background:
+            "#f4f7fc",
+
           fontFamily:
             "Arial,sans-serif",
         }}
       >
-
-        <div
+<div
           style={{
             background:
               "linear-gradient(135deg,#0b3d91,#2563eb)",
@@ -123,15 +286,20 @@ export default function UserDashboard() {
             </div>
           </div>
 
-          <div
+          <Link
+            href="/user/profile"
             style={{
+              color: "#fff",
+              textDecoration:
+                "none",
               fontSize: "28px",
             }}
           >
             👤
-          </div>
+          </Link>
         </div>
-{menuOpen && (
+
+        {menuOpen && (
           <>
             <div
               onClick={() =>
@@ -281,8 +449,7 @@ export default function UserDashboard() {
             quotations and policies.
           </p>
         </div>
-
-        <div
+<div
           style={{
             padding: "20px",
             display: "grid",
@@ -346,7 +513,8 @@ export default function UserDashboard() {
             )
           )}
         </div>
-<div
+
+        <div
           style={{
             margin: "0 20px 20px",
             background: "#fff",
@@ -427,10 +595,42 @@ export default function UserDashboard() {
               gap: "12px",
             }}
           >
-            <div style={activityRow}>
-              <span>-</span>
-              <span>No Activity</span>
-            </div>
+{recentActivities.length === 0 ? (
+
+              <div
+                style={activityRow}
+              >
+                <span>
+                  -
+                </span>
+
+                <span>
+                  No Activity
+                </span>
+              </div>
+
+            ) : (
+
+              recentActivities.map(
+                (item) => (
+
+                  <div
+                    key={item.id}
+                    style={activityRow}
+                  >
+                    <span>
+                      {item.requestNo}
+                    </span>
+
+                    <span>
+                      {item.status}
+                    </span>
+                  </div>
+
+                )
+              )
+
+            )}
           </div>
         </div>
 
@@ -440,30 +640,58 @@ export default function UserDashboard() {
 }
 
 const menuLink = {
+
   color: "#fff",
-  textDecoration: "none",
+
+  textDecoration:
+    "none",
+
   padding: "12px",
-  borderRadius: "10px",
+
+  borderRadius:
+    "10px",
+
   background:
     "rgba(255,255,255,0.08)",
 };
 
 const quickLink = {
-  textDecoration: "none",
-  background: "#f8fafc",
+
+  textDecoration:
+    "none",
+
+  background:
+    "#f8fafc",
+
   padding: "15px",
-  borderRadius: "12px",
-  textAlign: "center",
+
+  borderRadius:
+    "12px",
+
+  textAlign:
+    "center",
+
   color: "#0f172a",
-  fontWeight: "600",
-  border: "1px solid #e2e8f0",
+
+  fontWeight:
+    "600",
+
+  border:
+    "1px solid #e2e8f0",
 };
 
 const activityRow = {
+
   display: "flex",
+
   justifyContent:
     "space-between",
-  background: "#f8fafc",
+
+  background:
+    "#f8fafc",
+
   padding: "12px",
-  borderRadius: "10px",
+
+  borderRadius:
+    "10px",
 };
