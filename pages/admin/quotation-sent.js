@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { database } from "../../lib/firebase";
 import { ref, onValue } from "firebase/database";
-
+import AuthProtection from "../auth-protection";
 export default function QuotationSent() {
   const [requests, setRequests] =
     useState([]);
@@ -70,6 +70,8 @@ export default function QuotationSent() {
   };
 
   return (
+    <>
+    <AuthProtection role="admin" />
     <div
       style={{
         background: "#f4f7fc",
@@ -289,5 +291,6 @@ export default function QuotationSent() {
         )
       )}
 </div>
+</>
   );
 }
