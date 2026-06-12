@@ -56,7 +56,7 @@ export default function UserDashboard() {
         "requests"
       );
 
-    const unsubscribe =
+  
       onValue(
         requestsRef,
         (snapshot) => {
@@ -133,9 +133,6 @@ setRecentActivities(
 
         }
       );
-
-    return () =>
-      unsubscribe();
 
   }, []);
 
