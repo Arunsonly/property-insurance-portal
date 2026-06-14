@@ -10,6 +10,14 @@ export default function MyRequests() {
     setRequests] =
     useState([]);
 
+  const [search,
+    setSearch] =
+    useState("");
+
+  const [statusFilter,
+    setStatusFilter] =
+    useState("All");
+
   useEffect(() => {
 
     const requestsRef =
@@ -18,44 +26,47 @@ export default function MyRequests() {
         "requests"
       );
 
-    onValue(
-      requestsRef,
-      (snapshot) => {
+    const unsubscribe =
+      onValue(
+        requestsRef,
+        (snapshot) => {
 
-        const data =
-          snapshot.val();
+          const data =
+            snapshot.val();
 
-        if (!data) {
+          if (!data) {
 
-          setRequests([]);
+            setRequests([]);
 
-          return;
+            return;
+          }
 
-        }
-
-        const currentUserId =
-          localStorage.getItem(
-            "userId"
-          );
-
-        const loadedRequests =
-          Object.keys(data)
-            .map((key) => ({
-              id:key,
-              ...data[key],
-            }))
-            .filter(
-              (item) =>
-                item.userId ===
-                currentUserId
+          const currentUserId =
+            localStorage.getItem(
+              "userId"
             );
 
-        setRequests(
-          loadedRequests.reverse()
-        );
+          const loadedRequests =
+            Object.keys(data)
+              .map((key) => ({
+                id:key,
+                ...data[key],
+              }))
+              .filter(
+                (item) =>
+                  item.userId ===
+                  currentUserId
+              );
 
-      }
-    );
+          setRequests(
+            loadedRequests.reverse()
+          );
+
+        }
+      );
+
+    return () =>
+      unsubscribe();
 
   }, []);
 
@@ -93,11 +104,11 @@ export default function MyRequests() {
 
         default:
           return "#6b7280";
-
       }
 
     };
-const getLabel =
+
+  const getLabel =
     (status) => {
 
       switch (status) {
@@ -131,10 +142,47 @@ const getLabel =
 
         default:
           return status;
-
       }
 
     };
+const filteredRequests =
+    requests.filter(
+      (item) => {
+
+        const searchMatch =
+
+          item.requestNo
+            ?.toLowerCase()
+            .includes(
+              search.toLowerCase()
+            ) ||
+
+          item.policyNo
+            ?.toLowerCase()
+            .includes(
+              search.toLowerCase()
+            ) ||
+
+          item.insuredName
+            ?.toLowerCase()
+            .includes(
+              search.toLowerCase()
+            );
+
+        const statusMatch =
+
+          statusFilter === "All"
+            ? true
+            : item.status ===
+              statusFilter;
+
+        return (
+          searchMatch &&
+          statusMatch
+        );
+
+      }
+    );
 
   return (
     <>
@@ -171,7 +219,83 @@ const getLabel =
           </p>
         </div>
 
-        {requests.length === 0 && (
+        <input
+          type="text"
+          placeholder="Search Request No / Policy No / Insured Name"
+          value={search}
+          onChange={(e) =>
+            setSearch(
+              e.target.value
+            )
+          }
+          style={{
+            width:"100%",
+            padding:"14px",
+            border:"1px solid #ddd",
+            borderRadius:"12px",
+            marginBottom:"12px",
+            fontSize:"15px",
+          }}
+        />
+
+        <select
+          value={statusFilter}
+          onChange={(e) =>
+            setStatusFilter(
+              e.target.value
+            )
+          }
+          style={{
+            width:"100%",
+            padding:"14px",
+            border:"1px solid #ddd",
+            borderRadius:"12px",
+            marginBottom:"20px",
+            fontSize:"15px",
+          }}
+        >
+          <option value="All">
+            All Status
+          </option>
+
+          <option value="Pending">
+            Pending
+          </option>
+
+          <option value="Query Raised">
+            Query Raised
+          </option>
+
+          <option value="Reply Submitted">
+            Query Replied
+          </option>
+
+          <option value="Quotation Received">
+            Quotation Received
+          </option>
+
+          <option value="Quotation Accepted">
+            Accepted By You
+          </option>
+
+          <option value="Quotation Rejected">
+            Rejected By You
+          </option>
+
+          <option value="Re-Submitted">
+            Re-Submitted
+          </option>
+
+          <option value="Policy Issued">
+            Policy Issued
+          </option>
+
+          <option value="Cancelled By User">
+            Cancelled By User
+          </option>
+        </select>
+
+        {filteredRequests.length === 0 && (
 
           <div
             style={{
@@ -185,7 +309,7 @@ const getLabel =
           </div>
 
         )}
-{requests.map(
+{filteredRequests.map(
           (item) => (
 
             <div
@@ -205,14 +329,34 @@ const getLabel =
               </h2>
 
               <p>
-                <strong>Insured:</strong>{" "}
+                <strong>
+                  Insured :
+                </strong>{" "}
                 {item.insuredName}
               </p>
 
               <p>
-                <strong>Location:</strong>{" "}
+                <strong>
+                  Mobile :
+                </strong>{" "}
+                {item.mobile || "-"}
+              </p>
+
+              <p>
+                <strong>
+                  Location :
+                </strong>{" "}
                 {item.riskLocation}
               </p>
+
+              {item.policyNo && (
+                <p>
+                  <strong>
+                    Policy No :
+                  </strong>{" "}
+                  {item.policyNo}
+                </p>
+              )}
 
               <div
                 style={{
@@ -260,4 +404,4 @@ const getLabel =
       </div>
     </>
   );
-}
+                }
