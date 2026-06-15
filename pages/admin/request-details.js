@@ -194,7 +194,9 @@ return (
 
       <p>
         <b>Property Type:</b>{" "}
-        {requestData.propertyType?.join(", ")}
+        {Array.isArray(requestData.propertyType)
+          ? requestData.propertyType.join(", ")
+          : requestData.propertyType}
       </p>
 
     </div>
@@ -470,6 +472,26 @@ requestData.status === "Pending") && (
         </>
       )}
 
+      {requestData.status === "Query Raised" && (
+        <Link href={`/admin/raise-query?id=${id}`}>
+          <button
+            style={{
+              width:"100%",
+              padding:"15px",
+              border:"none",
+              borderRadius:"12px",
+              background:"#7c3aed",
+              color:"#fff",
+              fontSize:"16px",
+              fontWeight:"600",
+              cursor:"pointer",
+            }}
+          >
+            ✏️ Edit Query
+          </button>
+        </Link>
+      )}
+
       {requestData.status === "Replied By User" && (
         <>
 
@@ -528,7 +550,7 @@ requestData.status === "Pending") && (
         </>
       )}
 {requestData.status === "Quotation Sent" && (
-<Link href={"/admin/send-quotation?id=${id}"}>
+<Link href={`/admin/send-quotation?id=${id}`}>
 <button
 style={{
 width:"100%",
@@ -545,6 +567,26 @@ cursor:"pointer",
 ✏️ Modify Quotation
 </button>
 </Link>
+)}
+
+{requestData.status === "Quotation Accepted" && (
+  <Link href={`/admin/issue-policy?id=${id}`}>
+    <button
+      style={{
+        width:"100%",
+        padding:"15px",
+        border:"none",
+        borderRadius:"12px",
+        background:"#22c55e",
+        color:"#fff",
+        fontSize:"16px",
+        fontWeight:"600",
+        cursor:"pointer",
+      }}
+    >
+      📄 Issue Policy
+    </button>
+  </Link>
 )}
 
       {requestData.status === "Policy Issued" && (
@@ -582,3 +624,4 @@ border:"1px solid #e5e7eb",
 padding:"12px",
 textAlign:"left",
 };
+        
