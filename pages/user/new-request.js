@@ -318,7 +318,8 @@ const handleSubmit =
           requestRef,
           requestData
         );
-await emailjs.send(
+
+   await emailjs.send(
   "service_c3git45",
   "template_x4nj5r6",
   {
@@ -326,11 +327,30 @@ await emailjs.send(
     insured_name: insuredName,
     mobile: mobile,
     risk_location: riskLocation,
+
+    risk_type: riskType,
+
+    property_type: propertyType.join(", "),
+
     coverage: coverage,
+
     sum_insured: sumInsured,
+
+    building_si: buildingSI,
+
+    stock_si: stockSI,
+
+    plant_si: plantSI,
+
+    solar_si: solarSI,
+
+    others_si: othersSI,
+
+    additional_info: additionalInfo,
   },
   "_T-OveUSlfhtZ-1vU"
 );
+        
         alert(
           "Request Submitted Successfully"
         );
