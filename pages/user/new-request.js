@@ -439,6 +439,11 @@ const handleSubmit =
             <option value="Roof Top Solar">
               Roof Top Solar
             </option>
+
+            <option value="Others">
+              Others
+            </option>
+            
           </select>
 
           <textarea
@@ -508,11 +513,9 @@ const handleSubmit =
               lineHeight: "1.6",
             }}
           >
-            Proposal Form, Risk Photos
-            aur Previous Policy
-            details admin ko
-            WhatsApp ya Email se
-            share kar sakte hain.
+            This portal is used to gathering information quickly 
+            for final placement of premium Proposal Form, Risk Photos
+            and Precious policy send on mail to attached office.
           </p>
         </div>
 
