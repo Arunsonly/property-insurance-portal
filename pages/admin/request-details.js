@@ -480,70 +480,166 @@ export default function RequestDetails() {
         )}
 
         <div
-          style={{
-            display:"grid",
-            gap:"12px",
-            marginBottom:"20px",
-          }}
-        >
+  style={{
+    display:"grid",
+    gap:"12px",
+    marginBottom:"20px",
+  }}
+>{(!requestData.status ||
+requestData.status === "Pending") && (
+<>
+<Link
+href={"/admin/raise-query?id=${id}"}
+>
+<button
+style={{
+width:"100%",
+padding:"15px",
+border:"none",
+borderRadius:"12px",
+background:"#7c3aed",
+color:"#fff",
+fontSize:"16px",
+fontWeight:"600",
+cursor:"pointer",
+}}
+>
+❓ Raise Query
+</button>
+</Link>
 
-          <Link
-            href={`/admin/raise-query?id=${id}`}
-          >
-            <button
-              style={{
-                width:"100%",
-                padding:"15px",
-                border:"none",
-                borderRadius:"12px",
-                background:"#7c3aed",
-                color:"#fff",
-                fontSize:"16px",
-                fontWeight:"600",
-                cursor:"pointer",
-              }}
-            >
-              ❓ Raise Query
-            </button>
-          </Link>
+  <Link
+    href={`/admin/send-quotation?id=${id}`}
+  >
+    <button
+      style={{
+        width:"100%",
+        padding:"15px",
+        border:"none",
+        borderRadius:"12px",
+        background:"#16a34a",
+        color:"#fff",
+        fontSize:"16px",
+        fontWeight:"600",
+        cursor:"pointer",
+      }}
+    >
+      💰 Send Quotation
+    </button>
+  </Link>
 
-          <Link
-            href={`/admin/send-quotation?id=${id}`}
-          >
-            <button
-              style={{
-                width:"100%",
-                padding:"15px",
-                border:"none",
-                borderRadius:"12px",
-                background:"#16a34a",
-                color:"#fff",
-                fontSize:"16px",
-                fontWeight:"600",
-                cursor:"pointer",
-              }}
-            >
-              💰 Send Quotation
-            </button>
-          </Link>
+  <button
+    style={{
+      width:"100%",
+      padding:"15px",
+      border:"none",
+      borderRadius:"12px",
+      background:"#dc2626",
+      color:"#fff",
+      fontSize:"16px",
+      fontWeight:"600",
+      cursor:"pointer",
+    }}
+  >
+    ❌ Reject Request
+  </button>
+</>
 
-          <button
-            style={{
-              width:"100%",
-              padding:"15px",
-              border:"none",
-              borderRadius:"12px",
-              background:"#dc2626",
-              color:"#fff",
-              fontSize:"16px",
-              fontWeight:"600",
-              cursor:"pointer",
-            }}
-          >
-            ❌ Reject Request
-          </button>
+)}
 
-        </div>
+{requestData.status ===
+"Quotation Sent" && (
+<Link
+href={"/admin/send-quotation?id=${id}"}
+>
+<button
+style={{
+width:"100%",
+padding:"15px",
+border:"none",
+borderRadius:"12px",
+background:"#f59e0b",
+color:"#fff",
+fontSize:"16px",
+fontWeight:"600",
+cursor:"pointer",
+}}
+>
+✏️ Modify Quotation
+</button>
+</Link>
+)}
+
+{requestData.status ===
+"Policy Issued" && (
+<Link
+href={"/admin/send-quotation?id=${id}"}
+>
+<button
+style={{
+width:"100%",
+padding:"15px",
+border:"none",
+borderRadius:"12px",
+background:"#2563eb",
+color:"#fff",
+fontSize:"16px",
+fontWeight:"600",
+cursor:"pointer",
+}}
+>
+🔄 Send Renewal Quotation
+</button>
+</Link>
+)}
+
+{requestData.status ===
+"Query Raised" && (
+<Link
+href={"/admin/raise-query?id=${id}"}
+>
+<button
+style={{
+width:"100%",
+padding:"15px",
+border:"none",
+borderRadius:"12px",
+background:"#7c3aed",
+color:"#fff",
+fontSize:"16px",
+fontWeight:"600",
+cursor:"pointer",
+}}
+>
+👀 View Query
+</button>
+</Link>
+)}
+
+{requestData.status ===
+"Replied By User" && (
+<Link
+href={"/admin/raise-query?id=${id}"}
+>
+<button
+style={{
+width:"100%",
+padding:"15px",
+border:"none",
+borderRadius:"12px",
+background:"#2563eb",
+color:"#fff",
+fontSize:"16px",
+fontWeight:"600",
+cursor:"pointer",
+}}
+>
+💬 View User Reply
+</button>
+</Link>
+)}
+
+</div>
 
       </div>
     </>
