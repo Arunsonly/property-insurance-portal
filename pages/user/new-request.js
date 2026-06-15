@@ -514,8 +514,9 @@ const handleSubmit =
             }}
           >
             This portal is used to gathering information quickly 
-            for final placement of premium Proposal Form, Risk Photos
-            and Precious policy send on mail to attached office.
+            for final placement of premium Proposal Form, Risk Photod 
+            (if asked) and Previous policy if any send on mail to 
+            attached office.
           </p>
         </div>
 
