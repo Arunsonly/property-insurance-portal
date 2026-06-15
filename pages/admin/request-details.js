@@ -137,30 +137,11 @@ return (
 
       </div>
 
-      <p>
-        <b>Reference No:</b>{" "}
-        {requestData.requestNo}
-      </p>
-
-      <p>
-        <b>Customer Name:</b>{" "}
-        {requestData.userName}
-      </p>
-
-      <p>
-        <b>Insured Name:</b>{" "}
-        {requestData.insuredName}
-      </p>
-
-      <p>
-        <b>Mobile:</b>{" "}
-        {requestData.mobile}
-      </p>
-
-      <p>
-        <b>Address:</b>{" "}
-        {requestData.address}
-      </p>
+      <p><b>Reference No:</b> {requestData.requestNo}</p>
+      <p><b>Customer Name:</b> {requestData.userName}</p>
+      <p><b>Insured Name:</b> {requestData.insuredName}</p>
+      <p><b>Mobile:</b> {requestData.mobile}</p>
+      <p><b>Address:</b> {requestData.address}</p>
 
       <p>
         <b>Created On:</b>{" "}
@@ -175,314 +156,359 @@ return (
 
     </div>
 <div
-  style={{
-    background:"#fff",
-    padding:"20px",
-    borderRadius:"18px",
-    marginBottom:"15px",
-    boxShadow:
-      "0 4px 15px rgba(0,0,0,0.08)",
-  }}
->  <h3
-    style={{
-      marginTop:0,
-    }}
-  >
-    🏭 Risk Details
-  </h3>  <p>
-    <b>Risk Location:</b>{" "}
-    {requestData.riskLocation}
-  </p>  <p>
-    <b>Risk Type:</b>{" "}
-    {requestData.riskType}
-  </p>  <p>
-    <b>Business Activity:</b>{" "}
-    {requestData.businessActivity}
-  </p>  <p>
-    <b>Coverage Required:</b>{" "}
-    {requestData.coverage}
-  </p>  <p>
-    <b>Property Type:</b>{" "}
-    {requestData.propertyType?.join(", ")}
-  </p></div><div
-  style={{
-    background:"#fff",
-    padding:"20px",
-    borderRadius:"18px",
-    marginBottom:"15px",
-    boxShadow:
-      "0 4px 15px rgba(0,0,0,0.08)",
-  }}
->  <h3
-    style={{
-      marginTop:0,
-    }}
-  >
-    💰 Sum Insured Breakup
-  </h3>  <table
-    style={{
-      width:"100%",
-      borderCollapse:"collapse",
-    }}
-  >
-    <tbody>  <tr>
-    <td style={tableCell}>Building</td>
-    <td style={tableCell}>
-      ₹ {requestData.buildingSI || 0}
-    </td>
-  </tr>
+          style={{
+            background:"#fff",
+            padding:"20px",
+            borderRadius:"18px",
+            marginBottom:"15px",
+            boxShadow:
+              "0 4px 15px rgba(0,0,0,0.08)",
+          }}
+        >      <h3
+        style={{
+          marginTop:0,
+        }}
+      >
+        🏭 Risk Details
+      </h3>
 
-  <tr>
-    <td style={tableCell}>
-      Stock / Assets
-    </td>
-    <td style={tableCell}>
-      ₹ {requestData.stockSI || 0}
-    </td>
-  </tr>
+      <p>
+        <b>Risk Location:</b>{" "}
+        {requestData.riskLocation}
+      </p>
 
-  <tr>
-    <td style={tableCell}>
-      Plant & Machinery
-    </td>
-    <td style={tableCell}>
-      ₹ {requestData.plantSI || 0}
-    </td>
-  </tr>
+      <p>
+        <b>Risk Type:</b>{" "}
+        {requestData.riskType}
+      </p>
 
-  <tr>
-    <td style={tableCell}>
-      Roof Top Solar
-    </td>
-    <td style={tableCell}>
-      ₹ {requestData.solarSI || 0}
-    </td>
-  </tr>
+      <p>
+        <b>Business Activity:</b>{" "}
+        {requestData.businessActivity}
+      </p>
 
-  <tr>
-    <td style={tableCell}>
-      Others
-    </td>
-    <td style={tableCell}>
-      ₹ {requestData.othersSI || 0}
-    </td>
-  </tr>
+      <p>
+        <b>Coverage Required:</b>{" "}
+        {requestData.coverage}
+      </p>
 
-  <tr
-    style={{
-      background:"#ecfdf5",
-      fontWeight:"700",
-    }}
-  >
-    <td style={tableCell}>
-      Total Sum Insured
-    </td>
+      <p>
+        <b>Property Type:</b>{" "}
+        {requestData.propertyType?.join(", ")}
+      </p>
 
-    <td style={tableCell}>
-      ₹ {requestData.sumInsured}
-    </td>
-  </tr>
+    </div>
 
-</tbody>
+    <div
+      style={{
+        background:"#fff",
+        padding:"20px",
+        borderRadius:"18px",
+        marginBottom:"15px",
+        boxShadow:
+          "0 4px 15px rgba(0,0,0,0.08)",
+      }}
+    >
 
-  </table></div><div
-  style={{
-    background:"#fff",
-    padding:"20px",
-    borderRadius:"18px",
-    marginBottom:"15px",
-    boxShadow:
-      "0 4px 15px rgba(0,0,0,0.08)",
-  }}
->  <h3 style={{marginTop:0}}>
-    📝 Additional Information
-  </h3>  <div
-    style={{
-      background:"#f8fafc",
-      padding:"15px",
-      borderRadius:"12px",
-      border:"1px solid #e5e7eb",
-      lineHeight:"1.7",
-    }}
-  >
-    {
-      requestData.additionalInfo ||
-      "No Additional Information Provided"
-    }
-  </div></div>{requestData.customerReply && (
+      <h3
+        style={{
+          marginTop:0,
+        }}
+      >
+        💰 Sum Insured Breakup
+      </h3>
 
+      <table
+        style={{
+          width:"100%",
+          borderCollapse:"collapse",
+        }}
+      >
+        <tbody>
+
+          <tr>
+            <td style={tableCell}>
+              Building
+            </td>
+            <td style={tableCell}>
+              ₹ {requestData.buildingSI || 0}
+            </td>
+          </tr>
+
+          <tr>
+            <td style={tableCell}>
+              Stock / Assets
+            </td>
+            <td style={tableCell}>
+              ₹ {requestData.stockSI || 0}
+            </td>
+          </tr>
+
+          <tr>
+            <td style={tableCell}>
+              Plant & Machinery
+            </td>
+            <td style={tableCell}>
+              ₹ {requestData.plantSI || 0}
+            </td>
+          </tr>
+
+          <tr>
+            <td style={tableCell}>
+              Roof Top Solar
+            </td>
+            <td style={tableCell}>
+              ₹ {requestData.solarSI || 0}
+            </td>
+          </tr>
+
+          <tr>
+            <td style={tableCell}>
+              Others
+            </td>
+            <td style={tableCell}>
+              ₹ {requestData.othersSI || 0}
+            </td>
+          </tr>
+
+          <tr
+            style={{
+              background:"#ecfdf5",
+              fontWeight:"700",
+            }}
+          >
+            <td style={tableCell}>
+              Total Sum Insured
+            </td>
+
+            <td style={tableCell}>
+              ₹ {requestData.sumInsured}
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+
+    </div>
 <div
-  style={{
-    background:"#fff",
-    padding:"20px",
-    borderRadius:"18px",
-    marginBottom:"15px",
-    boxShadow:
-      "0 4px 15px rgba(0,0,0,0.08)",
-  }}
->  <h3 style={{marginTop:0}}>
-    💬 Customer Reply
-  </h3>  <div
-    style={{
-      background:"#ecfdf5",
-      border:"1px solid #86efac",
-      padding:"15px",
-      borderRadius:"12px",
-      lineHeight:"1.7",
-    }}
-  >
-    {requestData.customerReply}
-  </div>  <p
-    style={{
-      marginTop:"10px",
-      color:"#666",
-      fontSize:"14px",
-    }}
-  >
-    Reply Date:{" "}
-    {requestData.replyDate || "-"}
-  </p></div>)}
-<div
-  style={{
-    display:"grid",
-    gap:"12px",
-    marginBottom:"20px",
-  }}
->{(!requestData.status ||
+          style={{
+            background:"#fff",
+            padding:"20px",
+            borderRadius:"18px",
+            marginBottom:"15px",
+            boxShadow:
+              "0 4px 15px rgba(0,0,0,0.08)",
+          }}
+        >      <h3 style={{marginTop:0}}>
+        📝 Additional Information
+      </h3>
+
+      <div
+        style={{
+          background:"#f8fafc",
+          padding:"15px",
+          borderRadius:"12px",
+          border:"1px solid #e5e7eb",
+          lineHeight:"1.7",
+        }}
+      >
+        {
+          requestData.additionalInfo ||
+          "No Additional Information Provided"
+        }
+      </div>
+
+    </div>
+
+    {requestData.customerReply && (
+
+      <div
+        style={{
+          background:"#fff",
+          padding:"20px",
+          borderRadius:"18px",
+          marginBottom:"15px",
+          boxShadow:
+            "0 4px 15px rgba(0,0,0,0.08)",
+        }}
+      >
+
+        <h3 style={{marginTop:0}}>
+          💬 Customer Reply
+        </h3>
+
+        <div
+          style={{
+            background:"#ecfdf5",
+            border:"1px solid #86efac",
+            padding:"15px",
+            borderRadius:"12px",
+            lineHeight:"1.7",
+          }}
+        >
+          {requestData.customerReply}
+        </div>
+
+        <p
+          style={{
+            marginTop:"10px",
+            color:"#666",
+            fontSize:"14px",
+          }}
+        >
+          Reply Date:{" "}
+          {requestData.replyDate || "-"}
+        </p>
+
+      </div>
+
+    )}
+
+    <div
+      style={{
+        display:"grid",
+        gap:"12px",
+        marginBottom:"20px",
+      }}
+    >
+{(!requestData.status ||
 requestData.status === "Pending") && (
 <>
 
-<Link href={`/admin/raise-query?id=${id}`}>
-<button
-style={{
-width:"100%",
-padding:"15px",
-border:"none",
-borderRadius:"12px",
-background:"#7c3aed",
-color:"#fff",
-fontSize:"16px",
-fontWeight:"600",
-cursor:"pointer",
-}}
->
-❓ Raise Query
-</button>
-</Link><Link href={`/admin/send-quotation?id=${id}`}>
-<button
-style={{
-width:"100%",
-padding:"15px",
-border:"none",
-borderRadius:"12px",
-background:"#16a34a",
-color:"#fff",
-fontSize:"16px",
-fontWeight:"600",
-cursor:"pointer",
-}}
->
-💰 Send Quotation
-</button>
-</Link><button
-style={{
-width:"100%",
-padding:"15px",
-border:"none",
-borderRadius:"12px",
-background:"#dc2626",
-color:"#fff",
-fontSize:"16px",
-fontWeight:"600",
-cursor:"pointer",
-}}
+          <Link href={`/admin/raise-query?id=${id}`}>
+            <button
+              style={{
+                width:"100%",
+                padding:"15px",
+                border:"none",
+                borderRadius:"12px",
+                background:"#7c3aed",
+                color:"#fff",
+                fontSize:"16px",
+                fontWeight:"600",
+                cursor:"pointer",
+              }}
+            >
+              ❓ Raise Query
+            </button>
+          </Link>
 
-«»
+          <Link href={`/admin/send-quotation?id=${id}`}>
+            <button
+              style={{
+                width:"100%",
+                padding:"15px",
+                border:"none",
+                borderRadius:"12px",
+                background:"#16a34a",
+                color:"#fff",
+                fontSize:"16px",
+                fontWeight:"600",
+                cursor:"pointer",
+              }}
+            >
+              💰 Send Quotation
+            </button>
+          </Link>
 
-❌ Reject Request
-</button>
+          <button
+            style={{
+              width:"100%",
+              padding:"15px",
+              border:"none",
+              borderRadius:"12px",
+              background:"#dc2626",
+              color:"#fff",
+              fontSize:"16px",
+              fontWeight:"600",
+              cursor:"pointer",
+            }}
+          >
+            ❌ Reject Request
+          </button>
 
-</>
-)}
+        </>
+      )}
 
-{requestData.status === "Query Raised" && (
+      {requestData.status === "Query Raised" && (
+        <Link href={`/admin/raise-query?id=${id}`}>
+          <button
+            style={{
+              width:"100%",
+              padding:"15px",
+              border:"none",
+              borderRadius:"12px",
+              background:"#7c3aed",
+              color:"#fff",
+              fontSize:"16px",
+              fontWeight:"600",
+              cursor:"pointer",
+            }}
+          >
+            👀 View Query
+          </button>
+        </Link>
+      )}
 
-<Link href={`/admin/raise-query?id=${id}`}>
-<button
-style={{
-width:"100%",
-padding:"15px",
-border:"none",
-borderRadius:"12px",
-background:"#7c3aed",
-color:"#fff",
-fontSize:"16px",
-fontWeight:"600",
-cursor:"pointer",
-}}
->
-👀 View Query
-</button>
-</Link>
-)}{requestData.status === "Replied By User" && (
-<>
+      {requestData.status === "Replied By User" && (
+        <>
 
-<Link href={`/admin/raise-query?id=${id}`}>
-<button
-style={{
-width:"100%",
-padding:"15px",
-border:"none",
-borderRadius:"12px",
-background:"#7c3aed",
-color:"#fff",
-fontSize:"16px",
-fontWeight:"600",
-cursor:"pointer",
-}}
->
-❓ Raise Query
-</button>
-</Link><Link href={`/admin/send-quotation?id=${id}`}>
-<button
-style={{
-width:"100%",
-padding:"15px",
-border:"none",
-borderRadius:"12px",
-background:"#16a34a",
-color:"#fff",
-fontSize:"16px",
-fontWeight:"600",
-cursor:"pointer",
-}}
->
-💰 Send Quotation
-</button>
-</Link><button
-style={{
-width:"100%",
-padding:"15px",
-border:"none",
-borderRadius:"12px",
-background:"#dc2626",
-color:"#fff",
-fontSize:"16px",
-fontWeight:"600",
-cursor:"pointer",
-}}
+          <Link href={`/admin/raise-query?id=${id}`}>
+            <button
+              style={{
+                width:"100%",
+                padding:"15px",
+                border:"none",
+                borderRadius:"12px",
+                background:"#7c3aed",
+                color:"#fff",
+                fontSize:"16px",
+                fontWeight:"600",
+                cursor:"pointer",
+              }}
+            >
+              ❓ Raise Query
+            </button>
+          </Link>
 
-«»
+          <Link href={`/admin/send-quotation?id=${id}`}>
+            <button
+              style={{
+                width:"100%",
+                padding:"15px",
+                border:"none",
+                borderRadius:"12px",
+                background:"#16a34a",
+                color:"#fff",
+                fontSize:"16px",
+                fontWeight:"600",
+                cursor:"pointer",
+              }}
+            >
+              💰 Send Quotation
+            </button>
+          </Link>
 
-❌ Reject Request
-</button>
+          <button
+            style={{
+              width:"100%",
+              padding:"15px",
+              border:"none",
+              borderRadius:"12px",
+              background:"#dc2626",
+              color:"#fff",
+              fontSize:"16px",
+              fontWeight:"600",
+              cursor:"pointer",
+            }}
+          >
+            ❌ Reject Request
+          </button>
 
-</>
-)}
-
+        </>
+      )}
 {requestData.status === "Quotation Sent" && (
-
-<Link href={`/admin/send-quotation?id=${id}`}>
+<Link href={"/admin/send-quotation?id=${id}"}>
 <button
 style={{
 width:"100%",
@@ -499,28 +525,37 @@ cursor:"pointer",
 ✏️ Modify Quotation
 </button>
 </Link>
-)}{requestData.status === "Policy Issued" && (
+)}
 
-<Link href={`/admin/send-quotation?id=${id}`}>
-<button
-style={{
-width:"100%",
-padding:"15px",
-border:"none",
-borderRadius:"12px",
-background:"#2563eb",
-color:"#fff",
-fontSize:"16px",
-fontWeight:"600",
-cursor:"pointer",
-}}
->
-🔄 Send Renewal Quotation
-</button>
-</Link>
-)}</div></div>
+      {requestData.status === "Policy Issued" && (
+        <Link href={`/admin/send-quotation?id=${id}`}>
+          <button
+            style={{
+              width:"100%",
+              padding:"15px",
+              border:"none",
+              borderRadius:"12px",
+              background:"#2563eb",
+              color:"#fff",
+              fontSize:"16px",
+              fontWeight:"600",
+              cursor:"pointer",
+            }}
+          >
+            🔄 Send Renewal Quotation
+          </button>
+        </Link>
+      )}
+
+    </div>
+
+  </div>
+
 </>
-);}
+
+);
+
+}
 
 const tableCell = {
 border:"1px solid #e5e7eb",
