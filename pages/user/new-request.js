@@ -70,6 +70,10 @@ export default function NewRequest() {
     setOthersSI] =
     useState("");
 
+  const [additionalInfo,
+    setAdditionalInfo] =
+    useState("");
+
   const [loading,
     setLoading] =
     useState(false);
@@ -105,13 +109,9 @@ export default function NewRequest() {
   }, [
 
     buildingSI,
-
     stockSI,
-
     plantSI,
-
     solarSI,
-
     othersSI
 
   ]);
@@ -173,6 +173,7 @@ export default function NewRequest() {
           setBusinessActivity("");
 
       }
+
     };
 
   const generateRequestNo =
@@ -186,17 +187,17 @@ export default function NewRequest() {
           ) || "USER"
         )
 
-          .replace(
-            /\s/g,
-            ""
-          )
+        .replace(
+          /\s/g,
+          ""
+        )
 
-          .substring(
-            0,
-            8
-          )
+        .substring(
+          0,
+          8
+        )
 
-          .toUpperCase();
+        .toUpperCase();
 
       const now =
         new Date();
@@ -222,6 +223,7 @@ export default function NewRequest() {
         );
 
       return `${userName}_${mm}${yy}_${serial}`;
+
     };
 const handleSubmit =
     async () => {
@@ -241,6 +243,7 @@ const handleSubmit =
         );
 
         return;
+
       }
 
       try {
@@ -300,6 +303,8 @@ const handleSubmit =
 
           othersSI,
 
+          additionalInfo,
+
           status:
             "Pending",
 
@@ -333,6 +338,8 @@ const handleSubmit =
         setPlantSI("");
         setSolarSI("");
         setOthersSI("");
+
+        setAdditionalInfo("");
 
       } catch (error) {
 
@@ -486,49 +493,159 @@ const handleSubmit =
             </option>
 
           </select>
-<select
-            multiple
-            value={propertyType}
-            onChange={(e)=>
-              setPropertyType(
-                [...e.target.selectedOptions]
-                  .map(
-                    (option)=>
-                      option.value
-                  )
-              )
-            }
+<div
             style={{
-              ...inputStyle,
-              height:"140px",
+              marginTop:"15px",
+              marginBottom:"15px",
+              display:"flex",
+              flexDirection:"column",
+              gap:"10px",
             }}
           >
 
-            <option value="Building">
-              Building
-            </option>
+            <label>
+              <input
+                type="checkbox"
+                checked={propertyType.includes("Building")}
+                onChange={(e)=>{
 
-            <option value="Stock/Assets">
-              Stock / Assets
-            </option>
+                  if(e.target.checked){
 
-            <option value="Plant & Machinery">
-              Plant & Machinery
-            </option>
+                    setPropertyType([
+                      ...propertyType,
+                      "Building"
+                    ]);
 
-            <option value="Roof Top Solar">
-              Roof Top Solar
-            </option>
+                  } else {
 
-            <option value="Others">
-              Others
-            </option>
+                    setPropertyType(
+                      propertyType.filter(
+                        x => x !== "Building"
+                      )
+                    );
 
-          </select>
+                  }
 
-          {propertyType.includes(
-            "Building"
-          ) && (
+                }}
+              />
+              {" "}Building
+            </label>
+
+            <label>
+              <input
+                type="checkbox"
+                checked={propertyType.includes("Stock/Assets")}
+                onChange={(e)=>{
+
+                  if(e.target.checked){
+
+                    setPropertyType([
+                      ...propertyType,
+                      "Stock/Assets"
+                    ]);
+
+                  } else {
+
+                    setPropertyType(
+                      propertyType.filter(
+                        x => x !== "Stock/Assets"
+                      )
+                    );
+
+                  }
+
+                }}
+              />
+              {" "}Stock / Assets
+            </label>
+
+            <label>
+              <input
+                type="checkbox"
+                checked={propertyType.includes("Plant & Machinery")}
+                onChange={(e)=>{
+
+                  if(e.target.checked){
+
+                    setPropertyType([
+                      ...propertyType,
+                      "Plant & Machinery"
+                    ]);
+
+                  } else {
+
+                    setPropertyType(
+                      propertyType.filter(
+                        x => x !== "Plant & Machinery"
+                      )
+                    );
+
+                  }
+
+                }}
+              />
+              {" "}Plant & Machinery
+            </label>
+
+            <label>
+              <input
+                type="checkbox"
+                checked={propertyType.includes("Roof Top Solar")}
+                onChange={(e)=>{
+
+                  if(e.target.checked){
+
+                    setPropertyType([
+                      ...propertyType,
+                      "Roof Top Solar"
+                    ]);
+
+                  } else {
+
+                    setPropertyType(
+                      propertyType.filter(
+                        x => x !== "Roof Top Solar"
+                      )
+                    );
+
+                  }
+
+                }}
+              />
+              {" "}Roof Top Solar
+            </label>
+
+            <label>
+              <input
+                type="checkbox"
+                checked={propertyType.includes("Others")}
+                onChange={(e)=>{
+
+                  if(e.target.checked){
+
+                    setPropertyType([
+                      ...propertyType,
+                      "Others"
+                    ]);
+
+                  } else {
+
+                    setPropertyType(
+                      propertyType.filter(
+                        x => x !== "Others"
+                      )
+                    );
+
+                  }
+
+                }}
+              />
+              {" "}Others
+            </label>
+
+          </div>
+
+          {propertyType.includes("Building") && (
             <input
               type="number"
               placeholder="Building Sum Insured"
@@ -542,9 +659,7 @@ const handleSubmit =
             />
           )}
 
-          {propertyType.includes(
-            "Stock/Assets"
-          ) && (
+          {propertyType.includes("Stock/Assets") && (
             <input
               type="number"
               placeholder="Stock / Assets Sum Insured"
@@ -558,9 +673,7 @@ const handleSubmit =
             />
           )}
 
-          {propertyType.includes(
-            "Plant & Machinery"
-          ) && (
+          {propertyType.includes("Plant & Machinery") && (
             <input
               type="number"
               placeholder="Plant & Machinery Sum Insured"
@@ -574,9 +687,7 @@ const handleSubmit =
             />
           )}
 
-          {propertyType.includes(
-            "Roof Top Solar"
-          ) && (
+          {propertyType.includes("Roof Top Solar") && (
             <input
               type="number"
               placeholder="Roof Top Solar Sum Insured"
@@ -590,9 +701,7 @@ const handleSubmit =
             />
           )}
 
-          {propertyType.includes(
-            "Others"
-          ) && (
+          {propertyType.includes("Others") && (
             <input
               type="number"
               placeholder="Others Sum Insured"
@@ -668,30 +777,54 @@ const handleSubmit =
               color:"#0b3d91",
             }}
           >
+            📝 Additional Information
+          </h2>
+
+          <textarea
+            value={additionalInfo}
+            onChange={(e)=>
+              setAdditionalInfo(
+                e.target.value
+              )
+            }
+            placeholder="Any special requirement, claim history, security arrangements, special risk details etc."
+            style={textareaStyle}
+          />
+
+        </div>
+
+        <div style={cardStyle}>
+
+          <h2
+            style={{
+              color:"#0b3d91",
+            }}
+          >
             📎 Documents Information
           </h2>
 
           <p
             style={{
               color:"#64748b",
-              lineHeight:"1.6",
+              lineHeight:"1.7",
             }}
           >
             This portal is used to gather
             information quickly for final
             placement of premium.
-            Proposal Form, Risk Photos
-            (if required) and Previous
-            Policy copy may be shared
-            separately through office mail.
+
+            Proposal Form,
+            Risk Photos (if required),
+            Previous Policy copy and
+            other supporting documents
+            may be shared separately
+            through office mail.
           </p>
 
         </div>
 
         <button
-          onClick={
-            handleSubmit
-          }
+          onClick={handleSubmit}
           disabled={loading}
           style={{
             width:"100%",
@@ -706,9 +839,11 @@ const handleSubmit =
             cursor:"pointer",
           }}
         >
-          {loading
+          {
+            loading
             ? "Please Wait..."
-            : "🚀 Submit Request"}
+            : "🚀 Submit Request"
+          }
         </button>
 
       </div>
