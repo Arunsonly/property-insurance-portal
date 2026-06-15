@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
   ref,
@@ -50,75 +50,152 @@ export default function NewRequest() {
     setSumInsured] =
     useState("");
 
+  const [buildingSI,
+    setBuildingSI] =
+    useState("");
+
+  const [stockSI,
+    setStockSI] =
+    useState("");
+
+  const [plantSI,
+    setPlantSI] =
+    useState("");
+
+  const [solarSI,
+    setSolarSI] =
+    useState("");
+
+  const [othersSI,
+    setOthersSI] =
+    useState("");
+
   const [loading,
     setLoading] =
     useState(false);
 
+  useEffect(() => {
+
+    const total =
+
+      Number(
+        buildingSI || 0
+      ) +
+
+      Number(
+        stockSI || 0
+      ) +
+
+      Number(
+        plantSI || 0
+      ) +
+
+      Number(
+        solarSI || 0
+      ) +
+
+      Number(
+        othersSI || 0
+      );
+
+    setSumInsured(
+      total.toString()
+    );
+
+  }, [
+
+    buildingSI,
+
+    stockSI,
+
+    plantSI,
+
+    solarSI,
+
+    othersSI
+
+  ]);
+
   const handleRiskType =
     (value) => {
 
-    setRiskType(value);
+      setRiskType(value);
 
-    switch (value) {
+      switch (value) {
 
-      case "Manufacturing Unit":
+        case
+          "Manufacturing Unit":
 
-        setBusinessActivity(
-          "Name of goods manufacturing"
-        );
+          setBusinessActivity(
+            "Name of goods manufacturing"
+          );
 
-        break;
+          break;
 
-      case "Godown (Open)":
+        case
+          "Godown (Open)":
 
-        setBusinessActivity(
-          "Name of goods storage"
-        );
+          setBusinessActivity(
+            "Name of goods storage"
+          );
 
-        break;
+          break;
 
-      case "Godown (Closed)":
+        case
+          "Godown (Closed)":
 
-        setBusinessActivity(
-          "Name of goods storage"
-        );
+          setBusinessActivity(
+            "Name of goods storage"
+          );
 
-        break;
+          break;
 
-      case "Retail Shop":
+        case
+          "Retail Shop":
 
-        setBusinessActivity(
-          "Name of goods selling (kirana, electric, puncture shop etc)"
-        );
+          setBusinessActivity(
+            "Name of goods selling (kirana, electric, puncture shop etc)"
+          );
 
-        break;
+          break;
 
-      case "Other":
+        case
+          "Other":
 
-        setBusinessActivity(
-          "Enter business activity details"
-        );
+          setBusinessActivity(
+            "Enter business activity details"
+          );
 
-        break;
+          break;
 
-      default:
+        default:
 
-        setBusinessActivity("");
+          setBusinessActivity("");
 
-    }
-  };
+      }
+    };
 
   const generateRequestNo =
     () => {
 
       const userName =
+
         (
           localStorage.getItem(
             "userName"
           ) || "USER"
         )
-          .replace(/\s/g, "")
-          .substring(0, 8)
+
+          .replace(
+            /\s/g,
+            ""
+          )
+
+          .substring(
+            0,
+            8
+          )
+
           .toUpperCase();
 
       const now =
@@ -127,7 +204,10 @@ export default function NewRequest() {
       const mm =
         String(
           now.getMonth() + 1
-        ).padStart(2, "0");
+        ).padStart(
+          2,
+          "0"
+        );
 
       const yy =
         String(
@@ -137,7 +217,8 @@ export default function NewRequest() {
       const serial =
         Math.floor(
           100 +
-          Math.random() * 900
+          Math.random() *
+          900
         );
 
       return `${userName}_${mm}${yy}_${serial}`;
@@ -152,7 +233,7 @@ const handleSubmit =
         !riskType ||
         propertyType.length === 0 ||
         !coverage ||
-        !sumInsured
+        Number(sumInsured) <= 0
       ) {
 
         alert(
@@ -209,6 +290,16 @@ const handleSubmit =
 
           sumInsured,
 
+          buildingSI,
+
+          stockSI,
+
+          plantSI,
+
+          solarSI,
+
+          othersSI,
+
           status:
             "Pending",
 
@@ -237,6 +328,12 @@ const handleSubmit =
         setCoverage("");
         setSumInsured("");
 
+        setBuildingSI("");
+        setStockSI("");
+        setPlantSI("");
+        setSolarSI("");
+        setOthersSI("");
+
       } catch (error) {
 
         console.error(
@@ -262,16 +359,11 @@ const handleSubmit =
 
       <div
         style={{
-          background:
-            "#f4f7fc",
-          minHeight:
-            "100vh",
-          padding:
-            "20px",
-          maxWidth:
-            "700px",
-          margin:
-            "0 auto",
+          background:"#f4f7fc",
+          minHeight:"100vh",
+          padding:"20px",
+          maxWidth:"700px",
+          margin:"0 auto",
         }}
       >
 
@@ -279,49 +371,35 @@ const handleSubmit =
           style={{
             background:
               "linear-gradient(135deg,#0b3d91,#2563eb)",
-            color:
-              "#fff",
-            padding:
-              "30px",
-            borderRadius:
-              "24px",
-            marginBottom:
-              "20px",
+            color:"#fff",
+            padding:"30px",
+            borderRadius:"24px",
+            marginBottom:"20px",
           }}
         >
-          <h1
-            style={{
-              margin: 0,
-            }}
-          >
+          <h1>
             🏢 New Property Request
           </h1>
 
-          <p
-            style={{
-              marginTop:
-                "10px",
-            }}
-          >
+          <p>
             Submit Property Insurance Requirement
           </p>
         </div>
 
-        <div
-          style={cardStyle}
-        >
+        <div style={cardStyle}>
+
           <h2
             style={{
-              color:
-                "#0b3d91",
+              color:"#0b3d91",
             }}
           >
             👤 Basic Details
           </h2>
-<input
+
+          <input
             placeholder="Insured Name"
             value={insuredName}
-            onChange={(e) =>
+            onChange={(e)=>
               setInsuredName(
                 e.target.value
               )
@@ -332,7 +410,7 @@ const handleSubmit =
           <input
             placeholder="Address"
             value={address}
-            onChange={(e) =>
+            onChange={(e)=>
               setAddress(
                 e.target.value
               )
@@ -343,19 +421,21 @@ const handleSubmit =
           <input
             placeholder="Mobile Number"
             value={mobile}
-            onChange={(e) =>
+            onChange={(e)=>
               setMobile(
                 e.target.value
               )
             }
             style={inputStyle}
           />
+
         </div>
 
         <div style={cardStyle}>
+
           <h2
             style={{
-              color: "#0b3d91",
+              color:"#0b3d91",
             }}
           >
             🏭 Risk Details
@@ -364,7 +444,7 @@ const handleSubmit =
           <input
             placeholder="Enter District Name"
             value={riskLocation}
-            onChange={(e) =>
+            onChange={(e)=>
               setRiskLocation(
                 e.target.value
               )
@@ -374,7 +454,7 @@ const handleSubmit =
 
           <select
             value={riskType}
-            onChange={(e) =>
+            onChange={(e)=>
               handleRiskType(
                 e.target.value
               )
@@ -404,26 +484,26 @@ const handleSubmit =
             <option>
               Other
             </option>
-          </select>
 
-          <select
+          </select>
+<select
             multiple
             value={propertyType}
-            onChange={(e) =>
+            onChange={(e)=>
               setPropertyType(
-                [
-                  ...e.target.selectedOptions,
-                ].map(
-                  (option) =>
-                    option.value
-                )
+                [...e.target.selectedOptions]
+                  .map(
+                    (option)=>
+                      option.value
+                  )
               )
             }
             style={{
               ...inputStyle,
-              height: "140px",
+              height:"140px",
             }}
           >
+
             <option value="Building">
               Building
             </option>
@@ -443,12 +523,92 @@ const handleSubmit =
             <option value="Others">
               Others
             </option>
-            
+
           </select>
+
+          {propertyType.includes(
+            "Building"
+          ) && (
+            <input
+              type="number"
+              placeholder="Building Sum Insured"
+              value={buildingSI}
+              onChange={(e)=>
+                setBuildingSI(
+                  e.target.value
+                )
+              }
+              style={inputStyle}
+            />
+          )}
+
+          {propertyType.includes(
+            "Stock/Assets"
+          ) && (
+            <input
+              type="number"
+              placeholder="Stock / Assets Sum Insured"
+              value={stockSI}
+              onChange={(e)=>
+                setStockSI(
+                  e.target.value
+                )
+              }
+              style={inputStyle}
+            />
+          )}
+
+          {propertyType.includes(
+            "Plant & Machinery"
+          ) && (
+            <input
+              type="number"
+              placeholder="Plant & Machinery Sum Insured"
+              value={plantSI}
+              onChange={(e)=>
+                setPlantSI(
+                  e.target.value
+                )
+              }
+              style={inputStyle}
+            />
+          )}
+
+          {propertyType.includes(
+            "Roof Top Solar"
+          ) && (
+            <input
+              type="number"
+              placeholder="Roof Top Solar Sum Insured"
+              value={solarSI}
+              onChange={(e)=>
+                setSolarSI(
+                  e.target.value
+                )
+              }
+              style={inputStyle}
+            />
+          )}
+
+          {propertyType.includes(
+            "Others"
+          ) && (
+            <input
+              type="number"
+              placeholder="Others Sum Insured"
+              value={othersSI}
+              onChange={(e)=>
+                setOthersSI(
+                  e.target.value
+                )
+              }
+              style={inputStyle}
+            />
+          )}
 
           <textarea
             value={businessActivity}
-            onChange={(e) =>
+            onChange={(e)=>
               setBusinessActivity(
                 e.target.value
               )
@@ -459,7 +619,7 @@ const handleSubmit =
 
           <select
             value={coverage}
-            onChange={(e) =>
+            onChange={(e)=>
               setCoverage(
                 e.target.value
               )
@@ -485,23 +645,27 @@ const handleSubmit =
             <option>
               Fire + STFI + EQ + Terrorism + Burglary
             </option>
+
           </select>
 
           <input
-            placeholder="Enter Total Sum Insured"
             value={sumInsured}
-            onChange={(e) =>
-              setSumInsured(
-                e.target.value
-              )
-            }
-            style={inputStyle}
+            readOnly
+            placeholder="Total Sum Insured"
+            style={{
+              ...inputStyle,
+              background:"#e2e8f0",
+              fontWeight:"700",
+            }}
           />
+
         </div>
-<div style={cardStyle}>
+
+        <div style={cardStyle}>
+
           <h2
             style={{
-              color: "#0b3d91",
+              color:"#0b3d91",
             }}
           >
             📎 Documents Information
@@ -509,36 +673,37 @@ const handleSubmit =
 
           <p
             style={{
-              color: "#64748b",
-              lineHeight: "1.6",
+              color:"#64748b",
+              lineHeight:"1.6",
             }}
           >
-            This portal is used to gathering information quickly 
-            for final placement of premium Proposal Form, Risk Photod 
-            (if asked) and Previous policy if any send on mail to 
-            attached office.
+            This portal is used to gather
+            information quickly for final
+            placement of premium.
+            Proposal Form, Risk Photos
+            (if required) and Previous
+            Policy copy may be shared
+            separately through office mail.
           </p>
+
         </div>
 
         <button
           onClick={
             handleSubmit
           }
-          disabled={
-            loading
-          }
+          disabled={loading}
           style={{
-            width: "100%",
-            padding: "18px",
-            border: "none",
-            borderRadius:
-              "16px",
+            width:"100%",
+            padding:"18px",
+            border:"none",
+            borderRadius:"16px",
             background:
               "linear-gradient(135deg,#16a34a,#22c55e)",
-            color: "#fff",
-            fontSize: "18px",
-            fontWeight: "700",
-            cursor: "pointer",
+            color:"#fff",
+            fontSize:"18px",
+            fontWeight:"700",
+            cursor:"pointer",
           }}
         >
           {loading
@@ -552,47 +717,35 @@ const handleSubmit =
 }
 
 const cardStyle = {
-  background: "#fff",
-  padding: "25px",
-  borderRadius: "24px",
-  marginBottom: "20px",
+  background:"#fff",
+  padding:"25px",
+  borderRadius:"24px",
+  marginBottom:"20px",
   boxShadow:
     "0 10px 25px rgba(0,0,0,0.08)",
 };
 
 const inputStyle = {
-  width: "100%",
-  boxSizing:
-    "border-box",
-  padding: "15px",
-  marginTop: "12px",
-  marginBottom: "12px",
-  borderRadius: "12px",
-  border:
-    "1px solid #ddd",
-  fontSize: "16px",
-  background:
-    "#fafafa",
+  width:"100%",
+  boxSizing:"border-box",
+  padding:"15px",
+  marginTop:"12px",
+  marginBottom:"12px",
+  borderRadius:"12px",
+  border:"1px solid #ddd",
+  fontSize:"16px",
+  background:"#fafafa",
 };
 
 const textareaStyle = {
-  width: "100%",
-  boxSizing:
-    "border-box",
-  minHeight:
-    "120px",
-  padding:
-    "15px",
-  marginTop:
-    "12px",
-  marginBottom:
-    "12px",
-  borderRadius:
-    "12px",
-  border:
-    "1px solid #ddd",
-  fontSize:
-    "16px",
-  background:
-    "#fafafa",
+  width:"100%",
+  boxSizing:"border-box",
+  minHeight:"120px",
+  padding:"15px",
+  marginTop:"12px",
+  marginBottom:"12px",
+  borderRadius:"12px",
+  border:"1px solid #ddd",
+  fontSize:"16px",
+  background:"#fafafa",
 };
