@@ -3,283 +3,315 @@ import { useRouter } from "next/router";
 import { database } from "../../lib/firebase";
 import { ref, get, update } from "firebase/database";
 import AuthProtection from "../auth-protection";
+
 export default function SendQuotation() {
-  const router = useRouter();
-  const { id } = router.query;
 
-  const [requestData, setRequestData] =
-    useState(null);
+const router = useRouter();
+const { id } = router.query;
 
-  const [premium, setPremium] =
-    useState("");
+const [requestData, setRequestData] =
+useState(null);
 
-  const [remarks, setRemarks] =
-    useState("");
+const [premium, setPremium] =
+useState("");
 
-  useEffect(() => {
-    if (!id) return;
+const [remarks, setRemarks] =
+useState("");
 
-    const loadData = async () => {
-      const snapshot = await get(
-        ref(database, `requests/${id}`)
-      );
+useEffect(() => {
 
-      if (snapshot.exists()) {
-        setRequestData(
-          snapshot.val()
-        );
-      }
-    };
+if (!id) return;
 
-    loadData();
-  }, [id]);
+const loadData = async () => {
 
-  const handleSubmit = async () => {
-    if (!premium) {
-      alert("Enter Premium");
-      return;
-    }
+  const snapshot = await get(
+    ref(
+      database,
+      `requests/${id}`
+    )
+  );
 
-    try {
-      await update(
-        ref(database, `requests/${id}`),
-        {
-          quotationPremium: premium,
-          quotationRemarks: remarks,
-          quotationDate:
-            new Date().toISOString(),
-          status:
-            "Quotation Received",
-        }
-      );
+  if (snapshot.exists()) {
 
-      alert(
-        "Quotation Sent Successfully"
-      );
-
-      router.push(
-        "/admin/pending-requests"
-      );
-    } catch (error) {
-      console.error(error);
-      alert("Error");
-    }
-  };
-
-  if (!requestData) {
-    return (
-      <div
-        style={{
-          padding: "20px",
-        }}
-      >
-        Loading...
-      </div>
+    setRequestData(
+      snapshot.val()
     );
+
   }
 
-  return (
-    <>
-    <AuthProtection role="admin" />
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "#f4f7fc",
-        padding: "15px",
-      }}
-    >
-      <div
-        style={{
-          background:
-            "linear-gradient(135deg,#16a34a,#22c55e)",
-          color: "#fff",
-          padding: "20px",
-          borderRadius: "15px",
-          marginBottom: "15px",
-        }}
-      >
-        <h2
+};
+
+loadData();
+
+}, [id]);
+
+const handleSubmit = async () => {
+
+if (!premium) {
+
+  alert("Enter Premium");
+  return;
+
+}
+
+try {
+
+  await update(
+    ref(
+      database,
+      `requests/${id}`
+    ),
+    {
+      quotationPremium:
+        premium,
+
+      quotationRemarks:
+        remarks,
+
+      quotationDate:
+        new Date()
+          .toISOString(),
+
+      status:
+        "Quotation Sent",
+    }
+  );
+
+  alert(
+    "Quotation Sent Successfully"
+  );
+
+  router.push(
+    "/admin/quotation-sent"
+  );
+
+} catch (error) {
+
+  console.error(error);
+
+  alert("Error");
+
+}
+
+};
+
+if (!requestData) {
+
+return (
+  <div
+    style={{
+      padding:"20px",
+    }}
+  >
+    Loading...
+  </div>
+);
+
+}
+
+return (
+<>
+<AuthProtection role="admin" />
+
+  <div
+    style={{
+      minHeight:"100vh",
+      background:"#f4f7fc",
+      padding:"15px",
+    }}
+  >
+<div
           style={{
-            margin: 0,
+            background:
+              "linear-gradient(135deg,#16a34a,#22c55e)",
+            color:"#fff",
+            padding:"20px",
+            borderRadius:"15px",
+            marginBottom:"15px",
           }}
         >
-          Send Quotation
-        </h2>
-
-        <p
-          style={{
-            marginTop: "5px",
-          }}
-        >
-          Review Request & Send Premium
-        </p>
-      </div>
-
-      <div
-        style={{
-          background: "#fff",
-          padding: "18px",
-          borderRadius: "15px",
-          marginBottom: "15px",
-        }}
-      >
-        <h3>Customer Details</h3>
-
-        <p>
-          <b>Reference No:</b>{" "}
-          {requestData.requestNo}
-        </p>
-
-        <p>
-          <b>Insured Name:</b>{" "}
-          {requestData.insuredName}
-        </p>
-
-        <p>
-          <b>Mobile:</b>{" "}
-          {requestData.mobile}
-        </p>
-
-        <p>
-          <b>Address:</b>{" "}
-          {requestData.address}
-        </p>
-      </div>
-
-      <div
-        style={{
-          background: "#fff",
-          padding: "18px",
-          borderRadius: "15px",
-          marginBottom: "15px",
-        }}
-      >
-        <h3>Risk Details</h3>
-
-        <p>
-          <b>Risk Location:</b>{" "}
-          {requestData.riskLocation}
-        </p>
-
-        <p>
-          <b>Risk Type:</b>{" "}
-          {requestData.riskType}
-        </p>
-
-        <p>
-          <b>Business Activity:</b>{" "}
-          {requestData.businessActivity}
-        </p>
-
-        <p>
-          <b>Coverage:</b>{" "}
-          {requestData.coverage}
-        </p>
-
-        <p>
-          <b>Sum Insured:</b>{" "}
-          {requestData.sumInsured}
-        </p>
-      </div>
-
-      {requestData.customerReply && (
-        <div
-          style={{
-            background: "#fff",
-            padding: "18px",
-            borderRadius: "15px",
-            marginBottom: "15px",
-          }}
-        >
-          <h3>Customer Reply</h3>
-
-          <div
+          <h2
             style={{
-              background:
-                "#ecfdf5",
-              padding: "15px",
-              borderRadius: "10px",
-              border:
-                "1px solid #86efac",
+              margin:0,
             }}
           >
-            {
-              requestData.customerReply
-            }
-          </div>
-        </div>
-      )}
+            Send Quotation
+          </h2>      <p
+        style={{
+          marginTop:"5px",
+        }}
+      >
+        Review Request & Send Premium
+      </p>
+    </div>
+
+    <div
+      style={{
+        background:"#fff",
+        padding:"18px",
+        borderRadius:"15px",
+        marginBottom:"15px",
+      }}
+    >
+      <h3>Customer Details</h3>
+
+      <p>
+        <b>Reference No:</b>{" "}
+        {requestData.requestNo}
+      </p>
+
+      <p>
+        <b>Insured Name:</b>{" "}
+        {requestData.insuredName}
+      </p>
+
+      <p>
+        <b>Mobile:</b>{" "}
+        {requestData.mobile}
+      </p>
+
+      <p>
+        <b>Address:</b>{" "}
+        {requestData.address}
+      </p>
+    </div>
+
+    <div
+      style={{
+        background:"#fff",
+        padding:"18px",
+        borderRadius:"15px",
+        marginBottom:"15px",
+      }}
+    >
+      <h3>Risk Details</h3>
+
+      <p>
+        <b>Risk Location:</b>{" "}
+        {requestData.riskLocation}
+      </p>
+
+      <p>
+        <b>Risk Type:</b>{" "}
+        {requestData.riskType}
+      </p>
+
+      <p>
+        <b>Business Activity:</b>{" "}
+        {requestData.businessActivity}
+      </p>
+
+      <p>
+        <b>Coverage:</b>{" "}
+        {requestData.coverage}
+      </p>
+
+      <p>
+        <b>Sum Insured:</b>{" "}
+        ₹ {requestData.sumInsured}
+      </p>
+    </div>
+
+    {requestData.customerReply && (
 
       <div
         style={{
-          background: "#fff",
-          padding: "18px",
-          borderRadius: "15px",
+          background:"#fff",
+          padding:"18px",
+          borderRadius:"15px",
+          marginBottom:"15px",
         }}
       >
-        <h3>Quotation Details</h3>
+        <h3>
+          Customer Reply
+        </h3>
 
-        <input
-          type="number"
-          placeholder="Premium Amount"
-          value={premium}
-          onChange={(e) =>
-            setPremium(
-              e.target.value
-            )
-          }
+        <div
           style={{
-            width: "100%",
-            padding: "14px",
-            borderRadius: "10px",
+            background:"#ecfdf5",
+            padding:"15px",
+            borderRadius:"10px",
             border:
-              "1px solid #ddd",
-            marginBottom: "15px",
-            boxSizing:
-              "border-box",
-          }}
-        />
-
-        <textarea
-          placeholder="Remarks"
-          value={remarks}
-          onChange={(e) =>
-            setRemarks(
-              e.target.value
-            )
-          }
-          rows="5"
-          style={{
-            width: "100%",
-            padding: "14px",
-            borderRadius: "10px",
-            border:
-              "1px solid #ddd",
-            marginBottom: "15px",
-            boxSizing:
-              "border-box",
-          }}
-        />
-
-        <button
-          onClick={handleSubmit}
-          style={{
-            width: "100%",
-            padding: "15px",
-            border: "none",
-            borderRadius: "10px",
-            background:
-              "#22c55e",
-            color: "#fff",
-            fontSize: "16px",
-            fontWeight: "bold",
-            cursor: "pointer",
+              "1px solid #86efac",
           }}
         >
-          Send Quotation
-        </button>
+          {
+            requestData.customerReply
+          }
+        </div>
       </div>
+
+    )}
+<div
+          style={{
+            background:"#fff",
+            padding:"18px",
+            borderRadius:"15px",
+          }}
+        >
+          <h3>
+            Quotation Details
+          </h3>      <input
+        type="number"
+        placeholder="Premium Amount"
+        value={premium}
+        onChange={(e) =>
+          setPremium(
+            e.target.value
+          )
+        }
+        style={{
+          width:"100%",
+          padding:"14px",
+          borderRadius:"10px",
+          border:"1px solid #ddd",
+          marginBottom:"15px",
+          boxSizing:"border-box",
+        }}
+      />
+
+      <textarea
+        placeholder="Remarks"
+        value={remarks}
+        onChange={(e) =>
+          setRemarks(
+            e.target.value
+          )
+        }
+        rows="5"
+        style={{
+          width:"100%",
+          padding:"14px",
+          borderRadius:"10px",
+          border:"1px solid #ddd",
+          marginBottom:"15px",
+          boxSizing:"border-box",
+        }}
+      />
+
+      <button
+        onClick={handleSubmit}
+        style={{
+          width:"100%",
+          padding:"15px",
+          border:"none",
+          borderRadius:"10px",
+          background:"#22c55e",
+          color:"#fff",
+          fontSize:"16px",
+          fontWeight:"bold",
+          cursor:"pointer",
+        }}
+      >
+        Send Quotation
+      </button>
+
     </div>
+
+  </div>
+
 </>
-  );
-}
+
+);
+
+        }
