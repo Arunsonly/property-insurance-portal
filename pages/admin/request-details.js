@@ -17,7 +17,6 @@ useEffect(() => {
 
 if (!id) return;
 
-// यहाँ गलती थी, उसे ठीक कर दिया गया है (बैकटिक्स जोड़ दिए गए हैं)
 const requestRef =
 ref(
 database,
@@ -131,7 +130,11 @@ return (
         fontWeight:"600",  
       }}  
     >  
-      {requestData.status || "Pending"}  
+      {
+        requestData.status === "Reply Submitted"
+          ? "Replied By User"
+          : (requestData.status || "Pending")
+      }  
     </span>  
 
   </div>  
@@ -487,7 +490,7 @@ requestData.status === "Pending") && (
     </Link>  
   )}  
 
-  {requestData.status === "Replied By User" && (  
+  {requestData.status === "Reply Submitted" && (  
     <>  
 
       <Link href={`/admin/raise-query?id=${id}`}>  
@@ -616,3 +619,4 @@ border:"1px solid #e5e7eb",
 padding:"12px",
 textAlign:"left",
 };
+        
