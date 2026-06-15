@@ -319,6 +319,46 @@ return (
       </div>
 
     </div>
+{requestData.queryMessage && (
+
+  <div
+    style={{
+      background:"#fff",
+      padding:"20px",
+      borderRadius:"18px",
+      marginBottom:"15px",
+      boxShadow:"0 4px 15px rgba(0,0,0,0.08)",
+    }}
+  >
+
+    <h3 style={{marginTop:0}}>
+      ❓ Query Raised
+    </h3>
+
+    <div
+      style={{
+        background:"#fef3c7",
+        border:"1px solid #fcd34d",
+        padding:"15px",
+        borderRadius:"12px",
+      }}
+    >
+      {requestData.queryMessage}
+    </div>
+
+    <p
+      style={{
+        marginTop:"10px",
+        color:"#666",
+        fontSize:"14px",
+      }}
+    >
+      Query Date: {requestData.queryDate || "-"}
+    </p>
+
+  </div>
+
+)}
 
     {requestData.customerReply && (
 
@@ -428,26 +468,6 @@ requestData.status === "Pending") && (
           </button>
 
         </>
-      )}
-
-      {requestData.status === "Query Raised" && (
-        <Link href={`/admin/raise-query?id=${id}`}>
-          <button
-            style={{
-              width:"100%",
-              padding:"15px",
-              border:"none",
-              borderRadius:"12px",
-              background:"#7c3aed",
-              color:"#fff",
-              fontSize:"16px",
-              fontWeight:"600",
-              cursor:"pointer",
-            }}
-          >
-            👀 View Query
-          </button>
-        </Link>
       )}
 
       {requestData.status === "Replied By User" && (
