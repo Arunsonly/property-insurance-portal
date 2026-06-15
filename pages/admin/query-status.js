@@ -21,7 +21,7 @@ export default function QueryStatus() {
           .filter(
   (item) =>
     item.status === "Query Raised" ||
-    item.status === "Reply Submitted"
+    item.status === "Reply Received"
 );
 
         setRequests(
@@ -123,7 +123,7 @@ export default function QueryStatus() {
             <span
   style={{
     background:
-      item.status === "Reply Submitted"
+      item.status === "Reply Recieved"
         ? "#2563eb"
         : "#6f42c1",
     color: "#fff",
