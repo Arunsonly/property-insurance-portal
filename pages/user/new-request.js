@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-
+import emailjs from "@emailjs/browser";
 import {
   ref,
   push,
@@ -318,7 +318,19 @@ const handleSubmit =
           requestRef,
           requestData
         );
-
+await emailjs.send(
+  "service_c3git45",
+  "template_x4nj5r6",
+  {
+    request_no: requestNo,
+    insured_name: insuredName,
+    mobile: mobile,
+    risk_location: riskLocation,
+    coverage: coverage,
+    sum_insured: sumInsured,
+  },
+  "_T-OveUSlfhtZ-1vU"
+);
         alert(
           "Request Submitted Successfully"
         );
