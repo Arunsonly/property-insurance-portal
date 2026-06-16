@@ -46,7 +46,7 @@ export default function QuotationReceived() {
                   currentUserId &&
                 (
                   item.status ===
-                    "Quotation Received" ||
+                    "Quotation Sent" ||
 
                   item.status ===
                     "Quotation Accepted" ||
@@ -90,7 +90,7 @@ const reviewAgain =
       switch (status) {
 
         case
-        "Quotation Received":
+        "Quotation Sent":
           return "#2563eb";
 
         case
@@ -209,7 +209,7 @@ const reviewAgain =
                   : item.status ===
                     "Quotation Rejected"
                   ? "Review Again"
-                  : "Quotation Received"}
+                  : "Quotation Sent"}
               </span>
 
               <div
@@ -261,4 +261,4 @@ const reviewAgain =
       </div>
     </>
   );
-                }
+}
