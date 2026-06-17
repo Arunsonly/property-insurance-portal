@@ -283,8 +283,10 @@ return (
           </p>
         </div>
 
-        {quotationData.status ===
-          "Quotation Received" && (
+        {(
+  quotationData.status === "Quotation Received" ||
+  quotationData.status === "Quotation Sent"
+) && (
 
           <>
             <button
