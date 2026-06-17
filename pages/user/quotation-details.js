@@ -277,9 +277,10 @@ return (
             Status :
             {" "}
             {
-              quotationData.status ||
-              "Quotation Received"
-            }
+  quotationData.status === "Quotation Sent"
+    ? "Quotation Received"
+    : (quotationData.status || "Quotation Received")
+}
           </p>
         </div>
 
