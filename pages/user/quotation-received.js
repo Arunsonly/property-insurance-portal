@@ -209,7 +209,7 @@ const reviewAgain =
                   : item.status ===
                     "Quotation Rejected"
                   ? "Review Again"
-                  : "Quotation Sent"}
+                  : "Quotation Received"}
               </span>
 
               <div
